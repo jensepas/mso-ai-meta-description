@@ -1,4 +1,10 @@
 <?php
+/**
+ * MSO Meta Description Ajax
+ *
+ * @package MSO_Meta_Description
+ * @since   1.2.0
+ */
 namespace MSO_Meta_Description;
 
 use WP_Error;

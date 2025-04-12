@@ -1,5 +1,8 @@
 /**
- * MSO Meta Description Admin Script
+ * MSO Meta Description JavaScript
+ *
+ * @package MSO_Meta_Description
+ * @since   1.2.0
  */
 
 (function ($) {
@@ -280,6 +283,9 @@
         }
     };
 
+    /**
+     * Error handling.
+     */
     const throwError = (data) => {
         if (!data) throw new Error(data);
     }

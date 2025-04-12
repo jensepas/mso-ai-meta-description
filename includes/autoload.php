@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * MSO Meta Description autoload
+ *
+ * @package MSO_Meta_Description
+ * @since   1.2.0
+ */
 if (!defined('ABSPATH')) exit;
 
 spl_autoload_register(function ($class) {

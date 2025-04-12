@@ -2,6 +2,9 @@
 /**
  * Template for the MSO Meta Description meta box.
  *
+ * @package MSO_Meta_Description
+ * @since   1.2.0
+ *
  * Available variables from MetaBox::render_meta_box_content():
  * @var string $value      The current meta description value.
  * @var string $field_name The name attribute for the input field (e.g., 'mso_add_description').
