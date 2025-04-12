@@ -39,12 +39,16 @@ class ApiClient
     {
         // Validate provider first
         if (!in_array($provider, self::SUPPORTED_PROVIDERS)) {
-            return new WP_Error('invalid_provider', __('Invalid provider specified.', MSO_Meta_Description::TEXT_DOMAIN));
+            return new WP_Error('invalid_provider', __('Invalid provider specified.', 'mso-meta-description'));
         }
 
         $api_key = get_option(MSO_Meta_Description::get_option_prefix() . $provider . '_api_key');
         if (empty($api_key)) {
-            return new WP_Error('api_key_missing', sprintf(__('API key for %s is not set.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider)));
+
+            return new WP_Error('api_key_missing', sprintf(
+                /* translators: %s: search term */
+                __('API key for %s is not set.', 'mso-meta-description'), ucfirst($provider))
+            );
         }
 
         $url = '';
@@ -82,7 +86,7 @@ class ApiClient
     {
          // Validate provider first
         if (!in_array($provider, self::SUPPORTED_PROVIDERS)) {
-             return new WP_Error('invalid_provider', __('Invalid provider specified.', MSO_Meta_Description::TEXT_DOMAIN));
+             return new WP_Error('invalid_provider', __('Invalid provider specified.', 'mso-meta-description'));
         }
 
         $option_prefix = MSO_Meta_Description::get_option_prefix();
@@ -100,27 +104,26 @@ class ApiClient
 
 
         if (empty($api_key)) {
-            return new WP_Error('api_key_missing', sprintf(__('API key for %s is not set.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider)));
+
+            return new WP_Error(
+                'api_key_missing',
+                sprintf(
+                /* translators: %s: search term */
+                __('API key for %s is not set.', 'mso-meta-description'),
+                ucfirst($provider)
+                )
+            );
         }
         // No need to check if model is empty now, as we use a default
         // if (empty($model)) {
-        //     return new WP_Error('model_missing', sprintf(__('Model for %s is not selected.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider)));
+        // /* translators: %s: search term */
+        //     return new WP_Error('model_missing', sprintf(__('Model for %s is not selected.', 'mso-meta-description'), ucfirst($provider)));
         // }
 
-
         // Consistent, detailed prompt
         $prompt = sprintf(
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', MSO_Meta_Description::TEXT_DOMAIN),
-            MSO_Meta_Description::MIN_DESCRIPTION_LENGTH,
-            MSO_Meta_Description::MAX_DESCRIPTION_LENGTH,
-            $content // Content is already sanitized/kses'd in Ajax handler
-        );
-
-
-
-        // Consistent, detailed prompt
-        $prompt = sprintf(
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', MSO_Meta_Description::TEXT_DOMAIN),
+            /* translators: 1: min description length, 2: max description length, 3: Content. */
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-meta-description'),
             MSO_Meta_Description::MIN_DESCRIPTION_LENGTH,
             MSO_Meta_Description::MAX_DESCRIPTION_LENGTH,
             $content // Content is already sanitized/kses'd in Ajax handler
@@ -169,7 +172,7 @@ class ApiClient
                     'model' => $model,
                     'messages' => [
                          // Optional: System message to guide the AI's role
-                         // ['role' => 'system', 'content' => __('You are a helpful assistant specialized in writing concise and SEO-friendly meta descriptions.', MSO_Meta_Description::TEXT_DOMAIN)],
+                         // ['role' => 'system', 'content' => __('You are a helpful assistant specialized in writing concise and SEO-friendly meta descriptions.', 'mso-meta-description')],
                         ['role' => 'user', 'content' => $prompt]
                     ],
                     'max_tokens' => $max_tokens,
@@ -181,7 +184,7 @@ class ApiClient
 
         $args['body'] = wp_json_encode($body);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return new WP_Error('json_encode_error', __('Failed to encode request body.', MSO_Meta_Description::TEXT_DOMAIN));
+            return new WP_Error('json_encode_error', __('Failed to encode request body.', 'mso-meta-description'));
         }
 
         $response = wp_remote_post($url, $args);
@@ -198,7 +201,14 @@ class ApiClient
                     if (isset($api_result['choices'][0]['message']['content'])) {
                         $summary = $api_result['choices'][0]['message']['content'];
                     } else {
-                        return new WP_Error('api_parse_error', sprintf(__('Could not parse summary from %s response.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider)));
+                        return new WP_Error('api_parse_error',
+                            sprintf(
+                                /* translators: %s: search term */
+                                __('Could not parse summary from %s response.',
+                                'mso-meta-description'),
+                                ucfirst($provider)
+                            )
+                        );
                     }
                     break;
 
@@ -211,7 +221,12 @@ class ApiClient
 
                         // Optional: Log more details for debugging
                         // error_log('Gemini API Error/Block: ' . print_r($api_result, true));
-                        return new WP_Error('api_parse_error', sprintf(__('Could not parse summary from Gemini response. Finish Reason: %s', MSO_Meta_Description::TEXT_DOMAIN), $finish_reason));
+                        return new WP_Error('api_parse_error', sprintf(
+                            /* translators: %s: search term */
+                            __('Could not parse summary from Gemini response. Finish Reason: %s',
+                                'mso-meta-description'),
+                            $finish_reason)
+                        );
                     }
                     break;
             }
@@ -223,7 +238,7 @@ class ApiClient
         }
 
         // Return WP_Error if handle_api_response returned one, or if parsing failed above
-        return is_wp_error($api_result) ? $api_result : new WP_Error('unknown_api_error', __('An unknown error occurred during API processing.', MSO_Meta_Description::TEXT_DOMAIN));
+        return is_wp_error($api_result) ? $api_result : new WP_Error('unknown_api_error', __('An unknown error occurred during API processing.', 'mso-meta-description'));
     }
 
     /**
@@ -238,12 +253,18 @@ class ApiClient
     {
         if (is_wp_error($response)) {
             // Add context to the existing WP_Error object
+
             $response->add(
                 'http_request_failed',
-                sprintf(__('HTTP request failed when calling %s API for %s.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider), $action),
+                sprintf(
+                    /* translators: 1: provider, 2: action */
+                    __('HTTP request failed when calling %1$s API for %2$s.', 'mso-meta-description'),
+                    ucfirst($provider),
+                    $action
+                ),
                 ['provider' => $provider, 'action' => $action] // Add context data
             );
-            echo 'tot'; exit;
+
             return $response;
         }
 
@@ -253,7 +274,13 @@ class ApiClient
 
         // Check for HTTP errors or JSON decoding errors
         if ($http_code >= 300 || $http_code < 200 || $data === null) {
-            $error_message = sprintf(__('Error %d from %s API for %s.', MSO_Meta_Description::TEXT_DOMAIN), $http_code, ucfirst($provider), $action);
+            $error_message = sprintf(
+                /* translators: 1: search term, 2:provider ,3: action */
+                __('Error %1$s from %2$s API for %3$s.', 'mso-meta-description'),
+                $http_code,
+                ucfirst($provider),
+                $action
+            );
             $api_error_details = '';
 
             // Try to extract error details from common structures
@@ -269,9 +296,9 @@ class ApiClient
 
             // Handle JSON decode error specifically
             if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
-                $api_error_details = __('Invalid JSON response received.', MSO_Meta_Description::TEXT_DOMAIN) . ' ' . json_last_error_msg();
+                $api_error_details = __('Invalid JSON response received.', 'mso-meta-description') . ' ' . json_last_error_msg();
             } elseif(empty($body) && $data === null) {
-                $api_error_details = __('Empty response body.', MSO_Meta_Description::TEXT_DOMAIN);
+                $api_error_details = __('Empty response body.', 'mso-meta-description');
             }
 
             if (!empty($api_error_details)) {
@@ -307,7 +334,13 @@ class ApiClient
                         return array_values($models); // Return the filtered array of model objects
 
                     } else {
-                        return new WP_Error('api_parse_error', sprintf(__('Could not parse model list from %s response.', MSO_Meta_Description::TEXT_DOMAIN), ucfirst($provider)));
+                        return new WP_Error('api_parse_error',
+                            sprintf(
+                            /* translators: %s: search term */
+                                __('Could not parse model list from %s response.', 'mso-meta-description'),
+                                ucfirst($provider)
+                            )
+                        );
                     }
                     break; // End case 'mistral', 'openai'
 
@@ -325,11 +358,11 @@ class ApiClient
 
                         return array_values($models); // Return the filtered array of model objects
                     } else {
-                        return new WP_Error('api_parse_error', __('Could not parse model list from Gemini response.', MSO_Meta_Description::TEXT_DOMAIN));
+                        return new WP_Error('api_parse_error', __('Could not parse model list from Gemini response.', 'mso-meta-description'));
                     }
                     break; // End case 'gemini'
             }
-             return new WP_Error('api_parse_error', __('Could not parse model list for the specified provider.', MSO_Meta_Description::TEXT_DOMAIN)); // Should not be reached
+             return new WP_Error('api_parse_error', __('Could not parse model list for the specified provider.', 'mso-meta-description')); // Should not be reached
         }
 
         // For generate_summary, the calling function handles specific structure extraction.
@@ -339,6 +372,10 @@ class ApiClient
         }
 
         // Fallback for unknown action or if logic fails
-        return new WP_Error('unknown_action', sprintf(__('Unknown action "%s" requested for API client.', MSO_Meta_Description::TEXT_DOMAIN), $action));
+        return new WP_Error('unknown_action', sprintf(
+        /* translators: %s: search term */
+            __('Unknown action "%s" requested for API client.', 'mso-meta-description'),
+            $action)
+        );
     }
 }

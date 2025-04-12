@@ -1,8 +1,8 @@
 === MSO Meta Description: Custom Meta Descriptions with AI ===
 Contributors: MS-ONLY
-Tags: meta description, seo, gemini, mistral, openai, chatgpt
+Tags: meta description, seo, AI, gemini mistral openai chatgpt
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.7
 Stable tag: 1.2.0
 Requires PHP: 8.1
 License: GPLv2 or later

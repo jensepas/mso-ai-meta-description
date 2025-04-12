@@ -55,44 +55,20 @@ function mso_meta_description_uninstall_site(): void
     delete_post_meta_by_key($meta_key);
 }
 
-// Uninstall for the current site.
-mso_meta_description_uninstall_site();
-
-// Uninstall for multisite installations.
+// Check if the installation is multisite
 if (is_multisite()) {
-    // WordPress 4.6 and later using WP_Site_Query.
-    if (function_exists('get_sites') && class_exists('WP_Site_Query')) {
-        $sites = get_sites();
-        foreach ($sites as $site) {
-            switch_to_blog($site->blog_id);
-            mso_meta_description_uninstall_site();
-            restore_current_blog();
-        }
-    } else {
-        // WordPress versions before 4.6 using wp_get_sites.
-        if (function_exists('wp_get_sites')) {
-            $sites = wp_get_sites();
-            foreach ($sites as $site) {
-                switch_to_blog($site['blog_id']);
-                mso_meta_description_uninstall_site();
-                restore_current_blog();
-            }
-        }
+    // Get all blog IDs from the network
+    $site_ids = get_sites(['fields' => 'ids']);
+
+    foreach ($site_ids as $site_id) {
+        switch_to_blog($site_id);
+        mso_meta_description_uninstall_site();
+        restore_current_blog();
     }
+} else {
+    // Single site uninstall
+    mso_meta_description_uninstall_site();
 }
-// Global uninstall actions that run only once for the entire network
-if (is_multisite() && function_exists('add_action')) {
-    /**
-     * IMPORTANT: If your plugin creates network-wide settings or tables,
-     * you should handle their removal in this action.
-     *
-     * Example for dropping a network-wide table:
-     * function mso_meta_description_uninstall_network() {
-     * global $wpdb;
-     * $network_table_name = $wpdb->prefix . 'mso_meta_description_network_data';
-     * $wpdb->query("DROP TABLE IF EXISTS {$network_table_name}");
-     * }
-     * add_action('network_uninstall_'.plugin_basename(__FILE__), 'mso_meta_description_uninstall_network');
-     */
-    do_action('mso_meta_description_uninstall_network');
-}
+
+// Clear any WordPress cache that might hold plugin data
+wp_cache_flush();

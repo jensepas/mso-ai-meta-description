@@ -30,8 +30,8 @@ class Settings
     public function add_options_page(): void
     {
         add_options_page(
-            __('MSO Meta Description Settings', MSO_Meta_Description::TEXT_DOMAIN),
-            __('MSO Meta Description', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('MSO Meta Description Settings', 'mso-meta-description'),
+            esc_html__('MSO Meta Description', 'mso-meta-description'),
             'manage_options',
             self::PAGE_SLUG,
             [$this, 'render_options_page'],
@@ -69,21 +69,19 @@ class Settings
     public function register_settings(): void
     {
         $option_prefix = MSO_Meta_Description::OPTION_PREFIX;
-        $sanitize_callback = ['sanitize_callback' => 'sanitize_text_field'];
 
         // Register settings for all providers
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_api_key', $sanitize_callback);
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_api_key', $sanitize_callback);
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_api_key', $sanitize_callback); // <-- ADDED OpenAI Key
-
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_model', $sanitize_callback);
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_model', $sanitize_callback);
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_model', $sanitize_callback); // <-- ADDED OpenAI Model
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_api_key', 'sanitize_text_field');
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_api_key', 'sanitize_text_field');
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_api_key', 'sanitize_text_field');
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_model', 'sanitize_text_field');
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_model', 'sanitize_text_field');
+        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_model', 'sanitize_text_field');
 
         // Add the main settings section
         add_settings_section(
             self::SECTION_ID,
-            __('API Settings', MSO_Meta_Description::TEXT_DOMAIN), // Section title
+            esc_html__('API Settings', 'mso-meta-description'), // Section title
             [$this, 'render_section_callback'], // Callback for section description (optional)
             self::PAGE_SLUG // Page slug where this section appears
         );
@@ -91,7 +89,7 @@ class Settings
         // --- Add fields for Mistral ---
         add_settings_field(
             $option_prefix . 'mistral_api_key',
-            __('Mistral API Key', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('Mistral API Key', 'mso-meta-description'),
             [$this, 'render_api_key_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
@@ -99,7 +97,7 @@ class Settings
         );
         add_settings_field(
             $option_prefix . 'mistral_model',
-            __('Mistral Model', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('Mistral Model', 'mso-meta-description'),
             [$this, 'render_model_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
@@ -109,7 +107,7 @@ class Settings
         // --- Add fields for Gemini ---
         add_settings_field(
             $option_prefix . 'gemini_api_key',
-            __('Gemini API Key', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('Gemini API Key', 'mso-meta-description'),
             [$this, 'render_api_key_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
@@ -117,29 +115,27 @@ class Settings
         );
         add_settings_field(
             $option_prefix . 'gemini_model',
-            __('Gemini Model', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('Gemini Model', 'mso-meta-description'),
             [$this, 'render_model_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
             ['provider' => 'gemini']
         );
-
-        // --- Add fields for OpenAI (ChatGPT) ---  <-- ADDED Section
         add_settings_field(
             $option_prefix . 'openai_api_key',
-            __('OpenAI (ChatGPT) API Key', MSO_Meta_Description::TEXT_DOMAIN), // Updated Label
+            esc_html__('OpenAI (ChatGPT) API Key', 'mso-meta-description'),
             [$this, 'render_api_key_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
-            ['provider' => 'openai'] // Specify 'openai' provider
+            ['provider' => 'openai']
         );
         add_settings_field(
             $option_prefix . 'openai_model',
-            __('OpenAI Model', MSO_Meta_Description::TEXT_DOMAIN), // Updated Label
+            esc_html__('OpenAI Model', 'mso-meta-description'),
             [$this, 'render_model_field'],
             self::PAGE_SLUG,
             self::SECTION_ID,
-            ['provider' => 'openai'] // Specify 'openai' provider
+            ['provider' => 'openai']
         );
 
 
@@ -154,7 +150,7 @@ class Settings
      */
     public function render_section_callback(): void
     {
-        echo '<p>' . __('Enter your API keys and select the models for generating meta descriptions.', MSO_Meta_Description::TEXT_DOMAIN) . '</p>';
+        echo '<p>' . esc_html__('Enter your API keys and select the models for generating meta descriptions.', 'mso-meta-description') . '</p>';
     }
 
     /**
@@ -165,13 +161,12 @@ class Settings
         $provider = $args['provider'] ?? 'unknown'; // Default to prevent errors
         $option_name = MSO_Meta_Description::OPTION_PREFIX . $provider . '_api_key';
         $value = get_option($option_name, '');
-        $input_id = esc_attr($option_name); // Use option name as ID for label connection
 
         // Use password input type for keys
         printf(
             '<input type="password" class="regular-text" name="%s" id="%s" value="%s" autocomplete="off">',
             esc_attr($option_name),
-            $input_id, // Use the variable here
+            esc_attr($option_name),
             esc_attr($value)
         );
 
@@ -180,8 +175,8 @@ class Settings
             '<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="%s" data-target="%s">
                 <span class="dashicons dashicons-hidden" aria-hidden="true"></span>
             </button>',
-            esc_attr__('Show password', 'default'), // Standard WP translation
-            '#' . $input_id // Target the input field by ID
+            esc_attr__('Show password', 'mso-meta-description'), // Standard WP translation
+            '#' . esc_attr($option_name) // Target the input field by ID
         );
 
 
@@ -202,10 +197,15 @@ class Settings
                 break;
         }
 
+
         printf(
+             /* translators: %s: search term */
             ' <p class="description"><a href="%s" target="_blank">%s</a></p>',
             esc_url($docs_url),
-            sprintf(__('Get your %s API key', MSO_Meta_Description::TEXT_DOMAIN), esc_html($provider_name))
+            sprintf(
+            /* translators: %s: search term */
+                esc_html__('Get your %s API key', 'mso-meta-description'), esc_html($provider_name)
+            )
         );
     }
 
@@ -219,16 +219,22 @@ class Settings
         // ID needs to be unique and match JS selector
         $select_id = 'mso_meta_description_' . $provider . '_model'; // Consistent ID format
 
+
         printf(
+             /* translators: %s: search term */
             '<select id="%s" name="%s" data-provider="%s" class="mso-model-select regular-text">', // Added regular-text class for WP styling
             esc_attr($select_id),
             esc_attr($option_name),
             esc_attr($provider)
         );
         // Placeholder option, JS will replace this
-        echo '<option value="">' . __('Loading models...', MSO_Meta_Description::TEXT_DOMAIN) . '</option>';
+        echo '<option value="">' . esc_html__('Loading models...', 'mso-meta-description') . '</option>';
         echo '</select>';
-        echo '<p class="description">' . sprintf(__('Select the %s model to use. Models loaded dynamically if API key is valid.', MSO_Meta_Description::TEXT_DOMAIN), esc_html(ucfirst($provider))) . '</p>'; // Updated text slightly
+        echo '<p class="description">' . sprintf(
+            /* translators: %s: search term */
+                esc_html__('Select the %s model to use. Models loaded dynamically if API key is valid.', 'mso-meta-description'),
+                esc_html(ucfirst($provider))
+            ) . '</p>'; // Updated text slightly
         echo '<div id="mso-model-error-'.esc_attr($provider).'" class="mso-model-error" style="color: red;"></div>'; // Placeholder for errors
     }
 
@@ -237,10 +243,10 @@ class Settings
     public function register_front_page_setting(): void
     {
         $option_name = MSO_Meta_Description::OPTION_PREFIX . 'front_page';
-        register_setting('reading', $option_name, ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('reading', 'mso_meta_description_', 'sanitize_text_field');
         add_settings_field(
             'mso_front_page_description_field',
-            __('Front page meta description', MSO_Meta_Description::TEXT_DOMAIN),
+            esc_html__('Front page meta description', 'mso-meta-description'),
             [$this, 'render_front_page_description_input'],
             'reading',
             'default',
@@ -259,15 +265,16 @@ class Settings
                 id="<?php echo esc_attr($option_name); ?>"
                 class="regular-text"
                 value="<?php echo esc_attr($value); ?>"
-                maxlength="<?php echo MSO_Meta_Description::MAX_DESCRIPTION_LENGTH + 10; ?>"
+                maxlength="<?php echo esc_html(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH + 10); ?>"
         >
         <p class="description" id="front-page-meta-description-hint">
             <?php printf(
-                __('Enter the meta description for the site\'s front page when it displays the latest posts. Recommended length: %1$d-%2$d characters.', MSO_Meta_Description::TEXT_DOMAIN),
-                MSO_Meta_Description::MIN_DESCRIPTION_LENGTH,
-                MSO_Meta_Description::MAX_DESCRIPTION_LENGTH
+            /* translators: %%1$d: search term, %2$d: */
+                esc_html__('Enter the meta description for the site\'s front page when it displays the latest posts. Recommended length: %1$d-%2$d characters.', 'mso-meta-description'),
+                esc_html(MSO_Meta_Description::MIN_DESCRIPTION_LENGTH),
+                esc_html(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH)
             ); ?>
-            <?php esc_html_e('Character count', MSO_Meta_Description::TEXT_DOMAIN); ?>: <span class="mso-char-count">0</span>
+            <?php esc_html_e('Character count', 'mso-meta-description'); ?>: <span class="mso-char-count">0</span>
         </p>
         <script>
             // Simple inline script for immediate feedback on this specific field

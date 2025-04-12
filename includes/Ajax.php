@@ -39,28 +39,28 @@ class Ajax
     {
         // Check nonce
         if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
-            wp_send_json_error(['message' => __('Invalid nonce.', MSO_Meta_Description::TEXT_DOMAIN)], 403);
+            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-meta-description')], 403);
             // No need for return after wp_send_json_error + wp_die()
         }
 
         // Check capability
         if (!current_user_can('edit_posts')) {
-            wp_send_json_error(['message' => __('Permission denied.', MSO_Meta_Description::TEXT_DOMAIN)], 403);
+            wp_send_json_error(['message' => __('Permission denied.', 'mso-meta-description')], 403);
         }
 
         // Sanitize inputs
-        $content = isset($_POST['content']) ? wp_kses_post($_POST['content']) : '';
-        $provider = isset($_POST['provider']) ? sanitize_key($_POST['provider']) : '';
+        $content = isset($_POST['content']) ? sanitize_text_field( wp_unslash($_POST['content'])) : '';
+        $provider = isset($_POST['provider']) ? sanitize_text_field( wp_unslash($_POST['provider'])) : '';
 
         // Validate inputs
         if (empty($content)) {
-            wp_send_json_error(['message' => __('Content cannot be empty.', MSO_Meta_Description::TEXT_DOMAIN)], 400);
+            wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-meta-description')], 400);
         }
 
         // *** MODIFICATION ICI ***
         // Include 'openai' in the list of valid providers
         if (empty($provider) || !in_array($provider, ApiClient::SUPPORTED_PROVIDERS)) { // Use the constant from ApiClient
-            wp_send_json_error(['message' => __('Invalid AI provider specified.', MSO_Meta_Description::TEXT_DOMAIN)], 400);
+            wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-meta-description')], 400);
         }
 
         // Call the API client
@@ -96,21 +96,21 @@ class Ajax
     {
         // Check nonce
         if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
-            wp_send_json_error(['message' => __('Invalid nonce.', MSO_Meta_Description::TEXT_DOMAIN)], 403);
+            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-meta-description')], 403);
         }
 
         // Check capability (Settings page access)
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => __('Permission denied.', MSO_Meta_Description::TEXT_DOMAIN)], 403);
+            wp_send_json_error(['message' => __('Permission denied.', 'mso-meta-description')], 403);
         }
 
         // Sanitize input
-        $api_type = isset($_POST['apiType']) ? sanitize_key($_POST['apiType']) : '';
+        $api_type = isset($_POST['apiType']) ? sanitize_text_field( wp_unslash($_POST['apiType'])) : '';
 
         // *** MODIFICATION ICI ***
         // Include 'openai' in the list of valid API types (providers)
         if (empty($api_type) || !in_array($api_type, ApiClient::SUPPORTED_PROVIDERS)) { // Use the constant from ApiClient
-            wp_send_json_error(['message' => __('Invalid API type specified.', MSO_Meta_Description::TEXT_DOMAIN)], 400);
+            wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-meta-description')], 400);
         }
 
         // Call the API client

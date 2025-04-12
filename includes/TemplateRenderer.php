@@ -31,7 +31,7 @@ class TemplateRenderer
         } else {
             // Optional: Log error or display a notice if template is missing
             // error_log("MSO Meta Description: Template file not found: " . $file_path);
-            echo "<p>Error: Template file '{$template_name}.php' not found.</p>"; // Basic fallback
+            echo "<p>Error: Template file '" . esc_html($template_name) . ".php' not found.</p>"; // Basic fallback
         }
     }
 }

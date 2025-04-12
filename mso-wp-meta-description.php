@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: MSO Meta Description
+ * Plugin Name: MSO Meta Description: Custom Meta Descriptions with AI
  * Description: Plugin WordPress pour ajouter des balises méta description personnalisées dans l'entête HTML, avec l'option de génération par IA (Gemini ou Mistral).
  * Author: ms-only
  * Version: 1.2.0

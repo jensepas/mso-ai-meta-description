@@ -67,13 +67,13 @@ class Admin
             'mistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model', ApiClient::DEFAULT_MISTRAL_MODEL),
             'openaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model', ApiClient::DEFAULT_OPENAI_MODEL), // Assurez-vous que la constante existe dans ApiClient
             'status' => [
-                __('(Too short)', MSO_Meta_Description::TEXT_DOMAIN),
-                __('(Too long)', MSO_Meta_Description::TEXT_DOMAIN),
-                __('(Good)', MSO_Meta_Description::TEXT_DOMAIN)
+                __('(Too short)', 'mso-meta-description'),
+                __('(Too long)', 'mso-meta-description'),
+                __('(Good)', 'mso-meta-description')
             ],
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'selectModel' => __('-- Select a Model --', MSO_Meta_Description::TEXT_DOMAIN),
-            'errorLoadingModels' => __('Error loading models.', MSO_Meta_Description::TEXT_DOMAIN),
+            'selectModel' => __('-- Select a Model --', 'mso-meta-description'),
+            'errorLoadingModels' => __('Error loading models.', 'mso-meta-description'),
             'nonce' => wp_create_nonce(MSO_Meta_Description::AJAX_NONCE), // Use constant
             'geminiApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_api_key')),
             'mistralApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_api_key')),
@@ -100,7 +100,7 @@ class Admin
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
             esc_url(admin_url('options-general.php?page=admin_mso_meta_description')),
-            __('Settings', MSO_Meta_Description::TEXT_DOMAIN)
+            __('Settings', 'mso-meta-description')
         );
         array_unshift($links, $settings_link);
         return $links;

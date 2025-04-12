@@ -5,7 +5,10 @@
  * @package MSO_Meta_Description
  * @since   1.2.0
  */
+
 namespace MSO_Meta_Description;
+
+use WP_Post;
 
 if (!defined('ABSPATH')) {
     die;
@@ -36,7 +39,7 @@ class MetaBox
         foreach ($post_types as $post_type) {
             add_meta_box(
                 'mso_meta_description_metabox', // Unique ID
-                __('MSO Meta Description', MSO_Meta_Description::TEXT_DOMAIN), // Title
+                __('MSO Meta Description', 'mso-meta-description'), // Title
                 [$this, 'render_meta_box_content'], // Callback
                 $post_type, // Screen
                 'normal', // Context
@@ -48,9 +51,9 @@ class MetaBox
     /**
      * Render the content of the meta description meta box.
      *
-     * @param \WP_Post $post The current post object.
+     * @param WP_Post $post The current post object.
      */
-    public function render_meta_box_content(\WP_Post $post): void
+    public function render_meta_box_content(WP_Post $post): void
     {
         wp_nonce_field($this->nonce_action, $this->nonce_name);
         $value = get_post_meta($post->ID, $this->meta_key, true);
@@ -73,7 +76,7 @@ class MetaBox
     public function save_meta_data(int $post_id): void
     {
         // Check nonce
-        if (!isset($_POST[$this->nonce_name]) || !wp_verify_nonce(sanitize_text_field($_POST[$this->nonce_name]), $this->nonce_action)) {
+        if (!isset($_POST[$this->nonce_name]) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action)) {
             return;
         }
 
@@ -96,7 +99,7 @@ class MetaBox
         }
 
         // Sanitize and save the data
-        $new_value = sanitize_text_field($_POST[$field_name]);
+        $new_value = sanitize_text_field(wp_unslash($_POST[$field_name]));
 
         if (empty($new_value)) {
             delete_post_meta($post_id, $this->meta_key);
