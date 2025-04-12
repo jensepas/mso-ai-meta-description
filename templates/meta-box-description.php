@@ -67,23 +67,23 @@ $option_prefix = MSO_Meta_Description::get_option_prefix(); // Get option prefix
     if ($mistral_key_set || $gemini_key_set || $openai_key_set) :
     ?>
         <div class="mso-ai-generator" style="margin-top: 15px;">
-            <p><strong><?php esc_html_e('Generate with AI:', MSO_Meta_Description::TEXT_DOMAIN); ?></strong></p>
+            <p><strong><?php _e('Generate with AI:', MSO_Meta_Description::TEXT_DOMAIN); ?></strong></p>
 
             <?php if ($mistral_key_set) : // <-- CORRECTED condition for Mistral ?>
                 <button type="button" id="summarize-mistral" class="button mso-generate-button" data-provider="mistral">
-                    <?php esc_html_e('Generate with Mistral', MSO_Meta_Description::TEXT_DOMAIN); ?>
+                    <?php _e('Generate with Mistral', MSO_Meta_Description::TEXT_DOMAIN); ?>
                 </button>
             <?php endif; ?>
 
             <?php if ($gemini_key_set) : ?>
                 <button type="button" id="summarize-gemini" class="button mso-generate-button" data-provider="gemini">
-                    <?php esc_html_e('Generate with Gemini', MSO_Meta_Description::TEXT_DOMAIN); ?>
+                    <?php _e('Generate with Gemini', MSO_Meta_Description::TEXT_DOMAIN); ?>
                 </button>
             <?php endif; ?>
 
             <?php if ($openai_key_set) : ?>
                 <button type="button" id="summarize-openai"  class="button mso-generate-button" data-provider="openai">
-                     <?php esc_html_e('Generate with ChatGPT', MSO_Meta_Description::TEXT_DOMAIN); ?>
+                     <?php _e('Generate with ChatGPT', MSO_Meta_Description::TEXT_DOMAIN); ?>
                 </button>
             <?php endif; ?>
 
