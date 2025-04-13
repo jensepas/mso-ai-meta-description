@@ -3,7 +3,7 @@ Contributors: MS-ONLY
 Tags: meta description, seo, AI, gemini mistral openai chatgpt
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -98,7 +98,7 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 
 == Changelog ==
 
-= 1.2.0 =
+= 1.3.0 =
 * Date: 2025-04-12
 * Feature: Added support for OpenAI (ChatGPT) for AI-powered description generation.
 * Enhancement: Updated API client and JavaScript for better error handling and dynamic model loading for all providers.
@@ -118,5 +118,5 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 
 == Upgrade Notice ==
 
-= 1.2.0 =
+= 1.3.0 =
 This version adds support for OpenAI (ChatGPT) alongside Gemini and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.

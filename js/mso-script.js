@@ -2,7 +2,7 @@
  * MSO Meta Description JavaScript
  *
  * @package MSO_Meta_Description
- * @since   1.2.0
+ * @since   1.3.0
  */
 
 (function ($) {
@@ -174,6 +174,9 @@
             if (!models || !Array.isArray(models) || models.length === 0) {
                 throwError('No compatible models found or returned by the API.');
             }
+
+            console.log(models)
+
 
             // Populate the select options
             models.forEach(model => {

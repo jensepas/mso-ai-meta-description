@@ -3,9 +3,10 @@
  * MSO Meta Description Admin
  *
  * @package MSO_Meta_Description
- * @since   1.2.0
+ * @since   1.3.0
  */
 namespace MSO_Meta_Description;
+use MSO_Meta_Description\Api\ApiClient;
 
 if (!defined('ABSPATH')) {
     die;

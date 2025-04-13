@@ -3,11 +3,11 @@
  * MSO Meta Description Ajax
  *
  * @package MSO_Meta_Description
- * @since   1.2.0
+ * @since   1.3.0
  */
 namespace MSO_Meta_Description;
 
-use WP_Error;
+use MSO_Meta_Description\Api\ApiClient;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {

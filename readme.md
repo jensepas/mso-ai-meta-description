@@ -118,7 +118,7 @@ Potentially. Both plugins can generate a meta description. **Avoid duplicates** 
 
 ## 🧾 Changelog
 
-### 1.2.0 – *2025-04-12*
+### 1.3.0 – *2025-04-12*
 
 - ✨ Added support for **OpenAI (ChatGPT)**
 - ⚙️ Improved error handling for all providers

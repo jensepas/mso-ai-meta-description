@@ -118,7 +118,7 @@ Possible. Les deux plugins peuvent générer une méta description. **Évitez le
 
 ## 🧾 Journal des modifications
 
-### 1.2.0 – *2025-04-12*
+### 1.3.0 – *2025-04-12*
 
 - ✨ Ajout du support pour **OpenAI (ChatGPT)**
 - ⚙️ Meilleure gestion des erreurs pour tous les fournisseurs

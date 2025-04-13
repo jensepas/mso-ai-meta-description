@@ -3,7 +3,7 @@
  * Template for the MSO Meta Description meta box.
  *
  * @package MSO_Meta_Description
- * @since   1.2.0
+ * @since   1.3.0
  *
  * Available variables from MetaBox::render_meta_box_content():
  * @var string $value      The current meta description value.

@@ -5,7 +5,7 @@
  * Actions performed when the plugin is deleted via the WordPress admin interface.
  *
  * @package MSO_Meta_Description
- * @since   1.2.0
+ * @since   1.3.0
  */
 
 // Exit if uninstall.php is not called by WordPress.
