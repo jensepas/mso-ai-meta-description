@@ -7,7 +7,7 @@
  * Uses AJAX for saving settings per tab to improve user experience.
  *
  * @package MSO_Meta_Description
- * @since   1.3.0 // Version updated
+ * @since   1.3.0
  */
 
 namespace MSO_Meta_Description;
@@ -291,18 +291,47 @@ class Settings
      */
     public function register_settings(): void
     {
-        // Get the prefix for option names.
-        $option_prefix = MSO_Meta_Description::OPTION_PREFIX;
+        $option_group = 'mso_meta_description_options';
+        $prefix = MSO_Meta_Description::get_option_prefix();
 
-        // Register each setting (option) that the plugin uses.
-        // The third argument is a sanitization callback (e.g., 'sanitize_text_field').
-        // Even with AJAX saving, this defines the option in WordPress.
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_api_key', 'sanitize_text_field');
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_api_key', 'sanitize_text_field');
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_api_key', 'sanitize_text_field');
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'mistral_model', 'sanitize_text_field');
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'gemini_model', 'sanitize_text_field');
-        register_setting(self::OPTIONS_GROUP, $option_prefix . 'openai_model', 'sanitize_text_field');
+        // --- API Key Settings ---
+        register_setting($option_group, $prefix . 'gemini_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
+        register_setting($option_group, $prefix . 'mistral_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
+        register_setting($option_group, $prefix . 'openai_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
+
+        // --- Model Selection Settings ---
+        register_setting(
+            $option_group,
+            $prefix . 'gemini_model',
+            [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                // Replace constant with the actual default string from GeminiProvider::get_default_model()
+                'default'           => 'gemini-1.5-flash-latest', // <-- CORRECTED (Check GeminiProvider if different)
+            ]
+        );
+
+        register_setting(
+            $option_group,
+            $prefix . 'mistral_model',
+            [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                // Replace constant with the actual default string from MistralProvider::get_default_model()
+                'default'           => 'mistral-small-latest', // <-- CORRECTED
+            ]
+        );
+
+        register_setting(
+            $option_group,
+            $prefix . 'openai_model',
+            [
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                // Replace constant with the actual default string from OpenAIProvider::get_default_model()
+                'default'           => 'gpt-3.5-turbo', // <-- CORRECTED
+            ]
+        );
 
         // --- Mistral Section ---
         // Add the settings section for Mistral.
@@ -314,7 +343,7 @@ class Settings
         );
         // Add the API key field to the Mistral section.
         add_settings_field(
-            $option_prefix . 'mistral_api_key', // Option name (ID for the field)
+            $prefix . 'mistral_api_key', // Option name (ID for the field)
             esc_html__('Mistral API Key', 'mso-meta-description'), // Label for the field
             [$this, 'render_api_key_field'], // Callback to render the input field HTML
             self::SECTION_MISTRAL_ID, // Page slug (using section ID)
@@ -323,7 +352,7 @@ class Settings
         );
         // Add the model selection field to the Mistral section.
         add_settings_field(
-            $option_prefix . 'mistral_model',
+            $prefix . 'mistral_model',
             esc_html__('Mistral Model', 'mso-meta-description'),
             [$this, 'render_model_field'],
             self::SECTION_MISTRAL_ID,
@@ -333,13 +362,13 @@ class Settings
 
         // --- Gemini Section ---
         add_settings_section(self::SECTION_GEMINI_ID, null, [$this, 'render_section_callback'], self::SECTION_GEMINI_ID);
-        add_settings_field($option_prefix . 'gemini_api_key', esc_html__('Gemini API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
-        add_settings_field($option_prefix . 'gemini_model', esc_html__('Gemini Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
+        add_settings_field($prefix . 'gemini_api_key', esc_html__('Gemini API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
+        add_settings_field($prefix . 'gemini_model', esc_html__('Gemini Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
 
         // --- OpenAI Section ---
         add_settings_section(self::SECTION_OPENAI_ID, null, [$this, 'render_section_callback'], self::SECTION_OPENAI_ID);
-        add_settings_field($option_prefix . 'openai_api_key', esc_html__('OpenAI (ChatGPT) API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
-        add_settings_field($option_prefix . 'openai_model', esc_html__('OpenAI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
+        add_settings_field($prefix . 'openai_api_key', esc_html__('OpenAI (ChatGPT) API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
+        add_settings_field($prefix . 'openai_model', esc_html__('OpenAI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
 
         // Conditionally register the front page description setting
         // if the site is configured to show latest posts on the front page.

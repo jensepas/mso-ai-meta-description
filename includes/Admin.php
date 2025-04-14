@@ -121,9 +121,9 @@ class Admin
         // Prepare an array of PHP variables to pass to the JavaScript file ('mso-admin-script').
         $script_vars = [
             // Pass selected models (or defaults) from settings.
-            'geminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model', ApiClient::DEFAULT_GEMINI_MODEL),
-            'mistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model', ApiClient::DEFAULT_MISTRAL_MODEL),
-            'openaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model', ApiClient::DEFAULT_OPENAI_MODEL), // Ensure constant exists in ApiClient or main class
+            'geminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model'),
+            'mistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model'),
+            'openaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model'),
             // Localized strings for character count status messages.
             'status' => [
                 __('(Too short)', 'mso-meta-description'),
@@ -137,15 +137,15 @@ class Admin
             // Localized string for model loading errors.
             'errorLoadingModels' => __('Error loading models.', 'mso-meta-description'),
             // Security nonce for AJAX requests initiated by this script.
-            'nonce' => wp_create_nonce(MSO_Meta_Description::AJAX_NONCE), // Use constant defined in main plugin file or Ajax class
+            'nonce' => wp_create_nonce(MSO_Meta_Description::AJAX_NONCE_ACTION), // Use constant defined in main plugin file or Ajax class
             // Boolean flags indicating if API keys have been set (useful for enabling/disabling UI elements).
             'geminiApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_api_key')),
             'mistralApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_api_key')),
             'openaiApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_api_key')),
             // Pass the currently selected models again (might be redundant if already passed above, but can be useful for specific JS logic).
-            'selectedGeminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model', ApiClient::DEFAULT_GEMINI_MODEL),
-            'selectedMistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model', ApiClient::DEFAULT_MISTRAL_MODEL),
-            'selectedOpenaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model', ApiClient::DEFAULT_OPENAI_MODEL),
+            'selectedGeminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model'),
+            'selectedMistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model'),
+            'selectedOpenaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model'),
         ];
 
         // Make the PHP variables available in JavaScript under the 'msoScriptVars' object.

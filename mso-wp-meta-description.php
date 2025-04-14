@@ -89,6 +89,8 @@ final class MSO_Meta_Description
      */
     const AJAX_NONCE = 'wp_rest';
 
+    const AJAX_NONCE_ACTION = 'mso_meta_description_ajax_actions';
+
     /** Prefix used for all plugin options stored in the wp_options table. Helps avoid naming conflicts. */
     const OPTION_PREFIX = 'mso_meta_description_';
 
@@ -193,7 +195,7 @@ final class MSO_Meta_Description
         // Instantiate the Frontend handler, passing the meta key.
         $this->frontend = new Frontend(self::META_KEY);
         // Instantiate the AJAX handler, passing the API client and nonce identifier.
-        $this->ajax = new Ajax($this->api_client, self::AJAX_NONCE);
+        $this->ajax = new Ajax($this->api_client, self::AJAX_NONCE_ACTION);
     }
 
     /**
@@ -225,9 +227,9 @@ final class MSO_Meta_Description
     public function load_plugin_text_domain(): void
     {
         load_plugin_textdomain(
-            self::TEXT_DOMAIN, // The plugin's unique text domain.
-            '', // Deprecated argument.
-            dirname(plugin_basename(__FILE__)) . '/languages' // Path to the languages directory relative to the plugin file.
+            self::TEXT_DOMAIN,
+            false,
+            dirname(plugin_basename(__FILE__)) . '/languages'
         );
     }
 

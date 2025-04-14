@@ -15,10 +15,10 @@ use MSO_Meta_Description\Providers\ProviderInterface; // Interface for individua
 use MSO_Meta_Description\Providers\ProviderManager; // Manages provider instances.
 use WP_Error; // Used for returning standardized errors.
 
-// Import specific provider classes to access their constants (e.g., DEFAULT_MODEL).
-use MSO_Meta_Description\Providers\Available\GeminiProvider;
-use MSO_Meta_Description\Providers\Available\MistralProvider;
-use MSO_Meta_Description\Providers\Available\OpenAIProvider;
+// --- Suppression des 'use' pour les providers spécifiques ici, car les constantes ne sont plus utilisées ---
+// use MSO_Meta_Description\Providers\Available\GeminiProvider;
+// use MSO_Meta_Description\Providers\Available\MistralProvider;
+// use MSO_Meta_Description\Providers\Available\OpenAIProvider;
 
 
 /**
@@ -33,13 +33,10 @@ class ApiClient
      */
     const SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai'];
 
-    /**
-     * Default model constants pulled from individual provider classes.
-     * Used as fallbacks when retrieving options.
-     */
-    const DEFAULT_GEMINI_MODEL = GeminiProvider::DEFAULT_MODEL;
-    const DEFAULT_MISTRAL_MODEL = MistralProvider::DEFAULT_MODEL;
-    const DEFAULT_OPENAI_MODEL = OpenAIProvider::DEFAULT_MODEL;
+    // --- Suppression des constantes DEFAULT_*_MODEL ---
+    // const DEFAULT_GEMINI_MODEL = GeminiProvider::DEFAULT_MODEL; // Supprimé
+    // const DEFAULT_MISTRAL_MODEL = MistralProvider::DEFAULT_MODEL; // Supprimé
+    // const DEFAULT_OPENAI_MODEL = OpenAIProvider::DEFAULT_MODEL; // Supprimé
 
     // Removed the $provider_manager property and the constructor.
     // Provider registration is handled via the 'plugins_loaded' hook now.

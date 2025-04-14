@@ -3,216 +3,301 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-12 17:56+0200\n"
+"POT-Creation-Date: 2025-04-14 09:45+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_html__;esc_html_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.6\n"
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/Admin.php:70
+#: ../includes/Admin.php:129
 msgid "(Too short)"
 msgstr ""
 
-#: ../includes/Admin.php:71
+#: ../includes/Admin.php:130
 msgid "(Too long)"
 msgstr ""
 
-#: ../includes/Admin.php:72
+#: ../includes/Admin.php:131
 msgid "(Good)"
 msgstr ""
 
-#: ../includes/Admin.php:75
+#: ../includes/Admin.php:136
 msgid "-- Select a Model --"
 msgstr ""
 
-#: ../includes/Admin.php:76
+#: ../includes/Admin.php:138
 msgid "Error loading models."
 msgstr ""
 
-#: ../includes/Admin.php:103
+#: ../includes/Admin.php:174
 msgid "Settings"
 msgstr ""
 
-#: ../includes/Ajax.php:42 ../includes/Ajax.php:99
+#: ../includes/Ajax.php:77 ../includes/Ajax.php:137
 msgid "Invalid nonce."
 msgstr ""
 
-#: ../includes/Ajax.php:48 ../includes/Ajax.php:104
+#: ../includes/Ajax.php:83 ../includes/Ajax.php:142
 msgid "Permission denied."
 msgstr ""
 
-#: ../includes/Ajax.php:57
+#: ../includes/Ajax.php:94
 msgid "Content cannot be empty."
 msgstr ""
 
-#: ../includes/Ajax.php:63
+#: ../includes/Ajax.php:98
 msgid "Invalid AI provider specified."
 msgstr ""
 
-#: ../includes/Ajax.php:113
+#: ../includes/Ajax.php:151
 msgid "Invalid API type specified."
 msgstr ""
 
-#: ../includes/ApiClient.php:42 ../includes/ApiClient.php:85
-msgid "Invalid provider specified."
-msgstr ""
-
-#: ../includes/ApiClient.php:47 ../includes/ApiClient.php:103
+#: ../includes/Api/ApiClient.php:67 ../includes/Api/ApiClient.php:96
 #, php-format
-msgid "API key for %s is not set."
+msgid "AI provider \"%s\" is not registered or supported."
 msgstr ""
 
-#: ../includes/ApiClient.php:113 ../includes/ApiClient.php:123
-#, php-format
-msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
-msgstr ""
-
-#: ../includes/ApiClient.php:184
-msgid "Failed to encode request body."
-msgstr ""
-
-#: ../includes/ApiClient.php:201
-#, php-format
-msgid "Could not parse summary from %s response."
-msgstr ""
-
-#: ../includes/ApiClient.php:214
-#, php-format
-msgid "Could not parse summary from Gemini response. Finish Reason: %s"
-msgstr ""
-
-#: ../includes/ApiClient.php:226
-msgid "An unknown error occurred during API processing."
-msgstr ""
-
-#: ../includes/ApiClient.php:243
-#, php-format
-msgid "HTTP request failed when calling %s API for %s."
-msgstr ""
-
-#: ../includes/ApiClient.php:256
-#, php-format
-msgid "Error %d from %s API for %s."
-msgstr ""
-
-#: ../includes/ApiClient.php:272
-msgid "Invalid JSON response received."
-msgstr ""
-
-#: ../includes/ApiClient.php:274
-msgid "Empty response body."
-msgstr ""
-
-#: ../includes/ApiClient.php:310
-#, php-format
-msgid "Could not parse model list from %s response."
-msgstr ""
-
-#: ../includes/ApiClient.php:328
-msgid "Could not parse model list from Gemini response."
-msgstr ""
-
-#: ../includes/ApiClient.php:332
-msgid "Could not parse model list for the specified provider."
-msgstr ""
-
-#: ../includes/ApiClient.php:342
-#, php-format
-msgid "Unknown action \"%s\" requested for API client."
-msgstr ""
-
-#: ../includes/MetaBox.php:39 ../includes/Settings.php:34
+#: ../includes/MetaBox.php:79 ../includes/Settings.php:167
 msgid "MSO Meta Description"
 msgstr ""
 
-#: ../includes/Settings.php:33
-msgid "MSO Meta Description Settings"
+#: ../includes/MetaBox.php:112
+msgid "Meta Description"
 msgstr ""
 
-#: ../includes/Settings.php:86
-msgid "API Settings"
-msgstr ""
-
-#: ../includes/Settings.php:94
-msgid "Mistral API Key"
-msgstr ""
-
-#: ../includes/Settings.php:102
-msgid "Mistral Model"
-msgstr ""
-
-#: ../includes/Settings.php:112
-msgid "Gemini API Key"
-msgstr ""
-
-#: ../includes/Settings.php:120
-msgid "Gemini Model"
-msgstr ""
-
-#: ../includes/Settings.php:130
-msgid "OpenAI (ChatGPT) API Key"
-msgstr ""
-
-#: ../includes/Settings.php:138
-msgid "OpenAI Model"
-msgstr ""
-
-#: ../includes/Settings.php:157
-msgid "Enter your API keys and select the models for generating meta descriptions."
-msgstr ""
-
-#: ../includes/Settings.php:208
-#, php-format
-msgid "Get your %s API key"
-msgstr ""
-
-#: ../includes/Settings.php:229
-msgid "Loading models..."
-msgstr ""
-
-#: ../includes/Settings.php:231
-#, php-format
-msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
-msgstr ""
-
-#: ../includes/Settings.php:243
-msgid "Front page meta description"
-msgstr ""
-
-#: ../includes/Settings.php:266
-#, php-format
-msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
-msgstr ""
-
-#: ../templates/meta-box-description.php:50
+#: ../includes/MetaBox.php:129
 #, php-format
 msgid "Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../templates/meta-box-description.php:55
+#: ../includes/MetaBox.php:134
 msgid "Current count:"
 msgstr ""
 
-#: ../templates/meta-box-description.php:70
+#: ../includes/MetaBox.php:149
 msgid "Generate with AI:"
 msgstr ""
 
-#: ../templates/meta-box-description.php:74
+#: ../includes/MetaBox.php:155
 msgid "Generate with Mistral"
 msgstr ""
 
-#: ../templates/meta-box-description.php:80
+#: ../includes/MetaBox.php:163
 msgid "Generate with Gemini"
 msgstr ""
 
-#: ../templates/meta-box-description.php:86
+#: ../includes/MetaBox.php:171
 msgid "Generate with ChatGPT"
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:60
+#: ../includes/Providers/Available/GeminiProvider.php:123
+msgid "API key for Gemini is not set."
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:85
+msgid "Unable to parse model list from Gemini."
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:130
+#: ../includes/Providers/Available/MistralProvider.php:138
+#: ../includes/Providers/Available/OpenAIProvider.php:162
+#, php-format
+msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:176
+#: ../includes/Providers/Available/MistralProvider.php:85
+#: ../includes/Providers/Available/MistralProvider.php:174
+#: ../includes/Providers/Available/OpenAIProvider.php:109
+#: ../includes/Providers/Available/OpenAIProvider.php:197
+msgid "Unknown API error occurred."
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:183
+#, php-format
+msgid "Gemini API Error (%1$d): %2$s"
+msgstr ""
+
+#: ../includes/Providers/Available/GeminiProvider.php:198
+msgid "Gemini response missing expected summary data."
+msgstr ""
+
+#: ../includes/Providers/Available/MistralProvider.php:58
+#: ../includes/Providers/Available/MistralProvider.php:131
+msgid "API key for Mistral is not set."
+msgstr ""
+
+#: ../includes/Providers/Available/MistralProvider.php:92
+#: ../includes/Providers/Available/MistralProvider.php:181
+#, php-format
+msgid "Mistral API Error (%1$d): %2$s"
+msgstr ""
+
+#: ../includes/Providers/Available/MistralProvider.php:103
+msgid "Unable to parse model list from Mistral."
+msgstr ""
+
+#: ../includes/Providers/Available/MistralProvider.php:196
+msgid "Mistral response missing expected summary data."
+msgstr ""
+
+#: ../includes/Providers/Available/OpenAIProvider.php:82
+#: ../includes/Providers/Available/OpenAIProvider.php:155
+msgid "API key for OpenAI is missing."
+msgstr ""
+
+#: ../includes/Providers/Available/OpenAIProvider.php:116
+#: ../includes/Providers/Available/OpenAIProvider.php:204
+#, php-format
+msgid "OpenAI API Error (%1$d): %2$s"
+msgstr ""
+
+#: ../includes/Providers/Available/OpenAIProvider.php:127
+msgid "Unable to parse model list from OpenAI."
+msgstr ""
+
+#: ../includes/Providers/Available/OpenAIProvider.php:219
+msgid "OpenAI response missing expected summary data."
+msgstr ""
+
+#: ../includes/Settings.php:122
+msgid "Saving..."
+msgstr ""
+
+#: ../includes/Settings.php:123
+msgid "Settings Saved"
+msgstr ""
+
+#: ../includes/Settings.php:124
+msgid "Error Saving Settings"
+msgstr ""
+
+#: ../includes/Settings.php:146
+msgid "Hide password"
+msgstr ""
+
+#: ../includes/Settings.php:151
+msgid "Show password"
+msgstr ""
+
+#: ../includes/Settings.php:166
+msgid "MSO Meta Description Settings"
+msgstr ""
+
+#: ../includes/Settings.php:250
+msgid "Save Changes"
+msgstr ""
+
+#: ../includes/Settings.php:265
+msgid "Invalid nonce specified."
+msgstr ""
+
+#: ../includes/Settings.php:265
+msgid "Error"
+msgstr ""
+
+#: ../includes/Settings.php:280
+msgid "Mistral Settings"
+msgstr ""
+
+#: ../includes/Settings.php:281
+msgid "Gemini Settings"
+msgstr ""
+
+#: ../includes/Settings.php:282
+msgid "OpenAI Settings"
+msgstr ""
+
+#: ../includes/Settings.php:318
+msgid "Mistral API Key"
+msgstr ""
+
+#: ../includes/Settings.php:327
+msgid "Mistral Model"
+msgstr ""
+
+#: ../includes/Settings.php:336
+msgid "Gemini API Key"
+msgstr ""
+
+#: ../includes/Settings.php:337
+msgid "Gemini Model"
+msgstr ""
+
+#: ../includes/Settings.php:341
+msgid "OpenAI (ChatGPT) API Key"
+msgstr ""
+
+#: ../includes/Settings.php:342
+msgid "OpenAI Model"
+msgstr ""
+
+#: ../includes/Settings.php:367
+msgid "Front page meta description"
+msgstr ""
+
+#: ../includes/Settings.php:389
+msgid "You do not have permission to save these settings."
+msgstr ""
+
+#: ../includes/Settings.php:399
+msgid "Could not determine which settings tab to save."
+msgstr ""
+
+#: ../includes/Settings.php:430
+#, php-format
+msgid "Unknown settings tab: %s"
+msgstr ""
+
+#: ../includes/Settings.php:475
+msgid "Settings saved with validation errors."
+msgstr ""
+
+#: ../includes/Settings.php:482
+msgid "Settings saved successfully."
+msgstr ""
+
+#: ../includes/Settings.php:499
+msgid "Configure the settings for using the Mistral API."
+msgstr ""
+
+#: ../includes/Settings.php:502
+msgid "Configure the settings for using the Google Gemini API."
+msgstr ""
+
+#: ../includes/Settings.php:505
+msgid "Configure the settings for using the OpenAI API."
+msgstr ""
+
+#: ../includes/Settings.php:566
+#, php-format
+msgid "Get your %s API key"
+msgstr ""
+
+#: ../includes/Settings.php:596
+msgid "Loading models..."
+msgstr ""
+
+#: ../includes/Settings.php:612
+#, php-format
+msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
+msgstr ""
+
+#: ../includes/Settings.php:647
+#, php-format
+msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
+msgstr ""
+
+#: ../includes/Settings.php:651
+msgid "Character count"
 msgstr ""
