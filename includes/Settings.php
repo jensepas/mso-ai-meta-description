@@ -171,7 +171,7 @@ class Settings
                 <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
                 <!-- Placeholder for AJAX success/error messages -->
-                <div id="mso-settings-messages" style="margin-top: 10px;"></div>
+                <div id="mso-settings-messages" class="mso-settings-messages"></div>
 
                 <!-- Navigation tabs -->
                 <h2 class="nav-tab-wrapper">
@@ -611,7 +611,7 @@ class Settings
 
         // Add a placeholder div for displaying errors related to model loading (e.g., invalid API key).
         // JavaScript can target this using the ID.
-        echo '<div id="mso-model-error-' . esc_attr($provider) . '" class="mso-model-error" style="color: red;"></div>';
+        echo '<div id="mso-model-error-' . esc_attr($provider) . '" class="mso-model-error"></div>';
     }
 
     /**

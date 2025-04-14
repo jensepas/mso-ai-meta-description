@@ -1,0 +1,24 @@
+.mso-model-error {
+    color: red;
+}
+.mso-length-indicator {
+    font-weight: bold;
+    margin-left: 5px;
+}
+.mso-ai-generator {
+    margin-top: 15px;
+}
+.mso-spinner {
+    float: none;
+    vertical-align: middle;
+    margin-left: 5px;
+    visibility: hidden;
+}
+.mso-ai-error {
+    color: red;
+    margin-top: 5px;
+    min-height: 1em;
+}
+.mso-settings-messages {
+    margin-top: 10px;
+}

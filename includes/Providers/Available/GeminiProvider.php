@@ -73,9 +73,10 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
 
         // Map to consistent format
         return array_map(function ($model) {
-            $model['id'] = str_replace('models/', '', $model['name'] ?? '');
-            $model['displayName'] = $model['displayName'] ?? $model['id'];
-            return $model;
+            return [
+                'id' => str_replace('models/', '', $model['name'] ?? ''),
+                'displayName' => $model['displayName'] ?? $model['id'],
+            ];
         }, array_values($models));
     }
 

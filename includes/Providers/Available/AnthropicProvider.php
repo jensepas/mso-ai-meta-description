@@ -76,7 +76,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
         if (!isset($data['data']) || !is_array($data['data'])) {
             return new WP_Error(
                 'invalid_response_structure',
-                __('Unable to parse model list from OpenAI: "data" array missing.', 'mso-meta-description')
+                __('Unable to parse model list from Anthropic: "data" array missing.', 'mso-meta-description')
             );
         }
 
@@ -84,7 +84,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
         return array_map(function ($model) {
             return [
                 'id' => $model['id'],
-                'displayName' => $model['displayName'],
+                'displayName' => $model['display_name'] ?? $model['id'],
             ];
         }, $data['data']);
     }

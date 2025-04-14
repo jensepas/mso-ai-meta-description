@@ -116,7 +116,7 @@ class MetaBox
                     id="mso_meta_description_field" <?php // Unique ID for the textarea, used by label and JavaScript. ?>
                     name="<?php echo esc_attr($field_name); ?>" <?php // Name attribute for form submission. ?>
                     rows="4"
-                    style="width: 100%;"
+                    class="large-text"
                     maxlength="<?php echo esc_attr($max_length + 20); // Allow some buffer beyond max recommended length for easier editing. ?>"
                     aria-describedby="mso-description-hint" <?php // Accessibility: Links textarea to the description paragraph below. ?>
             ><?php echo esc_textarea($value); /* Output the saved value, properly escaped for a textarea. */ ?></textarea>
@@ -133,7 +133,7 @@ class MetaBox
                 ?>
                 <?php esc_html_e('Current count:', 'mso-meta-description'); ?>
                 <span class="mso-char-count">0</span><?php // Span to display the live character count (updated by JS). ?>
-                <span class="mso-length-indicator" style="font-weight: bold; margin-left: 5px;"></span><?php // Span to display length status (e.g., "Too short", "Good", updated by JS). ?>
+                <span class="mso-length-indicator"></span><?php // Span to display length status (e.g., "Too short", "Good", updated by JS). ?>
             </p>
 
             <?php
@@ -146,7 +146,7 @@ class MetaBox
             // Only show the AI generator section if at least one API key is configured.
             if ($mistral_key_set || $gemini_key_set || $openai_key_set || $anthropic_key_set) :
                 ?>
-                <div class="mso-ai-generator" style="margin-top: 15px;">
+                <div class="mso-ai-generator">
                     <p><strong><?php esc_html_e('Generate with AI:', 'mso-meta-description'); ?></strong></p>
 
                     <?php // Conditionally display the button for Mistral if its API key is set. ?>
@@ -182,9 +182,9 @@ class MetaBox
                     <?php endif; ?>
 
                     <?php // Spinner element shown during AJAX requests (controlled by JS). ?>
-                    <span class="spinner" style="float: none; vertical-align: middle; margin-left: 5px; visibility: hidden;"></span> <?php // Inline styles to position spinner correctly and hide initially. ?>
+                    <span class="spinner mso-spinner"></span> <?php // Inline styles to position spinner correctly and hide initially. ?>
                     <?php // Paragraph to display potential error messages from AJAX requests (controlled by JS). ?>
-                    <p id="mso-ai-error" style="color: red; margin-top: 5px; min-height: 1em;"></p> <?php // Ensure space even when empty. ?>
+                    <p id="mso-ai-error" class="mso-ai-error"></p> <?php // Ensure space even when empty. ?>
 
                 </div> <?php // End mso-ai-generator div ?>
             <?php

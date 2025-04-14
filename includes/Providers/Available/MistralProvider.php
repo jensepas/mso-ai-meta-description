@@ -51,15 +51,11 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
             );
         }
 
-        // Filter the list of models: keep only those whose IDs start with 'gpt-3.5' or 'gpt-4'.
-        $models = array_filter($data['data'], fn($model) =>
-            isset($model['displayName']) && // Ensure 'id' exists before checking
-            (str_starts_with($model['id'], 'gpt-3.5') || str_starts_with($model['id'], 'gpt-4'))
-        );
-
         return array_map(function ($model) {
-            $model['displayName'] = $model['id'] ?? '';
-            return $model;
+            return [
+                'id' => $model['id'] ?? '',
+                'displayName' => $model['id'] ?? '',
+            ];
         }, array_values($data['data'])); // Re-index the array just in case.
     }
 

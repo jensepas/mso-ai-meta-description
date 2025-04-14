@@ -72,8 +72,10 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface {
 
         // Map the models to include a 'displayName' for consistency, falling back to 'id'.
         return array_map(function ($model) {
-            $model['displayName'] = $model['id'] ?? ''; // Use 'id' as 'displayName'
-            return $model;
+            return [
+                'id' => $model['id'] ?? '',
+                'displayName' => $model['id'] ?? '',
+            ];
         }, array_values($models)); // Re-index the array after filtering.
     }
 
