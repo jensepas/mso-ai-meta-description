@@ -3,34 +3,42 @@
  * MSO Meta Description Uninstall
  *
  * Actions performed when the plugin is deleted via the WordPress admin interface.
+ * This script runs *only* when the user clicks "Delete" for the plugin
+ * from the "Plugins" page. It does *not* run on deactivation.
  *
  * @package MSO_Meta_Description
  * @since   1.3.0
  */
 
 // Exit if uninstall.php is not called by WordPress.
+// WP_UNINSTALL_PLUGIN is defined by WordPress only when uninstalling a plugin.
 if (!defined('WP_UNINSTALL_PLUGIN')) {
-    die;
+    die; // Protects the script from direct access.
 }
 
 /**
  * Handles the removal of plugin data for a single WordPress site.
  *
  * Deletes plugin options, post meta associated with MSO Meta Description,
- * and any custom database tables created by the plugin.
+ * and any custom database tables created by the plugin (if applicable).
+ * This function is designed to be called for each site in a multisite network
+ * or just once for a single site installation.
  *
+ * @since 1.3.0
  * @return void
  */
 function mso_meta_description_uninstall_site(): void
 {
-// Define constants based on the main plugin class.
-// It's generally safer to hardcode these in uninstall.php as the main plugin file might not be loaded.
-    $option_prefix = 'mso_meta_description_';
-    $meta_key      = '_mso_meta_description'; // The meta key used for posts/pages
+    // Define constants based on the main plugin class or configuration.
+    // It's generally safer to hardcode these critical keys in uninstall.php
+    // because the main plugin files are not loaded during uninstallation.
+    $option_prefix = 'mso_meta_description_'; // Prefix used for plugin options.
+    $meta_key      = '_mso_meta_description'; // The meta key used for storing descriptions on posts/pages.
 
-// --- Delete Plugin Options ---
+    // --- Delete Plugin Options ---
 
-// List of options specific to this plugin stored in the wp_options table.
+    // List of all options specific to this plugin stored in the wp_options table.
+    // Ensure this list is comprehensive and includes all options created by the plugin.
     $options_to_delete = [
         $option_prefix . 'mistral_api_key',
         $option_prefix . 'gemini_api_key',
@@ -38,37 +46,66 @@ function mso_meta_description_uninstall_site(): void
         $option_prefix . 'mistral_model',
         $option_prefix . 'gemini_model',
         $option_prefix . 'openai_model',
-        $option_prefix . 'front_page', // Option added to 'reading' group but stored in wp_options
+        $option_prefix . 'front_page', // Option added to 'reading' group but stored in wp_options.
         // Add any other option names your plugin might create here.
+        // Example: $option_prefix . 'some_other_setting',
     ];
 
-// Loop through the options and delete them.
+    // Loop through the defined options and delete each one from the wp_options table.
     foreach ($options_to_delete as $option_name) {
-        delete_option($option_name);
+        delete_option($option_name); // WordPress function to remove an option.
     }
 
-// --- Delete Post Meta ---
+    // --- Delete Post Meta ---
 
-// Delete all instances of the custom meta key associated with this plugin from the wp_postmeta table.
-// This is more efficient than looping through all posts.
-// Requires WordPress 3.4+ (Plugin requires 6.0+, so this is safe).
+    // Delete all instances of the custom meta key associated with this plugin
+    // from the wp_postmeta table across all posts and pages.
+    // This is more efficient than querying all posts and deleting meta individually.
+    // Requires WordPress 3.4+ (Plugin requires 6.0+, so this is safe).
     delete_post_meta_by_key($meta_key);
+
+    // --- Delete Custom Tables (Example - If you had custom tables) ---
+    /*
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'mso_custom_data'; // Example table name
+    $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
+    */
+
+    // --- Delete Scheduled Cron Events (Example - If you had cron jobs) ---
+    /*
+    wp_clear_scheduled_hook('mso_daily_cron_event');
+    */
 }
 
-// Check if the installation is multisite
-if (is_multisite()) {
-    // Get all blog IDs from the network
-    $site_ids = get_sites(['fields' => 'ids']);
+// --- Handle Multisite ---
 
+// Check if the current WordPress installation is a multisite network.
+if (is_multisite()) {
+    // Get all site (blog) IDs within the network.
+    // 'fields' => 'ids' returns an array of IDs directly.
+    $site_ids = get_sites(['fields' => 'ids', 'network_id' => null, 'deleted' => 0, 'archived' => 0]); // Ensure we get active sites
+
+    // Iterate through each site ID in the network.
     foreach ($site_ids as $site_id) {
+        // Temporarily switch the context to the specific site.
+        // This makes functions like delete_option() and delete_post_meta_by_key()
+        // operate on the tables for that specific site (e.g., wp_2_options, wp_2_postmeta).
         switch_to_blog($site_id);
+
+        // Call the site-specific uninstall function to clean up data for this site.
         mso_meta_description_uninstall_site();
+
+        // Restore the context back to the original site (usually the main site).
+        // This is crucial to avoid issues if the loop continues or other code runs after this.
         restore_current_blog();
     }
 } else {
-    // Single site uninstall
+    // If it's not a multisite installation, just run the uninstall function once for the single site.
     mso_meta_description_uninstall_site();
 }
 
-// Clear any WordPress cache that might hold plugin data
+// --- Final Cleanup ---
+
+// Clear any WordPress object cache that might hold plugin data.
+// This helps ensure that stale data isn't accidentally retrieved after uninstallation.
 wp_cache_flush();
