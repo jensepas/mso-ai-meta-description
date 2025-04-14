@@ -539,17 +539,17 @@ class Settings
         $provider_name = ucfirst($provider); // Capitalize provider name for display.
         switch ($provider) {
             case 'mistral':
-                $docs_url = 'https://docs.mistral.ai/platform/client/';
+                $docs_url = 'https://console.mistral.ai/home';
                 break;
             case 'gemini':
                 $docs_url = 'https://ai.google.dev/tutorials/setup';
                 break;
             case 'openai':
-                $docs_url = 'https://platform.openai.com/account/api-keys';
+                $docs_url = 'https://platform.openai.com/api-keys';
                 $provider_name = 'OpenAI'; // Use specific capitalization.
                 break;
             case 'anthropic':
-                $docs_url = 'https://console.anthropic.com/settings/keys';
+                $docs_url = 'https://console.anthropic.com';
                 $provider_name = 'Anthropic'; // Use specific capitalization.
                 break;
         }

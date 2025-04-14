@@ -59,10 +59,4 @@ spl_autoload_register(function ($class) {
         // if the file somehow gets included again elsewhere.
         require_once $file;
     }
-    // Optional: Add logging here for debugging if a file is expected but not found.
-    // else {
-    //     if (defined('WP_DEBUG') && WP_DEBUG) {
-    //         error_log("Autoloader Error: Could not load class $class. File not found or not readable: $file");
-    //     }
-    // }
 });

@@ -33,11 +33,6 @@ use MSO_Meta_Description\Api\ApiClient;
 $autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
 // Check if the autoloader file exists. If not, the plugin cannot function.
 if (!file_exists($autoloader)) {
-    // Log an error or display an admin notice if the autoloader is missing.
-    // error_log('MSO Meta Description: Autoloader not found at ' . $autoloader . '. Plugin cannot function.');
-    // add_action('admin_notices', function() {
-    //     echo '<div class="notice notice-error"><p><strong>MSO Meta Description Error:</strong> Autoloader file is missing. Please reinstall the plugin.</p></div>';
-    // });
     return; // Stop plugin execution if the autoloader is missing.
 }
 // Include the autoloader to handle automatic class loading.
@@ -49,9 +44,6 @@ require_once $autoloader;
 $provider_interface = plugin_dir_path(__FILE__) . 'includes/Providers/ProviderInterface.php';
 if (file_exists($provider_interface)) {
     require_once $provider_interface;
-} else {
-    // Log an error or display an admin notice if the interface file is missing.
-    // error_log('MSO Meta Description: ProviderInterface.php not found. Dynamic providers may not load correctly.');
 }
 
 
@@ -295,8 +287,6 @@ function mso_init_dynamic_providers(): void
 {
     // Check if the ProviderManager class exists (it should have been autoloaded).
     if (!class_exists('\MSO_Meta_Description\Providers\ProviderManager')) {
-        // Log an error if the class is missing.
-        // error_log('MSO Meta Description Error: ProviderManager class not found. Cannot register providers.');
         return;
     }
 
@@ -305,18 +295,11 @@ function mso_init_dynamic_providers(): void
 
     // Check if the directory actually exists.
     if (!is_dir($provider_scan_dir)) {
-        // Log a warning if the directory is missing. The ProviderManager method also handles this.
-        // error_log('MSO Meta Description Warning: Provider scan directory (' . $provider_scan_dir . ') not found. No dynamic providers will be loaded.');
+        return;
     }
 
     // Call the static method on ProviderManager to scan the directory and register found providers.
     ProviderManager::register_providers_from_directory();
-
-    // Optional: Log the registered providers during development for debugging purposes.
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        // $registered_providers = ProviderManager::get_providers();
-        // error_log('MSO Meta Description: Dynamically registered providers: ' . (!empty($registered_providers) ? implode(', ', array_keys($registered_providers)) : 'None'));
-    }
 }
 
 // Hook the provider initialization function to the 'plugins_loaded' action.

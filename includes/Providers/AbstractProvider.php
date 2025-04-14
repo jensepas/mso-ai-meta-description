@@ -10,6 +10,7 @@
 namespace MSO_Meta_Description\Providers;
 
 use MSO_Meta_Description\MSO_Meta_Description;
+use MSO_Meta_Description\Utils\Logger;
 use WP_Error;
 
 abstract class AbstractProvider implements ProviderInterface
@@ -18,13 +19,13 @@ abstract class AbstractProvider implements ProviderInterface
      * Stores the API key retrieved from settings.
      * @var string|false|null Null if not yet fetched, false if empty/not set.
      */
-    protected $api_key = null;
+    protected mixed $api_key = null;
 
     /**
      * Stores the selected model retrieved from settings.
      * @var string|null
      */
-    protected $model = null;
+    protected mixed $model = null;
 
     /**
      * Constructor. Retrieves API key and model.
@@ -127,16 +128,15 @@ abstract class AbstractProvider implements ProviderInterface
         // Handle non-200 responses
         if ($http_code !== 200) {
             $error_message = $this->extract_error_message($data) ?? __('Unknown API error occurred.', 'mso-meta-description');
-            if (defined('WP_DEBUG') && WP_DEBUG === true) {
-                error_log(sprintf(
-                    '%s API Error (%s) - Status: %d - Message: %s - Body: %s',
-                    ucfirst($this->get_name()),
-                    $endpoint,
-                    $http_code,
-                    $error_message,
-                    $body
-                ));
-            }
+            // Use the centralized logger
+            Logger::debug(
+                sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint), // Main message
+                [ // Context array
+                    'status' => $http_code,
+                    'message' => $error_message,
+                    'body' => $body
+                ]
+            );
             return new WP_Error(
                 'api_error',
                 sprintf(
@@ -152,14 +152,13 @@ abstract class AbstractProvider implements ProviderInterface
 
         // Handle JSON decoding errors
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
-            if (defined('WP_DEBUG') && WP_DEBUG === true) {
-                error_log(sprintf(
-                    '%s API JSON Decode Error (%s) - Body: %s',
-                    ucfirst($this->get_name()),
-                    $endpoint,
-                    $body
-                ));
-            }
+            // Use the centralized logger
+            Logger::debug(
+                sprintf('%s API JSON Decode Error (%s)', ucfirst($this->get_name()), $endpoint), // Main message
+                ['body' => $body] // Context array
+            );
+
+            // ... return WP_Error ...
             return new WP_Error('json_decode_error', __('Failed to decode API response.', 'mso-meta-description'), ['body' => $body]);
         }
 

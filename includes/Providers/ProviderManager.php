@@ -13,6 +13,7 @@ namespace MSO_Meta_Description\Providers;
 
 use FilesystemIterator; // Used for directory iteration options.
 use GlobIterator; // Used for finding files matching a pattern.
+use MSO_Meta_Description\Utils\Logger;
 use ReflectionClass; // Used for inspecting classes to ensure they implement the interface.
 use Exception; // Import base Exception class for catching errors during reflection/instantiation.
 
@@ -42,15 +43,12 @@ class ProviderManager
     public static function register_provider(ProviderInterface $provider): void
     {
         // Optional: Log if overriding an existing provider with the same name
-        // if (isset(self::$providers[$provider->get_name()])) {
-        //     error_log('MSO Meta Description: Overriding registered provider: ' . $provider->get_name());
-        // }
+         if (isset(self::$providers[$provider->get_name()])) {
+             Logger::debug('Overriding registered provider', ['name' => $provider->get_name()]);
+         }
 
         // Store the provider instance in the static array using its name as the key.
         self::$providers[$provider->get_name()] = $provider;
-
-        // Optional: Log registration for debugging
-        // error_log('MSO Meta Description: Registered provider: ' . $provider->get_name());
     }
 
     /**
@@ -82,7 +80,6 @@ class ProviderManager
         return self::$providers;
     }
 
-
     /**
      * Scans the 'Available' subdirectory for provider classes and registers them.
      *
@@ -104,9 +101,6 @@ class ProviderManager
 
         // Check if the directory exists before attempting to scan it.
         if (!is_dir($providers_dir)) {
-            // Log an error if the directory is missing.
-            //error_log('MSO Meta Description: Provider directory not found: ' . $providers_dir);
-            // Mark as registered even if failed, to prevent repeated attempts in the same request.
             self::$providers_registered = true;
             return;
         }
@@ -145,15 +139,24 @@ class ProviderManager
                             self::register_provider($providerInstance);
                         } else {
                             // Log if a class was found but didn't meet the criteria.
-                            //error_log("MSO Meta Description: Class $fqcn found but does not implement ProviderInterface or is not instantiable.");
+                            Logger::error(
+                                'Class found but does not implement ProviderInterface or is not instantiable',
+                                ['class' => $fqcn]
+                            );
                         }
                     } else {
                         // Log if the file was included but the expected class name wasn't defined.
-                        //error_log("MSO Meta Description: File $path included, but class $fqcn not found.");
+                        Logger::error(
+                            'File included, but class not found',
+                            ['path' => $path, 'expected_class' => $fqcn]
+                        );
                     }
                 } catch (Exception $e) {
                     // Catch any exceptions during reflection or instantiation (e.g., constructor errors).
-                    //error_log("MSO Meta Description: Error loading provider from $path: " . $e->getMessage());
+                    Logger::error(
+                        'Error loading provider',
+                        ['path' => $path, 'exception_message' => $e->getMessage()]
+                    );
                 }
             }
         }

@@ -24,7 +24,6 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
  * This function is designed to be called for each site in a multisite network
  * or just once for a single site installation.
  *
- * @since 1.3.0
  * @return void
  */
 function mso_meta_description_uninstall_site(): void
