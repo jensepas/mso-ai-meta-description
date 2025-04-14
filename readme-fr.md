@@ -1,12 +1,12 @@
 # MSO Meta Description
 
-**Ajoutez facilement des méta descriptions personnalisables à votre site WordPress, avec des suggestions optionnelles basées sur l'IA de Gemini, Mistral et OpenAI (ChatGPT).**
+**Ajoutez facilement des méta descriptions personnalisables à votre site WordPress, avec des suggestions optionnelles basées sur l'IA de Gemini, Mistral, Anthropic et OpenAI (ChatGPT).**
 
 ---
 
 ## 🧠 Introduction
 
-**MSO Meta Description** est un plugin WordPress léger conçu pour vous donner un contrôle total sur les balises de méta description de votre site pour un meilleur SEO. Écrivez-les manuellement ou obtenez des suggestions en utilisant les derniers LLM comme Gemini, Mistral et OpenAI (ChatGPT).
+**MSO Meta Description** est un plugin WordPress léger conçu pour vous donner un contrôle total sur les balises de méta description de votre site pour un meilleur SEO. Écrivez-les manuellement ou obtenez des suggestions en utilisant les derniers LLM comme Gemini, Mistral, Anthropic et OpenAI (ChatGPT).
 
 ---
 
@@ -31,6 +31,7 @@
     - Google Gemini
     - Mistral AI
     - OpenAI (ChatGPT)
+    - Anthropic Claude
 - 🧩 **Compteur de Caractères** pour rester dans la plage optimale de 120 à 160 caractères.
 - ⚙️ **Support de Description de la Page d'Accueil** que vous utilisiez une page statique ou les derniers articles.
 - 🪶 **Léger et Focus** : Fait bien une chose, sans surcharge.
@@ -104,6 +105,7 @@ Le plugin récupère dynamiquement les modèles disponibles une fois une clé AP
 - `gpt-3.5-turbo`
 - `mistral-small-latest`
 - `gemini-2.0-flash`
+- `claude-3-sonnet-20240229`
 
 ### Cela va-t-il entrer en conflit avec des plugins SEO comme Yoast ou Rank Math ?
 
@@ -118,7 +120,12 @@ Possible. Les deux plugins peuvent générer une méta description. **Évitez le
 
 ## 🧾 Journal des modifications
 
-### 1.3.0 – *2025-04-12*
+
+### 1.3.0 – *2025-04-14*
+
+- ✨ Ajout du support pour **Anthropic**
+
+### 1.2.0
 
 - ✨ Ajout du support pour **OpenAI (ChatGPT)**
 - ⚙️ Meilleure gestion des erreurs pour tous les fournisseurs

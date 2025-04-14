@@ -30,6 +30,7 @@
     const $mistralSelect = $('#mso_meta_description_mistral_model_id'); // Select dropdown for Mistral models.
     const $geminiSelect = $('#mso_meta_description_gemini_model_id'); // Select dropdown for Gemini models.
     const $openaiSelect = $('#mso_meta_description_openai_model_id'); // Select dropdown for OpenAI models.
+    const $anthropicSelect = $('#mso_meta_description_anthropic_model_id'); // Select dropdown for OpenAI models.
 
     // --- Get Localized Variables ---
     // Retrieve variables passed from PHP using wp_localize_script.
@@ -40,10 +41,12 @@
         selectedGeminiModel = '',
         selectedOpenaiModel = '',
         selectedMistralModel = '',
+        selectedAnthropicModel = '',
         // API Key Status (boolean flags passed from PHP)
         geminiApiKeySet = false,
         openaiApiKeySet = false,
         mistralApiKeySet = false,
+        anthropicApiKeySet = false,
         // UI Strings & Config (localized strings and essential URLs/nonces)
         selectModel = '-- Select a Model --', // Default text for model dropdowns.
         errorLoadingModels = 'Error loading models.', // Generic error for model fetching.
@@ -403,7 +406,7 @@
 
         // --- Settings Page Specific Initializations ---
         // Check if any of the model select dropdowns exist on the page.
-        if ($mistralSelect.length || $geminiSelect.length || $openaiSelect.length) {
+        if ($mistralSelect.length || $geminiSelect.length || $openaiSelect.length || $anthropicSelect.length) {
 
             // Populate Mistral models dropdown if it exists.
             void populateModelSelect({
@@ -427,6 +430,14 @@
                 $select: $openaiSelect, // Use the corrected selector.
                 defaultModel: selectedOpenaiModel,
                 apiKeySet: openaiApiKeySet
+            });
+
+            // Populate Anthropic models dropdown if it exists.
+            void populateModelSelect({
+                apiType: 'anthropic',
+                $select: $anthropicSelect, // Use the corrected selector.
+                defaultModel: selectedAnthropicModel,
+                apiKeySet: anthropicApiKeySet
             });
 
             // Attach handlers for password toggle buttons.

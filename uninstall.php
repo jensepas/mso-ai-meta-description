@@ -43,9 +43,11 @@ function mso_meta_description_uninstall_site(): void
         $option_prefix . 'mistral_api_key',
         $option_prefix . 'gemini_api_key',
         $option_prefix . 'openai_api_key',
-        $option_prefix . 'mistral_model',
+        $option_prefix . 'openai_api_key',
+        $option_prefix . 'anthropic_api_key',
         $option_prefix . 'gemini_model',
         $option_prefix . 'openai_model',
+        $option_prefix . 'anthropic_model',
         $option_prefix . 'front_page', // Option added to 'reading' group but stored in wp_options.
         // Add any other option names your plugin might create here.
         // Example: $option_prefix . 'some_other_setting',

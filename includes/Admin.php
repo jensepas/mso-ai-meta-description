@@ -11,7 +11,6 @@
  * @since   1.3.0
  */
 namespace MSO_Meta_Description;
-use MSO_Meta_Description\Api\ApiClient; // Used for default model constants
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -124,6 +123,7 @@ class Admin
             'geminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model'),
             'mistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model'),
             'openaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model'),
+            'anthropicModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'anthropic_model'),
             // Localized strings for character count status messages.
             'status' => [
                 __('(Too short)', 'mso-meta-description'),
@@ -142,10 +142,12 @@ class Admin
             'geminiApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_api_key')),
             'mistralApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_api_key')),
             'openaiApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_api_key')),
+            'anthropicApiKeySet' => !empty(get_option(MSO_Meta_Description::OPTION_PREFIX . 'anthropic_api_key')),
             // Pass the currently selected models again (might be redundant if already passed above, but can be useful for specific JS logic).
             'selectedGeminiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'gemini_model'),
             'selectedMistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model'),
             'selectedOpenaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model'),
+            'selectedAnthropicModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'anthropic_model'),
         ];
 
         // Make the PHP variables available in JavaScript under the 'msoScriptVars' object.

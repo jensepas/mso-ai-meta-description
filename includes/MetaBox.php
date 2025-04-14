@@ -141,9 +141,10 @@ class MetaBox
             $mistral_key_set = !empty(get_option($option_prefix . 'mistral_api_key'));
             $gemini_key_set = !empty(get_option($option_prefix . 'gemini_api_key'));
             $openai_key_set = !empty(get_option($option_prefix . 'openai_api_key'));
+            $anthropic_key_set = !empty(get_option($option_prefix . 'anthropic_api_key'));
 
             // Only show the AI generator section if at least one API key is configured.
-            if ($mistral_key_set || $gemini_key_set || $openai_key_set) :
+            if ($mistral_key_set || $gemini_key_set || $openai_key_set || $anthropic_key_set) :
                 ?>
                 <div class="mso-ai-generator" style="margin-top: 15px;">
                     <p><strong><?php esc_html_e('Generate with AI:', 'mso-meta-description'); ?></strong></p>
@@ -169,6 +170,14 @@ class MetaBox
                         <button type="button" id="summarize-openai" class="button mso-generate-button"
                                 data-provider="openai">
                             <?php esc_html_e('Generate with ChatGPT', 'mso-meta-description'); ?>
+                        </button>
+                    <?php endif; ?>
+
+                    <?php // Conditionally display the button for OpenAI if its API key is set. ?>
+                    <?php if ($anthropic_key_set) : ?>
+                        <button type="button" id="summarize-anthropic" class="button mso-generate-button"
+                                data-provider="anthropic">
+                            <?php esc_html_e('Generate with Anthropic', 'mso-meta-description'); ?>
                         </button>
                     <?php endif; ?>
 

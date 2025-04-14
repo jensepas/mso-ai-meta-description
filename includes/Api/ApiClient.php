@@ -31,7 +31,7 @@ class ApiClient
      * This should align with the names returned by ProviderInterface::get_name().
      * @var string[]
      */
-    const SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai'];
+    const SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai', 'anthropic'];
 
     // --- Suppression des constantes DEFAULT_*_MODEL ---
     // const DEFAULT_GEMINI_MODEL = GeminiProvider::DEFAULT_MODEL; // Supprimé

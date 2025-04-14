@@ -5,7 +5,7 @@
  * Provides common functionality for AI provider implementations.
  *
  * @package MSO_Meta_Description
- * @since   1.3.1 // Mettez à jour la version si nécessaire
+ * @since   1.3.0
  */
 namespace MSO_Meta_Description\Providers;
 

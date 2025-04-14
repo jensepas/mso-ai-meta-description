@@ -99,12 +99,15 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 == Changelog ==
 
 = 1.3.0 =
+* Date: 2025-04-14
+* Feature: Added support for Anthropic.
+
+= 1.2.0 =
 * Date: 2025-04-12
 * Feature: Added support for OpenAI (ChatGPT) for AI-powered description generation.
 * Enhancement: Updated API client and JavaScript for better error handling and dynamic model loading for all providers.
 * Enhancement: Improved UI for settings page and meta box.
 * Fix: Corrected conditional logic for displaying AI buttons in meta box.
-* Dev: Updated readme.txt with new features and improved instructions.
 
 = 1.1.0 =
 * Note: Version representing the major refactoring for better code structure (Separation of Concerns). (Adjust date/details if tracked differently)
@@ -119,4 +122,4 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 == Upgrade Notice ==
 
 = 1.3.0 =
-This version adds support for OpenAI (ChatGPT) alongside Gemini and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.
+This version adds support for OpenAI (ChatGPT) Anthropic Gemini and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.

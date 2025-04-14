@@ -113,6 +113,4 @@ jQuery(document).ready(function($) {
             });
         });
     });
-
-
 });

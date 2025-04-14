@@ -12,7 +12,9 @@
 
 namespace MSO_Meta_Description;
 
-use MSO_Meta_Description\Api\ApiClient; // Assuming ApiClient is used for fetching models, though not directly visible in this snippet.
+use MSO_Meta_Description\Api\ApiClient;
+
+// Assuming ApiClient is used for fetching models, though not directly visible in this snippet.
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -52,13 +54,18 @@ class Settings
      * @var string
      */
     const SECTION_OPENAI_ID = 'mso_meta_description_openai_section';
+    /**
+     * Settings section ID for Anthropic.
+     * @var string
+     */
+    const SECTION_ANTHROPIC_ID = 'mso_meta_description_anthropic_section';
+
 
     /**
      * The AJAX action hook for saving settings.
      * @var string
      */
     const AJAX_SAVE_ACTION = 'mso_save_settings';
-
     /**
      * Instance of the ApiClient, potentially used for model fetching or validation.
      * @var ApiClient
@@ -123,35 +130,6 @@ class Settings
                     'saved_text' => esc_html__('Settings Saved', 'mso-meta-description'),
                     'error_text' => esc_html__('Error Saving Settings', 'mso-meta-description'),
                 ]
-            );
-
-            // Enqueue the WordPress password strength meter script (used for API key fields).
-            wp_enqueue_script('password-strength-meter');
-
-            // Add inline JavaScript to handle the show/hide password functionality for API key fields.
-            // This targets elements with the 'wp-hide-pw' class added in render_api_key_field().
-            wp_add_inline_script(
-                'password-strength-meter', // Script handle to attach this inline script to.
-                // Use jQuery since it's a dependency.
-                'jQuery(document).ready(function($){
-                    // Attach click event handler to buttons with class "wp-hide-pw".
-                    $(".wp-hide-pw").on("click", function(){
-                        var button = $(this);
-                        var input = button.prev("input"); // Assumes input is immediately before the button.
-                        // Toggle input type between "password" and "text".
-                        if (input.attr("type") === "password") {
-                            input.attr("type", "text");
-                            // Update button icon and accessibility label.
-                            button.find(".dashicons").removeClass("dashicons-hidden").addClass("dashicons-visibility");
-                            button.attr("aria-label", "' . esc_js(__('Hide password', 'mso-meta-description')) . '");
-                        } else {
-                            input.attr("type", "password");
-                            // Update button icon and accessibility label.
-                            button.find(".dashicons").removeClass("dashicons-visibility").addClass("dashicons-hidden");
-                            button.attr("aria-label", "' . esc_js(__('Show password', 'mso-meta-description')) . '");
-                        }
-                    });
-                });'
             );
         }
     }
@@ -241,6 +219,9 @@ class Settings
                         case 'openai':
                             do_settings_sections(self::SECTION_OPENAI_ID);
                             break;
+                        case 'anthropic':
+                            do_settings_sections(self::SECTION_ANTHROPIC_ID);
+                            break;
                         // Add cases for other tabs if needed.
                     }
 
@@ -263,7 +244,7 @@ class Settings
             // Consider restructuring if this nonce check is critical. Currently, it prevents the page from rendering if the nonce fails.
             // A better approach might be to show an error message within the standard page structure.
             wp_die(esc_html__('Invalid nonce specified.', 'mso-meta-description'), esc_html__('Error', 'mso-meta-description'), [
-                'response'  => 403,
+                'response' => 403,
                 'back_link' => true,
             ]);
         }
@@ -280,6 +261,7 @@ class Settings
             'mistral' => esc_html__('Mistral Settings', 'mso-meta-description'),
             'gemini' => esc_html__('Gemini Settings', 'mso-meta-description'),
             'openai' => esc_html__('OpenAI Settings', 'mso-meta-description'),
+            'anthropic' => esc_html__('Anthropic Settings', 'mso-meta-description'),
         ];
     }
 
@@ -295,70 +277,36 @@ class Settings
         $prefix = MSO_Meta_Description::get_option_prefix();
 
         // --- API Key Settings ---
-        register_setting($option_group, $prefix . 'gemini_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
-        register_setting($option_group, $prefix . 'mistral_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
-        register_setting($option_group, $prefix . 'openai_api_key', ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '']);
+        register_setting($option_group, $prefix . 'gemini_api_key', 'sanitize_text_field');
+        register_setting($option_group, $prefix . 'mistral_api_key', 'sanitize_text_field');
+        register_setting($option_group, $prefix . 'openai_api_key', 'sanitize_text_field');
+        register_setting($option_group, $prefix . 'anthropic_api_key', 'sanitize_text_field');
 
         // --- Model Selection Settings ---
         register_setting(
             $option_group,
-            $prefix . 'gemini_model',
-            [
-                'type'              => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-                // Replace constant with the actual default string from GeminiProvider::get_default_model()
-                'default'           => 'gemini-1.5-flash-latest', // <-- CORRECTED (Check GeminiProvider if different)
-            ]
+            $prefix . 'gemini_model', 'sanitize_text_field'
         );
 
         register_setting(
             $option_group,
-            $prefix . 'mistral_model',
-            [
-                'type'              => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-                // Replace constant with the actual default string from MistralProvider::get_default_model()
-                'default'           => 'mistral-small-latest', // <-- CORRECTED
-            ]
+            $prefix . 'mistral_model', 'sanitize_text_field'
         );
 
         register_setting(
             $option_group,
-            $prefix . 'openai_model',
-            [
-                'type'              => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-                // Replace constant with the actual default string from OpenAIProvider::get_default_model()
-                'default'           => 'gpt-3.5-turbo', // <-- CORRECTED
-            ]
+            $prefix . 'openai_model', 'sanitize_text_field'
+        );
+
+        register_setting(
+            $option_group,
+            $prefix . 'anthropic_model', 'sanitize_text_field'
         );
 
         // --- Mistral Section ---
-        // Add the settings section for Mistral.
-        add_settings_section(
-            self::SECTION_MISTRAL_ID, // Unique ID for the section
-            null, // Title (rendered by render_section_callback or can be null)
-            [$this, 'render_section_callback'], // Callback to render content before fields
-            self::SECTION_MISTRAL_ID // Page slug where this section appears (using section ID itself here)
-        );
-        // Add the API key field to the Mistral section.
-        add_settings_field(
-            $prefix . 'mistral_api_key', // Option name (ID for the field)
-            esc_html__('Mistral API Key', 'mso-meta-description'), // Label for the field
-            [$this, 'render_api_key_field'], // Callback to render the input field HTML
-            self::SECTION_MISTRAL_ID, // Page slug (using section ID)
-            self::SECTION_MISTRAL_ID, // Section ID where this field belongs
-            ['provider' => 'mistral'] // Arguments passed to the render callback
-        );
-        // Add the model selection field to the Mistral section.
-        add_settings_field(
-            $prefix . 'mistral_model',
-            esc_html__('Mistral Model', 'mso-meta-description'),
-            [$this, 'render_model_field'],
-            self::SECTION_MISTRAL_ID,
-            self::SECTION_MISTRAL_ID,
-            ['provider' => 'mistral']
-        );
+        add_settings_section(self::SECTION_MISTRAL_ID, null, [$this, 'render_section_callback'], self::SECTION_MISTRAL_ID);
+        add_settings_field($prefix . 'mistral_api_key', esc_html__('Mistral API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
+        add_settings_field($prefix . 'mistral_model', esc_html__('Mistral Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
 
         // --- Gemini Section ---
         add_settings_section(self::SECTION_GEMINI_ID, null, [$this, 'render_section_callback'], self::SECTION_GEMINI_ID);
@@ -369,6 +317,12 @@ class Settings
         add_settings_section(self::SECTION_OPENAI_ID, null, [$this, 'render_section_callback'], self::SECTION_OPENAI_ID);
         add_settings_field($prefix . 'openai_api_key', esc_html__('OpenAI (ChatGPT) API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
         add_settings_field($prefix . 'openai_model', esc_html__('OpenAI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
+
+        // --- Anthropic Section ---
+        add_settings_section(self::SECTION_ANTHROPIC_ID, null, [$this, 'render_section_callback'], self::SECTION_ANTHROPIC_ID);
+        add_settings_field($prefix . 'anthropic_api_key', esc_html__('Anthropic API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
+        add_settings_field($prefix . 'anthropic_model', esc_html__('Anthropic AI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
+
 
         // Conditionally register the front page description setting
         // if the site is configured to show latest posts on the front page.
@@ -449,6 +403,12 @@ class Settings
                 $options_for_this_tab = [
                     $option_prefix . 'openai_api_key',
                     $option_prefix . 'openai_model',
+                ];
+                break;
+            case 'anthropic':
+                $options_for_this_tab = [
+                    $option_prefix . 'anthropic_api_key',
+                    $option_prefix . 'anthropic_model',
                 ];
                 break;
             // Add cases for other tabs if necessary.
@@ -533,6 +493,9 @@ class Settings
             case self::SECTION_OPENAI_ID:
                 echo '<p>' . esc_html__('Configure the settings for using the OpenAI API.', 'mso-meta-description') . '</p>';
                 break;
+            case self::SECTION_ANTHROPIC_ID:
+                echo '<p>' . esc_html__('Configure the settings for using the Anthropic API.', 'mso-meta-description') . '</p>';
+                break;
             default:
                 // No text for unknown sections.
                 break;
@@ -584,6 +547,10 @@ class Settings
             case 'openai':
                 $docs_url = 'https://platform.openai.com/account/api-keys';
                 $provider_name = 'OpenAI'; // Use specific capitalization.
+                break;
+            case 'anthropic':
+                $docs_url = 'https://console.anthropic.com/settings/keys';
+                $provider_name = 'Anthropic'; // Use specific capitalization.
                 break;
         }
         // Output the help text with a link to get the API key.
@@ -667,17 +634,22 @@ class Settings
                 id="<?php echo esc_attr($field_id); ?>"
                 class="regular-text"
                 value="<?php echo esc_attr($value); ?>"
-                maxlength="<?php echo esc_attr(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH + 10); // Allow slightly more for flexibility ?>"
-                aria-describedby="front-page-meta-description-hint" <?php // Link input to its description ?>
+                maxlength="<?php echo esc_attr(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH + 10); // Allow slightly more for flexibility
+                ?>"
+                aria-describedby="front-page-meta-description-hint" <?php // Link input to its description
+        ?>
         >
-        <p class="description" id="front-page-meta-description-hint"> <?php // ID for aria-describedby ?>
+        <p class="description" id="front-page-meta-description-hint"> <?php // ID for aria-describedby
+            ?>
             <?php printf(
             /* translators: 1: Minimum length, 2: Maximum length */
                 esc_html__('Enter the meta description for the site\'s front page when it displays the latest posts. Recommended length: %1$d-%2$d characters.', 'mso-meta-description'),
                 esc_html(MSO_Meta_Description::MIN_DESCRIPTION_LENGTH),
                 esc_html(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH)
             ); ?>
-            <?php esc_html_e('Character count', 'mso-meta-description'); ?>: <span class="mso-char-count">0</span> <?php // Span to display character count ?>
+            <?php esc_html_e('Character count', 'mso-meta-description'); ?>: <span
+                    class="mso-char-count">0</span> <?php // Span to display character count
+            ?>
         </p>
         <script>
             // Inline script for immediate character count feedback on the Reading settings page.
