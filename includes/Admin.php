@@ -89,7 +89,7 @@ class Admin
         $is_post_edit_page = $screen && $screen->base === 'post';
         // Determine if the current page is the plugin's settings page.
         // Note: The hook suffix for pages added via add_options_page is 'settings_page_{menu_slug}'.
-        $is_settings_page = $hook_suffix === 'settings_page_' . Settings::PAGE_SLUG; // Use constant from Settings class
+        $is_settings_page = $hook_suffix === $screen->id; // Use constant from Settings class
 
         // Only proceed if we are on a relevant admin page.
         if (!$is_post_edit_page && !$is_settings_page) {

@@ -67,7 +67,7 @@ class MetaBox
     public function add_meta_box(): void
     {
         // Get all registered post types that are public (visible in admin UI and frontend).
-        $post_types = get_post_types(['public' => true], 'names');
+        $post_types = get_post_types(['public' => true]);
         // Remove 'attachment' post type as a meta description is usually not needed for media files directly.
         unset($post_types['attachment']);
 

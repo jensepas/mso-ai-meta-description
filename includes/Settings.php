@@ -103,8 +103,7 @@ class Settings
         $current_screen = get_current_screen();
 
         // Only load scripts if we are on *our* specific settings page.
-        // The screen ID for a page added via add_options_page is 'settings_page_{page_slug}'.
-        if ($current_screen && $current_screen->id === 'settings_page_' . self::PAGE_SLUG) {
+        if ($current_screen && $current_screen->id === $hook_suffix) {
 
             // Enqueue the main JavaScript file for handling AJAX requests on the settings page.
             wp_enqueue_script(
@@ -627,7 +626,7 @@ class Settings
         $value = get_option($option_name, '');
         // Use the 'label_for' argument passed by add_settings_field for the input ID.
         $field_id = esc_attr($args['label_for']);
-        ?>
+        ?><label>
         <input
                 type="text"
                 name="<?php echo esc_attr($option_name); ?>"
@@ -638,7 +637,7 @@ class Settings
                 ?>"
                 aria-describedby="front-page-meta-description-hint" <?php // Link input to its description
         ?>
-        >
+        ></label>
         <p class="description" id="front-page-meta-description-hint"> <?php // ID for aria-describedby
             ?>
             <?php printf(
@@ -659,13 +658,13 @@ class Settings
                 // Use jQuery since it's generally available in WP admin.
                 jQuery(document).ready(function ($) {
                     // Get the input field and the character count span.
-                    var inputField = $('#<?php echo esc_js($field_id); ?>'); // Use esc_js for safety in JS strings.
-                    var countSpan = inputField.next('.description').find('.mso-char-count'); // Find the span relative to the input.
+                    const inputField = $('#<?php echo esc_js($field_id); ?>'); // Use esc_js for safety in JS strings.
+                    const countSpan = inputField.next('.description').find('.mso-char-count'); // Find the span relative to the input.
 
                     // Ensure both elements were found.
                     if (inputField.length && countSpan.length) {
                         // Function to update the character count display.
-                        var updateCount = function () {
+                        const updateCount = function () {
                             countSpan.text(inputField.val().length);
                         };
                         // Bind the update function to input events.

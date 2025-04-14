@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 14:25+0200\n"
+"POT-Creation-Date: 2025-04-14 17:27+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "AI provider \"%s\" is not registered or supported."
 msgstr ""
 
-#: ../includes/MetaBox.php:79 ../includes/Settings.php:145
+#: ../includes/MetaBox.php:79 ../includes/Settings.php:144
 msgid "MSO Meta Description"
 msgstr ""
 
@@ -103,12 +103,12 @@ msgstr ""
 msgid "Generate with Anthropic"
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:54
+#: ../includes/Providers/AbstractProvider.php:55
 #, php-format
 msgid "API key for %s is not set."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:129
+#: ../includes/Providers/AbstractProvider.php:130
 msgid "Unknown API error occurred."
 msgstr ""
 
@@ -117,16 +117,20 @@ msgstr ""
 msgid "%1$s API Error (%2$d): %3$s"
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:163
+#: ../includes/Providers/AbstractProvider.php:162
 msgid "Failed to decode API response."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:180
+#: ../includes/Providers/AbstractProvider.php:179
 #, php-format
 msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
 msgstr ""
 
-#: ../includes/Providers/Available/AnthropicProvider.php:128
+#: ../includes/Providers/Available/AnthropicProvider.php:79
+msgid "Unable to parse model list from Anthropic: \"data\" array missing."
+msgstr ""
+
+#: ../includes/Providers/Available/AnthropicProvider.php:116
 msgid "Anthropic response missing expected summary data."
 msgstr ""
 
@@ -134,7 +138,7 @@ msgstr ""
 msgid "Unable to parse model list from Gemini: \"models\" array missing."
 msgstr ""
 
-#: ../includes/Providers/Available/GeminiProvider.php:108
+#: ../includes/Providers/Available/GeminiProvider.php:109
 msgid "Gemini response missing expected summary data."
 msgstr ""
 
@@ -142,7 +146,7 @@ msgstr ""
 msgid "Unable to parse model list from Mistral: \"data\" array missing."
 msgstr ""
 
-#: ../includes/Providers/Available/MistralProvider.php:84
+#: ../includes/Providers/Available/MistralProvider.php:80
 msgid "Mistral response missing expected summary data."
 msgstr ""
 
@@ -150,146 +154,146 @@ msgstr ""
 msgid "Unable to parse model list from OpenAI: \"data\" array missing."
 msgstr ""
 
-#: ../includes/Providers/Available/OpenAIProvider.php:99
+#: ../includes/Providers/Available/OpenAIProvider.php:101
 msgid "OpenAI response missing expected summary data."
 msgstr ""
 
-#: ../includes/Settings.php:129
+#: ../includes/Settings.php:128
 msgid "Saving..."
 msgstr ""
 
-#: ../includes/Settings.php:130
+#: ../includes/Settings.php:129
 msgid "Settings Saved"
 msgstr ""
 
-#: ../includes/Settings.php:131
+#: ../includes/Settings.php:130
 msgid "Error Saving Settings"
 msgstr ""
 
-#: ../includes/Settings.php:144
+#: ../includes/Settings.php:143
 msgid "MSO Meta Description Settings"
 msgstr ""
 
-#: ../includes/Settings.php:231
+#: ../includes/Settings.php:230
 msgid "Save Changes"
 msgstr ""
 
-#: ../includes/Settings.php:246
+#: ../includes/Settings.php:245
 msgid "Invalid nonce specified."
 msgstr ""
 
-#: ../includes/Settings.php:246
+#: ../includes/Settings.php:245
 msgid "Error"
 msgstr ""
 
-#: ../includes/Settings.php:261
+#: ../includes/Settings.php:260
 msgid "Mistral Settings"
 msgstr ""
 
-#: ../includes/Settings.php:262
+#: ../includes/Settings.php:261
 msgid "Gemini Settings"
 msgstr ""
 
-#: ../includes/Settings.php:263
+#: ../includes/Settings.php:262
 msgid "OpenAI Settings"
 msgstr ""
 
-#: ../includes/Settings.php:264
+#: ../includes/Settings.php:263
 msgid "Anthropic Settings"
 msgstr ""
 
-#: ../includes/Settings.php:308
+#: ../includes/Settings.php:307
 msgid "Mistral API Key"
 msgstr ""
 
-#: ../includes/Settings.php:309
+#: ../includes/Settings.php:308
 msgid "Mistral Model"
 msgstr ""
 
-#: ../includes/Settings.php:313
+#: ../includes/Settings.php:312
 msgid "Gemini API Key"
 msgstr ""
 
-#: ../includes/Settings.php:314
+#: ../includes/Settings.php:313
 msgid "Gemini Model"
 msgstr ""
 
-#: ../includes/Settings.php:318
+#: ../includes/Settings.php:317
 msgid "OpenAI (ChatGPT) API Key"
 msgstr ""
 
-#: ../includes/Settings.php:319
+#: ../includes/Settings.php:318
 msgid "OpenAI Model"
 msgstr ""
 
-#: ../includes/Settings.php:323
+#: ../includes/Settings.php:322
 msgid "Anthropic API Key"
 msgstr ""
 
-#: ../includes/Settings.php:324
+#: ../includes/Settings.php:323
 msgid "Anthropic AI Model"
 msgstr ""
 
-#: ../includes/Settings.php:350
+#: ../includes/Settings.php:349
 msgid "Front page meta description"
 msgstr ""
 
-#: ../includes/Settings.php:372
+#: ../includes/Settings.php:371
 msgid "You do not have permission to save these settings."
 msgstr ""
 
-#: ../includes/Settings.php:382
+#: ../includes/Settings.php:381
 msgid "Could not determine which settings tab to save."
 msgstr ""
 
-#: ../includes/Settings.php:419
+#: ../includes/Settings.php:418
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr ""
 
-#: ../includes/Settings.php:464
+#: ../includes/Settings.php:463
 msgid "Settings saved with validation errors."
 msgstr ""
 
-#: ../includes/Settings.php:471
+#: ../includes/Settings.php:470
 msgid "Settings saved successfully."
 msgstr ""
 
-#: ../includes/Settings.php:488
+#: ../includes/Settings.php:487
 msgid "Configure the settings for using the Mistral API."
 msgstr ""
 
-#: ../includes/Settings.php:491
+#: ../includes/Settings.php:490
 msgid "Configure the settings for using the Google Gemini API."
 msgstr ""
 
-#: ../includes/Settings.php:494
+#: ../includes/Settings.php:493
 msgid "Configure the settings for using the OpenAI API."
 msgstr ""
 
-#: ../includes/Settings.php:497
+#: ../includes/Settings.php:496
 msgid "Configure the settings for using the Anthropic API."
 msgstr ""
 
-#: ../includes/Settings.php:562
+#: ../includes/Settings.php:561
 #, php-format
 msgid "Get your %s API key"
 msgstr ""
 
-#: ../includes/Settings.php:592
+#: ../includes/Settings.php:591
 msgid "Loading models..."
 msgstr ""
 
-#: ../includes/Settings.php:608
+#: ../includes/Settings.php:607
 #, php-format
 msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
 msgstr ""
 
-#: ../includes/Settings.php:646
+#: ../includes/Settings.php:645
 #, php-format
 msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../includes/Settings.php:650
+#: ../includes/Settings.php:649
 msgid "Character count"
 msgstr ""
