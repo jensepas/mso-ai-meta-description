@@ -1,19 +1,19 @@
 <?php
 /**
- * MSO Meta Description ProviderManager
+ * MSO AI Meta Description ProviderManager
  *
  * Manages the discovery, registration, and retrieval of AI provider instances.
  * It scans a designated directory for classes implementing ProviderInterface
  * and makes them available throughout the plugin.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Providers;
+namespace MSO_AI_Meta_Description\Providers;
 
 use FilesystemIterator; // Used for directory iteration options.
 use GlobIterator; // Used for finding files matching a pattern.
-use MSO_Meta_Description\Utils\Logger;
+use MSO_AI_Meta_Description\Utils\Logger;
 use ReflectionClass; // Used for inspecting classes to ensure they implement the interface.
 use Exception; // Import base Exception class for catching errors during reflection/instantiation.
 

@@ -1,9 +1,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MSO Meta Description\n"
+"Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 17:27+0200\n"
+"POT-Creation-Date: 2025-04-15 14:43+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
@@ -37,40 +37,52 @@ msgstr ""
 msgid "Error loading models."
 msgstr ""
 
-#: ../includes/Admin.php:176
+#: ../includes/Admin.php:153
+msgid "Saving..."
+msgstr ""
+
+#: ../includes/Admin.php:154
+msgid "Settings Saved"
+msgstr ""
+
+#: ../includes/Admin.php:155
+msgid "Error Saving Settings"
+msgstr ""
+
+#: ../includes/Admin.php:181
 msgid "Settings"
 msgstr ""
 
-#: ../includes/Ajax.php:77 ../includes/Ajax.php:137
+#: ../includes/Ajax.php:76 ../includes/Ajax.php:135
 msgid "Invalid nonce."
 msgstr ""
 
-#: ../includes/Ajax.php:83 ../includes/Ajax.php:142
+#: ../includes/Ajax.php:82 ../includes/Ajax.php:140
 msgid "Permission denied."
 msgstr ""
 
-#: ../includes/Ajax.php:94
+#: ../includes/Ajax.php:92
 msgid "Content cannot be empty."
 msgstr ""
 
-#: ../includes/Ajax.php:98
+#: ../includes/Ajax.php:96
 msgid "Invalid AI provider specified."
 msgstr ""
 
-#: ../includes/Ajax.php:151
+#: ../includes/Ajax.php:149
 msgid "Invalid API type specified."
 msgstr ""
 
-#: ../includes/Api/ApiClient.php:64 ../includes/Api/ApiClient.php:93
+#: ../includes/Api/ApiClient.php:50 ../includes/Api/ApiClient.php:79
 #, php-format
 msgid "AI provider \"%s\" is not registered or supported."
 msgstr ""
 
-#: ../includes/MetaBox.php:79 ../includes/Settings.php:144
-msgid "MSO Meta Description"
+#: ../includes/MetaBox.php:79
+msgid "MSO AI Meta Description"
 msgstr ""
 
-#: ../includes/MetaBox.php:112
+#: ../includes/MetaBox.php:112 ../includes/Settings.php:92
 msgid "Meta Description"
 msgstr ""
 
@@ -158,142 +170,130 @@ msgstr ""
 msgid "OpenAI response missing expected summary data."
 msgstr ""
 
-#: ../includes/Settings.php:128
-msgid "Saving..."
+#: ../includes/Settings.php:91
+msgid "MSO AI Meta Description Settings"
 msgstr ""
 
-#: ../includes/Settings.php:129
-msgid "Settings Saved"
-msgstr ""
-
-#: ../includes/Settings.php:130
-msgid "Error Saving Settings"
-msgstr ""
-
-#: ../includes/Settings.php:143
-msgid "MSO Meta Description Settings"
-msgstr ""
-
-#: ../includes/Settings.php:230
+#: ../includes/Settings.php:179
 msgid "Save Changes"
 msgstr ""
 
-#: ../includes/Settings.php:245
+#: ../includes/Settings.php:194
 msgid "Invalid nonce specified."
 msgstr ""
 
-#: ../includes/Settings.php:245
+#: ../includes/Settings.php:194
 msgid "Error"
 msgstr ""
 
-#: ../includes/Settings.php:260
+#: ../includes/Settings.php:209
 msgid "Mistral Settings"
 msgstr ""
 
-#: ../includes/Settings.php:261
+#: ../includes/Settings.php:210
 msgid "Gemini Settings"
 msgstr ""
 
-#: ../includes/Settings.php:262
+#: ../includes/Settings.php:211
 msgid "OpenAI Settings"
 msgstr ""
 
-#: ../includes/Settings.php:263
+#: ../includes/Settings.php:212
 msgid "Anthropic Settings"
 msgstr ""
 
-#: ../includes/Settings.php:307
+#: ../includes/Settings.php:256
 msgid "Mistral API Key"
 msgstr ""
 
-#: ../includes/Settings.php:308
+#: ../includes/Settings.php:257
 msgid "Mistral Model"
 msgstr ""
 
-#: ../includes/Settings.php:312
+#: ../includes/Settings.php:261
 msgid "Gemini API Key"
 msgstr ""
 
-#: ../includes/Settings.php:313
+#: ../includes/Settings.php:262
 msgid "Gemini Model"
 msgstr ""
 
-#: ../includes/Settings.php:317
+#: ../includes/Settings.php:266
 msgid "OpenAI (ChatGPT) API Key"
 msgstr ""
 
-#: ../includes/Settings.php:318
+#: ../includes/Settings.php:267
 msgid "OpenAI Model"
 msgstr ""
 
-#: ../includes/Settings.php:322
+#: ../includes/Settings.php:271
 msgid "Anthropic API Key"
 msgstr ""
 
-#: ../includes/Settings.php:323
+#: ../includes/Settings.php:272
 msgid "Anthropic AI Model"
 msgstr ""
 
-#: ../includes/Settings.php:349
+#: ../includes/Settings.php:298
 msgid "Front page meta description"
 msgstr ""
 
-#: ../includes/Settings.php:371
+#: ../includes/Settings.php:319
 msgid "You do not have permission to save these settings."
 msgstr ""
 
-#: ../includes/Settings.php:381
+#: ../includes/Settings.php:329
 msgid "Could not determine which settings tab to save."
 msgstr ""
 
-#: ../includes/Settings.php:418
+#: ../includes/Settings.php:366
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr ""
 
-#: ../includes/Settings.php:463
+#: ../includes/Settings.php:400
 msgid "Settings saved with validation errors."
 msgstr ""
 
-#: ../includes/Settings.php:470
+#: ../includes/Settings.php:407
 msgid "Settings saved successfully."
 msgstr ""
 
-#: ../includes/Settings.php:487
+#: ../includes/Settings.php:424
 msgid "Configure the settings for using the Mistral API."
 msgstr ""
 
-#: ../includes/Settings.php:490
+#: ../includes/Settings.php:427
 msgid "Configure the settings for using the Google Gemini API."
 msgstr ""
 
-#: ../includes/Settings.php:493
+#: ../includes/Settings.php:430
 msgid "Configure the settings for using the OpenAI API."
 msgstr ""
 
-#: ../includes/Settings.php:496
+#: ../includes/Settings.php:433
 msgid "Configure the settings for using the Anthropic API."
 msgstr ""
 
-#: ../includes/Settings.php:561
+#: ../includes/Settings.php:498
 #, php-format
 msgid "Get your %s API key"
 msgstr ""
 
-#: ../includes/Settings.php:591
+#: ../includes/Settings.php:528
 msgid "Loading models..."
 msgstr ""
 
-#: ../includes/Settings.php:607
+#: ../includes/Settings.php:544
 #, php-format
 msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
 msgstr ""
 
-#: ../includes/Settings.php:645
+#: ../includes/Settings.php:582
 #, php-format
 msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../includes/Settings.php:649
+#: ../includes/Settings.php:586
 msgid "Character count"
 msgstr ""

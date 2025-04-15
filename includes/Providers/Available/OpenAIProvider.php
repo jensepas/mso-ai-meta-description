@@ -1,20 +1,20 @@
 <?php
 /**
- * MSO Meta Description OpenAIProvider
+ * MSO AI Meta Description OpenAIProvider
  *
  * Implements the ProviderInterface for interacting with the OpenAI API (specifically Chat Completions).
  * Handles fetching available GPT models and generating meta description summaries.
  * Extends AbstractProvider for common functionality.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
-namespace MSO_Meta_Description\Providers\Available;
+namespace MSO_AI_Meta_Description\Providers\Available;
 
 // Use the AbstractProvider and ProviderInterface
-use MSO_Meta_Description\Providers\AbstractProvider;
-use MSO_Meta_Description\Providers\ProviderInterface;
+use MSO_AI_Meta_Description\Providers\AbstractProvider;
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error; // Used for returning standardized errors.
 
 /**
@@ -60,7 +60,7 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface {
         if (!isset($data['data']) || !is_array($data['data'])) {
             return new WP_Error(
                 'invalid_response_structure',
-                __('Unable to parse model list from OpenAI: "data" array missing.', 'mso-meta-description')
+                __('Unable to parse model list from OpenAI: "data" array missing.', 'mso-ai-meta-description')
             );
         }
 
@@ -98,7 +98,7 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface {
         if ($generated_text === null) {
             return new WP_Error(
                 'parse_error',
-                __('OpenAI response missing expected summary data.', 'mso-meta-description')
+                __('OpenAI response missing expected summary data.', 'mso-ai-meta-description')
             );
         }
         return trim($generated_text);

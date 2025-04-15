@@ -1,16 +1,16 @@
 <?php
 /**
- * MSO Meta Description MetaBox
+ * MSO AI Meta Description MetaBox
  *
  * Handles the creation, rendering, and saving of the meta description
  * meta box displayed on post edit screens. Allows users to manually
  * enter or generate a meta description using AI.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
-namespace MSO_Meta_Description;
+namespace MSO_AI_Meta_Description;
 
 use WP_Post; // Type hint for WordPress Post object.
 
@@ -75,8 +75,8 @@ class MetaBox
         foreach ($post_types as $post_type) {
             // Add the meta box to the edit screen for each post type.
             add_meta_box(
-                'mso_meta_description_meta_box', // Unique ID for the meta box.
-                __('MSO Meta Description', 'mso-meta-description'), // Title displayed in the meta box header.
+                'mso_ai_meta_description_meta_box', // Unique ID for the meta box.
+                __('MSO AI Meta Description', 'mso-ai-meta-description'), // Title displayed in the meta box header.
                 [$this, 'render_meta_box_content'], // Callback function to render the meta box HTML.
                 $post_type, // The post type screen where the meta box should appear.
                 'normal', // Context (where on the screen: 'normal', 'side', 'advanced').
@@ -100,40 +100,40 @@ class MetaBox
         $value = get_post_meta($post->ID, $this->meta_key, true); // 'true' gets a single value.
 
         // Define variables used in the template (consider making these constants or class properties if used elsewhere).
-        $field_name = 'mso_add_description'; // Name attribute for the textarea input. Must match save_meta_data().
-        $min_length = MSO_Meta_Description::MIN_DESCRIPTION_LENGTH; // Minimum recommended length.
-        $max_length = MSO_Meta_Description::MAX_DESCRIPTION_LENGTH; // Maximum recommended length.
-        $option_prefix = MSO_Meta_Description::get_option_prefix(); // Get the plugin's option prefix.
+        $field_name = 'mso_ai_add_description'; // Name attribute for the textarea input. Must match save_meta_data().
+        $min_length = MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH; // Minimum recommended length.
+        $max_length = MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH; // Maximum recommended length.
+        $option_prefix = MSO_AI_Meta_Description::get_option_prefix(); // Get the plugin's option prefix.
 
         ?>
-        <div class="mso-meta-box-wrapper">
+        <div class="mso-ai-meta-box-wrapper">
             <p>
-                <label for="mso_meta_description_field">
-                    <strong><?php esc_html_e('Meta Description', 'mso-meta-description'); ?></strong>
+                <label for="mso_ai_meta_description_field">
+                    <strong><?php esc_html_e('Meta Description', 'mso-ai-meta-description'); ?></strong>
                 </label>
             </p>
             <textarea
-                    id="mso_meta_description_field" <?php // Unique ID for the textarea, used by label and JavaScript. ?>
+                    id="mso_ai_meta_description_field" <?php // Unique ID for the textarea, used by label and JavaScript. ?>
                     name="<?php echo esc_attr($field_name); ?>" <?php // Name attribute for form submission. ?>
                     rows="4"
                     class="large-text"
                     maxlength="<?php echo esc_attr($max_length + 20); // Allow some buffer beyond max recommended length for easier editing. ?>"
-                    aria-describedby="mso-description-hint" <?php // Accessibility: Links textarea to the description paragraph below. ?>
+                    aria-describedby="mso-ai-description-hint" <?php // Accessibility: Links textarea to the description paragraph below. ?>
             ><?php echo esc_textarea($value); /* Output the saved value, properly escaped for a textarea. */ ?></textarea>
 
-            <p class="description" id="mso-description-hint"> <?php // Hint paragraph linked by aria-describedby. ?>
+            <p class="description" id="mso-ai_description-hint"> <?php // Hint paragraph linked by aria-describedby. ?>
                 <?php
                 // Display recommended length information.
                 printf(
                 /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
-                    esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-meta-description'),
+                    esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
                     esc_html($min_length),
                     esc_html($max_length)
                 );
                 ?>
-                <?php esc_html_e('Current count:', 'mso-meta-description'); ?>
-                <span class="mso-char-count">0</span><?php // Span to display the live character count (updated by JS). ?>
-                <span class="mso-length-indicator"></span><?php // Span to display length status (e.g., "Too short", "Good", updated by JS). ?>
+                <?php esc_html_e('Current count:', 'mso-ai-meta-description'); ?>
+                <span class="mso-ai-char-count">0</span><?php // Span to display the live character count (updated by JS). ?>
+                <span class="mso-ai-length-indicator"></span><?php // Span to display length status (e.g., "Too short", "Good", updated by JS). ?>
             </p>
 
             <?php
@@ -147,37 +147,37 @@ class MetaBox
             if ($mistral_key_set || $gemini_key_set || $openai_key_set || $anthropic_key_set) :
                 ?>
                 <div class="mso-ai-generator">
-                    <p><strong><?php esc_html_e('Generate with AI:', 'mso-meta-description'); ?></strong></p>
+                    <p><strong><?php esc_html_e('Generate with AI:', 'mso-ai-meta-description'); ?></strong></p>
 
                     <?php // Conditionally display the button for Mistral if its API key is set. ?>
                     <?php if ($mistral_key_set) : ?>
-                        <button type="button" id="summarize-mistral" class="button mso-generate-button"
+                        <button type="button" id="summarize-mistral" class="button mso-ai-generate-button"
                                 data-provider="mistral" <?php // Data attribute used by JS to identify the provider. ?>>
-                            <?php esc_html_e('Generate with Mistral', 'mso-meta-description'); ?>
+                            <?php esc_html_e('Generate with Mistral', 'mso-ai-meta-description'); ?>
                         </button>
                     <?php endif; ?>
 
                     <?php // Conditionally display the button for Gemini if its API key is set. ?>
                     <?php if ($gemini_key_set) : ?>
-                        <button type="button" id="summarize-gemini" class="button mso-generate-button"
+                        <button type="button" id="summarize-gemini" class="button mso-ai-generate-button"
                                 data-provider="gemini">
-                            <?php esc_html_e('Generate with Gemini', 'mso-meta-description'); ?>
+                            <?php esc_html_e('Generate with Gemini', 'mso-ai-meta-description'); ?>
                         </button>
                     <?php endif; ?>
 
                     <?php // Conditionally display the button for OpenAI if its API key is set. ?>
                     <?php if ($openai_key_set) : ?>
-                        <button type="button" id="summarize-openai" class="button mso-generate-button"
+                        <button type="button" id="summarize-openai" class="button mso-ai-generate-button"
                                 data-provider="openai">
-                            <?php esc_html_e('Generate with ChatGPT', 'mso-meta-description'); ?>
+                            <?php esc_html_e('Generate with ChatGPT', 'mso-ai-meta-description'); ?>
                         </button>
                     <?php endif; ?>
 
                     <?php // Conditionally display the button for OpenAI if its API key is set. ?>
                     <?php if ($anthropic_key_set) : ?>
-                        <button type="button" id="summarize-anthropic" class="button mso-generate-button"
+                        <button type="button" id="summarize-anthropic" class="button mso-ai-generate-button"
                                 data-provider="anthropic">
-                            <?php esc_html_e('Generate with Anthropic', 'mso-meta-description'); ?>
+                            <?php esc_html_e('Generate with Anthropic', 'mso-ai-meta-description'); ?>
                         </button>
                     <?php endif; ?>
 
@@ -226,7 +226,7 @@ class MetaBox
         }
 
         // 4. Check if our specific meta description field was submitted.
-        $field_name = 'mso_add_description'; // This MUST match the 'name' attribute of the textarea.
+        $field_name = 'mso_ai_add_description'; // This MUST match the 'name' attribute of the textarea.
         if (!isset($_POST[$field_name])) {
             // Field not submitted (e.g., maybe meta box was conditionally hidden).
             // Depending on requirements, you might want to delete existing meta here,

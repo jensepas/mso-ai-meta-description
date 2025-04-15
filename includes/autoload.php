@@ -1,12 +1,12 @@
 <?php
 /**
- * MSO Meta Description autoload
+ * MSO AI Meta Description autoload
  *
- * PSR-4 compliant autoloader for the MSO_Meta_Description namespace.
+ * PSR-4 compliant autoloader for the MSO_AI_Meta_Description namespace.
  * This script registers a function that automatically includes class files
  * when they are first used, based on their namespace and class name.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
@@ -19,17 +19,17 @@ if (!defined('ABSPATH')) {
  * Autoload function registered with spl_autoload_register.
  *
  * This function is called by PHP whenever a class or interface from the
- * MSO_Meta_Description namespace is used for the first time and hasn't
+ * MSO_AI_Meta_Description namespace is used for the first time and hasn't
  * been loaded yet. It maps the namespace structure to the directory structure
  * within the 'includes' folder.
  *
- * @param string $class The fully qualified class name (e.g., MSO_Meta_Description\Admin).
+ * @param string $class The fully qualified class name (e.g., MSO_AI_Meta_Description\Admin).
  */
 spl_autoload_register(function ($class) {
 
     // Define the base namespace prefix for this plugin. All classes managed by this autoloader
     // should start with this namespace.
-    $prefix = 'MSO_Meta_Description\\';
+    $prefix = 'MSO_AI_Meta_Description\\';
 
     // Check if the requested class uses the plugin's base namespace.
     // If the class name doesn't start with the prefix, this autoloader is not responsible
@@ -40,7 +40,7 @@ spl_autoload_register(function ($class) {
 
     // Remove the base namespace prefix from the fully qualified class name
     // to get the relative class name.
-    // Example: 'MSO_Meta_Description\Providers\ProviderManager' becomes 'Providers\ProviderManager'.
+    // Example: 'MSO_AI_Meta_Description\Providers\ProviderManager' becomes 'Providers\ProviderManager'.
     $relative_class = substr($class, strlen($prefix));
 
     // Define the base directory corresponding to the base namespace prefix.

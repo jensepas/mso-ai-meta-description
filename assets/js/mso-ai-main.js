@@ -1,14 +1,14 @@
 /**
- * MSO Meta Description JavaScript Unified
+ * MSO AI Meta Description JavaScript Unified
  *
- * Handles client-side interactions for the MSO Meta Description plugin, including:
+ * Handles client-side interactions for the MSO AI Meta Description plugin, including:
  * - Character counting for meta description field
  * - AI summary generation via AJAX
  * - Model fetching for different AI providers
  * - Settings page form handling
  * - Password visibility toggling
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
@@ -21,28 +21,28 @@
 
     // --- Cache DOM Elements ---
     // Meta Box Elements
-    const $metaBoxField = $('#mso_meta_description_field');
-    const $charCountSpan = $('.mso-char-count');
-    const $lengthIndicatorSpan = $('.mso-length-indicator');
-    const $generateButtons = $('.mso-generate-button');
+    const $metaBoxField = $('#mso_ai_meta_description_field');
+    const $charCountSpan = $('.mso-ai-char-count');
+    const $lengthIndicatorSpan = $('.mso-ai-length-indicator');
+    const $generateButtons = $('.mso-ai-generate-button');
     const $spinner = $('.mso-ai-generator .spinner');
     const $aiErrorContainer = $('#mso-ai-error');
     const $content = $('#content');
 
     // Settings Page Elements
-    const $mistralSelect = $('#mso_meta_description_mistral_model_id');
-    const $geminiSelect = $('#mso_meta_description_gemini_model_id');
-    const $openaiSelect = $('#mso_meta_description_openai_model_id');
-    const $anthropicSelect = $('#mso_meta_description_anthropic_model_id');
-    const $form = $('#mso-settings-form');
-    const $submitButton = $('#mso-submit-button');
-    const $messagesDiv = $('#mso-settings-messages');
+    const $mistralSelect = $('#mso_ai_meta_description_mistral_model_id');
+    const $geminiSelect = $('#mso_ai_meta_description_gemini_model_id');
+    const $openaiSelect = $('#mso_ai_meta_description_openai_model_id');
+    const $anthropicSelect = $('#mso_ai_meta_description_anthropic_model_id');
+    const $form = $('#mso-ai-settings-form');
+    const $submitButton = $('#mso-ai-submit-button');
+    const $messagesDiv = $('#mso-ai-settings-messages');
     const $navTabs = $('.nav-tab-wrapper a.nav-tab');
-    const $passwordInputs = $('input[type="password"][name^="mso_meta_description_"]');
+    const $passwordInputs = $('input[type="password"][name^="AI_Meta_Description_"]');
     const $passwordToggleButtons = $('.wp-hide-pw');
 
     // --- Get Localized Variables ---
-    /* global msoScriptVars */
+    /* global msoAiScriptVars */
 
     // Script Variables (with defaults)
     const {
@@ -63,12 +63,12 @@
         status = ['(Too short)', '(Too long)', '(Good)'],
         ajaxUrl = '',
         nonce = '',
-        action = 'save_mso_settings',
+        action = 'save_mso_ai_settings',
         saving_text = 'Saving...',
         error_text = 'An error occurred.',
         i18n_show_password = 'Show password',
         i18n_hide_password = 'Hide password'
-    } = (typeof msoScriptVars !== 'undefined') ? msoScriptVars : {};
+    } = (typeof msoAiScriptVars !== 'undefined') ? msoAiScriptVars : {};
 
     // --- Helper Functions ---
 
@@ -163,7 +163,7 @@
 
         $select.empty();
         $select.append(`<option value="">${selectModel}</option>`);
-        const $errorContainer = $('#mso-model-error-' + apiType);
+        const $errorContainer = $('#mso-ai-model-error-' + apiType);
         $errorContainer.text('');
 
         if (!apiKeySet) {
@@ -183,7 +183,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
-                    action: 'mso_fetch_models',
+                    action: 'mso_ai_fetch_models',
                     nonce: nonce,
                     apiType: apiType,
                 }),
@@ -269,7 +269,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                 },
                 body: new URLSearchParams({
-                    action: 'mso_generate_summary',
+                    action: 'mso_ai_generate_summary',
                     nonce: nonce,
                     content: plainText,
                     provider: provider
@@ -365,7 +365,7 @@
             updateCharacterCount();
             $metaBoxField.on('keyup input paste change', updateCharacterCount);
 
-            $('.mso-ai-generator').on('click', '.mso-generate-button', function () {
+            $('.mso-ai-generator').on('click', '.mso-ai-generate-button', function () {
                 const provider = $(this).data('provider');
                 if (provider) {
                     void summarizeContent(provider);
@@ -376,6 +376,7 @@
         // Initialize Settings Page functionality
         if ($mistralSelect.length || $geminiSelect.length || $openaiSelect.length || $anthropicSelect.length) {
             // Populate model selects
+
             void populateModelSelect({
                 apiType: 'mistral',
                 $select: $mistralSelect,
@@ -432,8 +433,6 @@
                 $submitButton.val(saving_text).prop('disabled', true);
                 $messagesDiv.removeClass('notice-success notice-error is-dismissible').empty().hide();
 
-
-
                 $.ajax({
                     url: ajaxUrl,
                     type: 'POST',
@@ -443,7 +442,6 @@
                         if (response.success) {
                             displayMessage('success', response.data.message);
                         } else {
-                            console.log(response.data)
                             const errorMessage = response.data.message || error_text;
                             displayMessage('error', errorMessage);
                         }
@@ -456,7 +454,7 @@
             });
 
             // Initialize notice dismiss button handler
-            $('body').on('click', '#mso-settings-messages .notice-dismiss', function () {
+            $('body').on('click', '#mso-ai-settings-messages .notice-dismiss', function () {
                 $(this).closest('.notice').fadeTo(100, 0, function () {
                     $(this).slideUp(100, function () {
                         $(this).remove();

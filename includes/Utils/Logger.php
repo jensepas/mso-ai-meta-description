@@ -1,13 +1,13 @@
 <?php
 /**
- * MSO Meta Description Logger Utility
+ * MSO AI Meta Description Logger Utility
  *
  * Provides a centralized way to handle logging within the plugin.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Utils;
+namespace MSO_AI_Meta_Description\Utils;
 
 /**
  * Handles logging operations for the plugin.
@@ -65,7 +65,7 @@ class Logger
         // Check if WordPress debug mode is enabled before proceeding.
         if (defined('WP_DEBUG') && WP_DEBUG === true) {
             // Prepare the log message with a clear prefix based on the level.
-            $log_entry = sprintf('[MSO Meta Description %s] %s', $level, $message);
+            $log_entry = sprintf('[MSO AI Meta Description %s] %s', $level, $message);
 
             // If additional context data is provided...
             if (!empty($context)) {

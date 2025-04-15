@@ -1,18 +1,18 @@
 <?php
 /**
- * MSO Meta Description Settings
+ * MSO AI Meta Description Settings
  *
  * Handles the registration, display, and saving of plugin settings,
  * including API keys and model selections for different AI providers.
  * Uses AJAX for saving settings per tab to improve user experience.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
-namespace MSO_Meta_Description;
+namespace MSO_AI_Meta_Description;
 
-use MSO_Meta_Description\Api\ApiClient;
+use MSO_AI_Meta_Description\Api\ApiClient;
 
 // Assuming ApiClient is used for fetching models, though not directly visible in this snippet.
 
@@ -30,35 +30,35 @@ class Settings
      * The options group name used by register_setting().
      * @var string
      */
-    const OPTIONS_GROUP = 'mso_meta_description_options';
+    const OPTIONS_GROUP = 'mso_ai_meta_description_options';
 
     /**
      * The slug for the settings page.
      * @var string
      */
-    const PAGE_SLUG = 'admin_mso_meta_description';
+    const PAGE_SLUG = 'admin_mso_ai_meta_description';
 
     // --- Section IDs for different providers ---
     /**
      * Settings section ID for Mistral.
      * @var string
      */
-    const SECTION_MISTRAL_ID = 'mso_meta_description_mistral_section';
+    const SECTION_MISTRAL_ID = 'mso_ai_meta_description_mistral_section';
     /**
      * Settings section ID for Gemini.
      * @var string
      */
-    const SECTION_GEMINI_ID = 'mso_meta_description_gemini_section';
+    const SECTION_GEMINI_ID = 'mso_ai_meta_description_gemini_section';
     /**
      * Settings section ID for OpenAI.
      * @var string
      */
-    const SECTION_OPENAI_ID = 'mso_meta_description_openai_section';
+    const SECTION_OPENAI_ID = 'mso_ai_meta_description_openai_section';
     /**
      * Settings section ID for Anthropic.
      * @var string
      */
-    const SECTION_ANTHROPIC_ID = 'mso_meta_description_anthropic_section';
+    const SECTION_ANTHROPIC_ID = 'mso_ai_meta_description_anthropic_section';
 
     const ICON_BASE64_SVG = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjgwMHB4IiB3aWR0aD0iODAwcHgiIHZlcnNpb249IjEuMSIgaWQ9IkNhcGFfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgDQoJIHZpZXdCb3g9IjAgMCA0OTAgNDkwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDE2LDBINzRDMzMuMywwLDAsMzMuNCwwLDc0djM0MmMwLDQwLjcsMzMuNCw3NCw3NCw3NGgzNDJjNDAuNywwLDc0LTMzLjQsNzQtNzRWNzRDNDkwLDMzLjQsNDU2LjYsMCw0MTYsMHogTTQ0OS4zLDQxNg0KCQkJYzAsMTguOC0xNC42LDMzLjQtMzMuNCwzMy40SDc0Yy0xOC44LDAtMzMuNC0xNC42LTMzLjQtMzMuNFY3NGMwLTE4LjgsMTQuNi0zMy40LDMzLjQtMzMuNGgzNDJjMTguOCwwLDMzLjQsMTQuNiwzMy40LDMzLjR2MzQyDQoJCQlINDQ5LjN6Ii8+DQoJCTxnPg0KCQkJPHBhdGggZD0iTTIzNC44LDE2OS44Yy0yLjQtNS41LTcuOC05LTEzLjgtOXMtMTEuNCwzLjUtMTMuOCw5TDE0NywzMDguM2MtMy4zLDcuNiwwLjIsMTYuNCw3LjgsMTkuN2MyLDAuOSw0LDEuMyw2LDEuMw0KCQkJCWM1LjgsMCwxMS4zLTMuNCwxMy44LTlsMTMuMi0zMC4yaDY2LjlsMTMuMiwzMC4yYzMuMyw3LjYsMTIuMSwxMS4xLDE5LjcsNy44YzcuNi0zLjMsMTEuMS0xMi4yLDcuOC0xOS43TDIzNC44LDE2OS44eg0KCQkJCSBNMjAwLjcsMjYwbDIwLjQtNDYuOGwyMC40LDQ2LjhIMjAwLjd6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMjE3LjljLTguMywwLTE1LDYuNy0xNSwxNXY4MS40YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTgxLjRDMzQ0LjMsMjI0LjYsMzM3LjYsMjE3LjksMzI5LjMsMjE3Ljl6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMTY2LjRjLTguMywwLTE1LDYuNy0xNSwxNXY0YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTRDMzQ0LjMsMTczLjEsMzM3LjYsMTY2LjQsMzI5LjMsMTY2LjR6Ii8+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8L3N2Zz4=';
 
@@ -78,7 +78,7 @@ class Settings
         $this->api_client = $api_client;
 
         // Hook the AJAX handler for saving settings.
-        add_action('wp_ajax_' . MSO_Meta_Description::AJAX_NONCE_ACTION, [$this, 'handle_ajax_save_settings']);
+        add_action('wp_ajax_' . MSO_AI_Meta_Description::AJAX_NONCE_ACTION, [$this, 'handle_ajax_save_settings']);
     }
 
     /**
@@ -88,8 +88,8 @@ class Settings
     public function add_options_page(): void
     {
         add_menu_page(
-            esc_html__('AI Meta Description Settings', 'mso-meta-description'), // Page title
-            esc_html__('Meta Description', 'mso-meta-description'),       // Menu title
+            esc_html__('MSO AI Meta Description Settings', 'mso-ai-meta-description'), // Page title
+            esc_html__('Meta Description', 'mso-ai-meta-description'),       // Menu title
             'manage_options', // Capability required to access
             self::PAGE_SLUG,  // Menu slug (unique identifier)
             [$this, 'render_options_page'], // Function to render the page content
@@ -119,7 +119,7 @@ class Settings
                 <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
                 <!-- Placeholder for AJAX success/error messages -->
-                <div id="mso-settings-messages" class="mso-settings-messages"></div>
+                <div id="mso-ai-settings-messages" class="mso-ai-settings-messages"></div>
 
                 <!-- Navigation tabs -->
                 <h2 class="nav-tab-wrapper">
@@ -149,7 +149,7 @@ class Settings
                 </h2>
 
                 <!-- Settings form - Submission is handled via AJAX, so 'action' is empty -->
-                <form method="post" action="" id="mso-settings-form">
+                <form method="post" action="" id="mso-ai-settings-form">
                     <?php
                     // Output hidden fields necessary for the settings API (like nonce),
                     // though primarily used for non-AJAX submissions to options.php.
@@ -176,11 +176,11 @@ class Settings
                     // Output the standard WordPress submit button.
                     // The actual saving is triggered by JavaScript attached to this button's ID or form submission.
                     submit_button(
-                        esc_html__('Save Changes', 'mso-meta-description'), // Button text
+                        esc_html__('Save Changes', 'mso-ai-meta-description'), // Button text
                         'primary', // Button class (primary, secondary, etc.)
-                        'mso-save-settings-button', // 'name' attribute (not critical for AJAX)
+                        'mso-ai-save-settings-button', // 'name' attribute (not critical for AJAX)
                         true, // Wrap in <p> tags
-                        ['id' => 'mso-submit-button'] // HTML ID for JavaScript targeting
+                        ['id' => 'mso-ai-submit-button'] // HTML ID for JavaScript targeting
                     );
                     ?>
                 </form>
@@ -191,7 +191,7 @@ class Settings
             // This part seems slightly misplaced; the nonce check should ideally protect the rendering logic.
             // Consider restructuring if this nonce check is critical. Currently, it prevents the page from rendering if the nonce fails.
             // A better approach might be to show an error message within the standard page structure.
-            wp_die(esc_html__('Invalid nonce specified.', 'mso-meta-description'), esc_html__('Error', 'mso-meta-description'), [
+            wp_die(esc_html__('Invalid nonce specified.', 'mso-ai-meta-description'), esc_html__('Error', 'mso-ai-meta-description'), [
                 'response' => 403,
                 'back_link' => true,
             ]);
@@ -206,10 +206,10 @@ class Settings
     private function get_tabs(): array
     {
         return [
-            'mistral' => esc_html__('Mistral Settings', 'mso-meta-description'),
-            'gemini' => esc_html__('Gemini Settings', 'mso-meta-description'),
-            'openai' => esc_html__('OpenAI Settings', 'mso-meta-description'),
-            'anthropic' => esc_html__('Anthropic Settings', 'mso-meta-description'),
+            'mistral' => esc_html__('Mistral Settings', 'mso-ai-meta-description'),
+            'gemini' => esc_html__('Gemini Settings', 'mso-ai-meta-description'),
+            'openai' => esc_html__('OpenAI Settings', 'mso-ai-meta-description'),
+            'anthropic' => esc_html__('Anthropic Settings', 'mso-ai-meta-description'),
         ];
     }
 
@@ -221,8 +221,8 @@ class Settings
      */
     public function register_settings(): void
     {
-        $option_group = 'mso_meta_description_options';
-        $prefix = MSO_Meta_Description::get_option_prefix();
+        $option_group = 'mso_ai_meta_description_options';
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
 
         // --- API Key Settings ---
         register_setting($option_group, $prefix . 'gemini_api_key', 'sanitize_text_field');
@@ -253,23 +253,23 @@ class Settings
 
         // --- Mistral Section ---
         add_settings_section(self::SECTION_MISTRAL_ID, null, [$this, 'render_section_callback'], self::SECTION_MISTRAL_ID);
-        add_settings_field($prefix . 'mistral_api_key', esc_html__('Mistral API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
-        add_settings_field($prefix . 'mistral_model', esc_html__('Mistral Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
+        add_settings_field($prefix . 'mistral_api_key', esc_html__('Mistral API Key', 'mso-ai-meta-description'), [$this, 'render_api_key_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
+        add_settings_field($prefix . 'mistral_model', esc_html__('Mistral Model', 'mso-ai-meta-description'), [$this, 'render_model_field'], self::SECTION_MISTRAL_ID, self::SECTION_MISTRAL_ID, ['provider' => 'mistral']);
 
         // --- Gemini Section ---
         add_settings_section(self::SECTION_GEMINI_ID, null, [$this, 'render_section_callback'], self::SECTION_GEMINI_ID);
-        add_settings_field($prefix . 'gemini_api_key', esc_html__('Gemini API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
-        add_settings_field($prefix . 'gemini_model', esc_html__('Gemini Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
+        add_settings_field($prefix . 'gemini_api_key', esc_html__('Gemini API Key', 'mso-ai-meta-description'), [$this, 'render_api_key_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
+        add_settings_field($prefix . 'gemini_model', esc_html__('Gemini Model', 'mso-ai-meta-description'), [$this, 'render_model_field'], self::SECTION_GEMINI_ID, self::SECTION_GEMINI_ID, ['provider' => 'gemini']);
 
         // --- OpenAI Section ---
         add_settings_section(self::SECTION_OPENAI_ID, null, [$this, 'render_section_callback'], self::SECTION_OPENAI_ID);
-        add_settings_field($prefix . 'openai_api_key', esc_html__('OpenAI (ChatGPT) API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
-        add_settings_field($prefix . 'openai_model', esc_html__('OpenAI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
+        add_settings_field($prefix . 'openai_api_key', esc_html__('OpenAI (ChatGPT) API Key', 'mso-ai-meta-description'), [$this, 'render_api_key_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
+        add_settings_field($prefix . 'openai_model', esc_html__('OpenAI Model', 'mso-ai-meta-description'), [$this, 'render_model_field'], self::SECTION_OPENAI_ID, self::SECTION_OPENAI_ID, ['provider' => 'openai']);
 
         // --- Anthropic Section ---
         add_settings_section(self::SECTION_ANTHROPIC_ID, null, [$this, 'render_section_callback'], self::SECTION_ANTHROPIC_ID);
-        add_settings_field($prefix . 'anthropic_api_key', esc_html__('Anthropic API Key', 'mso-meta-description'), [$this, 'render_api_key_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
-        add_settings_field($prefix . 'anthropic_model', esc_html__('Anthropic AI Model', 'mso-meta-description'), [$this, 'render_model_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
+        add_settings_field($prefix . 'anthropic_api_key', esc_html__('Anthropic API Key', 'mso-ai-meta-description'), [$this, 'render_api_key_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
+        add_settings_field($prefix . 'anthropic_model', esc_html__('Anthropic AI Model', 'mso-ai-meta-description'), [$this, 'render_model_field'], self::SECTION_ANTHROPIC_ID, self::SECTION_ANTHROPIC_ID, ['provider' => 'anthropic']);
 
 
         // Conditionally register the front page description setting
@@ -285,7 +285,7 @@ class Settings
      */
     public function register_front_page_setting(): void
     {
-        $option_name = MSO_Meta_Description::OPTION_PREFIX . 'front_page';
+        $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page';
         // Register the setting to be saved on the 'reading' settings page.
         register_setting(
             'reading', // The settings group for the Reading settings page.
@@ -294,15 +294,14 @@ class Settings
         );
         // Add the field to the 'reading' page, within the 'default' section.
         add_settings_field(
-            'mso_front_page_description_field', // Unique ID for the field.
-            esc_html__('Front page meta description', 'mso-meta-description'), // Field label.
+            'mso_ai_front_page_description_field', // Unique ID for the field.
+            esc_html__('Front page meta description', 'mso-ai-meta-description'), // Field label.
             [$this, 'render_front_page_description_input'], // Callback to render the input.
             'reading', // Page slug.
             'default', // Section ID on the 'reading' page.
             ['label_for' => $option_name] // Associates the label with the input ID (improves accessibility).
         );
     }
-
 
     /**
      * Handles the AJAX request triggered by the JavaScript on the settings page
@@ -312,12 +311,12 @@ class Settings
     {
         // 1. Verify the security nonce sent with the AJAX request.
         // 'nonce' is the key expected in the $_POST data (matches wp_localize_script).
-        check_ajax_referer(MSO_Meta_Description::AJAX_NONCE_ACTION, 'nonce');
+        check_ajax_referer(MSO_AI_Meta_Description::AJAX_NONCE_ACTION, 'nonce');
 
         // 2. Check if the current user has the required capability to manage options.
         if (!current_user_can('manage_options')) {
             // Send a JSON error response with a 403 Forbidden status.
-            wp_send_json_error(['message' => esc_html__('You do not have permission to save these settings.', 'mso-meta-description')], 403);
+            wp_send_json_error(['message' => esc_html__('You do not have permission to save these settings.', 'mso-ai-meta-description')], 403);
             // wp_send_json_* functions include die().
         }
 
@@ -327,12 +326,12 @@ class Settings
 
         // Ensure the active tab identifier was provided.
         if (!$active_tab) {
-            wp_send_json_error(['message' => esc_html__('Could not determine which settings tab to save.', 'mso-meta-description')], 400); // 400 Bad Request status.
+            wp_send_json_error(['message' => esc_html__('Could not determine which settings tab to save.', 'mso-ai-meta-description')], 400); // 400 Bad Request status.
         }
 
         // 4. Determine which specific option names belong to the active tab being saved.
         $options_for_this_tab = [];
-        $option_prefix = MSO_Meta_Description::OPTION_PREFIX;
+        $option_prefix = MSO_AI_Meta_Description::OPTION_PREFIX;
 
         switch ($active_tab) {
             case 'mistral':
@@ -364,7 +363,7 @@ class Settings
                 // Handle unknown tab identifier.
                 wp_send_json_error(['message' => sprintf(
                 /* translators: %s: The unknown tab identifier */
-                    esc_html__('Unknown settings tab: %s', 'mso-meta-description'), esc_html($active_tab))], 400);
+                    esc_html__('Unknown settings tab: %s', 'mso-ai-meta-description'), esc_html($active_tab))], 400);
         }
 
         // 5. Iterate through the options relevant to the current tab, sanitize, and save them.
@@ -398,14 +397,14 @@ class Settings
         if (!empty($errors)) {
             // Send an error response if validation failed.
             wp_send_json_error([
-                'message' => esc_html__('Settings saved with validation errors.', 'mso-meta-description'),
+                'message' => esc_html__('Settings saved with validation errors.', 'mso-ai-meta-description'),
                 'errors' => $errors, // Include specific field errors.
                 'saved_data' => $saved_data // Optionally send back saved data even on error.
             ]);
         } else {
             // Send a success response.
             wp_send_json_success([
-                'message' => esc_html__('Settings saved successfully.', 'mso-meta-description'),
+                'message' => esc_html__('Settings saved successfully.', 'mso-ai-meta-description'),
                 'saved_data' => $saved_data // Send back the saved data (useful for updating UI if needed).
             ]);
         }
@@ -422,16 +421,16 @@ class Settings
         // Output different introductory text based on the section ID.
         switch ($args['id']) {
             case self::SECTION_MISTRAL_ID:
-                echo '<p>' . esc_html__('Configure the settings for using the Mistral API.', 'mso-meta-description') . '</p>';
+                echo '<p>' . esc_html__('Configure the settings for using the Mistral API.', 'mso-ai-meta-description') . '</p>';
                 break;
             case self::SECTION_GEMINI_ID:
-                echo '<p>' . esc_html__('Configure the settings for using the Google Gemini API.', 'mso-meta-description') . '</p>';
+                echo '<p>' . esc_html__('Configure the settings for using the Google Gemini API.', 'mso-ai-meta-description') . '</p>';
                 break;
             case self::SECTION_OPENAI_ID:
-                echo '<p>' . esc_html__('Configure the settings for using the OpenAI API.', 'mso-meta-description') . '</p>';
+                echo '<p>' . esc_html__('Configure the settings for using the OpenAI API.', 'mso-ai-meta-description') . '</p>';
                 break;
             case self::SECTION_ANTHROPIC_ID:
-                echo '<p>' . esc_html__('Configure the settings for using the Anthropic API.', 'mso-meta-description') . '</p>';
+                echo '<p>' . esc_html__('Configure the settings for using the Anthropic API.', 'mso-ai-meta-description') . '</p>';
                 break;
             default:
                 // No text for unknown sections.
@@ -449,7 +448,7 @@ class Settings
         // Get the provider name ('mistral', 'gemini', 'openai') from the arguments.
         $provider = $args['provider'] ?? 'unknown'; // Default to prevent errors if 'provider' isn't set.
         // Construct the option name based on the provider.
-        $option_name = MSO_Meta_Description::OPTION_PREFIX . $provider . '_api_key';
+        $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_api_key';
         // Get the currently saved value for this option.
         $value = get_option($option_name, '');
         // Create a unique HTML ID for the input field for label and button targeting.
@@ -468,7 +467,7 @@ class Settings
             '<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="%s">
                 <span class="dashicons dashicons-hidden" aria-hidden="true"></span>
             </button>',
-            esc_attr__('Show password', 'mso-meta-description') // Accessibility label.
+            esc_attr__('Show password', 'mso-ai-meta-description') // Accessibility label.
         );
 
         // Determine the correct documentation link based on the provider.
@@ -496,7 +495,7 @@ class Settings
             esc_url($docs_url), // Link URL.
             sprintf(
             /* translators: %s: Provider name (e.g., Mistral, Gemini, OpenAI) */
-                esc_html__('Get your %s API key', 'mso-meta-description'), esc_html($provider_name)) // Link text.
+                esc_html__('Get your %s API key', 'mso-ai-meta-description'), esc_html($provider_name)) // Link text.
         );
     }
 
@@ -514,8 +513,8 @@ class Settings
     {
         // Get provider name and construct option name and HTML ID.
         $provider = $args['provider'] ?? 'unknown';
-        $option_name = MSO_Meta_Description::OPTION_PREFIX . $provider . '_model';
-        $select_id = 'mso_meta_description_' . $provider . '_model_id'; // Unique ID for the select element.
+        $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_model';
+        $select_id = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_model_id'; // Unique ID for the select element.
 
         // Output the select element.
         printf(
@@ -526,7 +525,7 @@ class Settings
         );
 
         // Initial placeholder option shown while loading or if no key is present.
-        echo '<option value="">' . esc_html__('Loading models...', 'mso-meta-description') . '</option>';
+        echo '<option value="">' . esc_html__('Loading models...', 'mso-ai-meta-description') . '</option>';
 
         // Pre-select the currently saved value if it exists.
         // This allows the saved value to be shown initially. JavaScript should replace
@@ -542,7 +541,7 @@ class Settings
         // Output the description text below the dropdown.
         echo '<p class="description">' . sprintf(
             /* translators: %s: Provider name (e.g., Mistral) */
-                esc_html__('Select the %s model to use. Models loaded dynamically if API key is valid.', 'mso-meta-description'),
+                esc_html__('Select the %s model to use. Models loaded dynamically if API key is valid.', 'mso-ai-meta-description'),
                 esc_html(ucfirst($provider)) // Capitalized provider name.
             ) . '</p>';
 
@@ -560,7 +559,7 @@ class Settings
     public function render_front_page_description_input(array $args): void
     {
         // Construct the option name and get its current value.
-        $option_name = MSO_Meta_Description::OPTION_PREFIX . 'front_page';
+        $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page';
         $value = get_option($option_name, '');
         // Use the 'label_for' argument passed by add_settings_field for the input ID.
         $field_id = esc_attr($args['label_for']);
@@ -571,7 +570,7 @@ class Settings
                 id="<?php echo esc_attr($field_id); ?>"
                 class="regular-text"
                 value="<?php echo esc_attr($value); ?>"
-                maxlength="<?php echo esc_attr(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH + 10); // Allow slightly more for flexibility
+                maxlength="<?php echo esc_attr(MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH + 10); // Allow slightly more for flexibility
                 ?>"
                 aria-describedby="front-page-meta-description-hint" <?php // Link input to its description
         ?>
@@ -580,11 +579,11 @@ class Settings
             ?>
             <?php printf(
             /* translators: 1: Minimum length, 2: Maximum length */
-                esc_html__('Enter the meta description for the site\'s front page when it displays the latest posts. Recommended length: %1$d-%2$d characters.', 'mso-meta-description'),
-                esc_html(MSO_Meta_Description::MIN_DESCRIPTION_LENGTH),
-                esc_html(MSO_Meta_Description::MAX_DESCRIPTION_LENGTH)
+                esc_html__('Enter the meta description for the site\'s front page when it displays the latest posts. Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
+                esc_html(MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH),
+                esc_html(MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH)
             ); ?>
-            <?php esc_html_e('Character count', 'mso-meta-description'); ?>: <span
+            <?php esc_html_e('Character count', 'mso-ai-meta-description'); ?>: <span
                     class="mso-char-count">0</span> <?php // Span to display character count
             ?>
         </p>
@@ -597,8 +596,10 @@ class Settings
                 jQuery(document).ready(function ($) {
                     // Get the input field and the character count span.
                     const inputField = $('#<?php echo esc_js($field_id); ?>'); // Use esc_js for safety in JS strings.
-                    const countSpan = inputField.next('.description').find('.mso-char-count'); // Find the span relative to the input.
+                    const countSpan = inputField.closest('label').next('.description').find('.mso-char-count'); // Find the span relative to the input.
 
+                    console.log (<?php echo esc_js($field_id); ?>);
+                    console.log (countSpan.length);
                     // Ensure both elements were found.
                     if (inputField.length && countSpan.length) {
                         // Function to update the character count display.

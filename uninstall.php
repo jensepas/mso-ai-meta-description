@@ -1,12 +1,12 @@
 <?php
 /**
- * MSO Meta Description Uninstall
+ * MSO AI Meta Description Uninstall
  *
  * Actions performed when the plugin is deleted via the WordPress admin interface.
  * This script runs *only* when the user clicks "Delete" for the plugin
  * from the "Plugins" page. It does *not* run on deactivation.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
@@ -19,20 +19,20 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 /**
  * Handles the removal of plugin data for a single WordPress site.
  *
- * Deletes plugin options, post meta associated with MSO Meta Description,
+ * Deletes plugin options, post meta associated with MSO AI Meta Description,
  * and any custom database tables created by the plugin (if applicable).
  * This function is designed to be called for each site in a multisite network
  * or just once for a single site installation.
  *
  * @return void
  */
-function mso_meta_description_uninstall_site(): void
+function mso_ai_meta_description_uninstall_site(): void
 {
     // Define constants based on the main plugin class or configuration.
     // It's generally safer to hardcode these critical keys in uninstall.php
     // because the main plugin files are not loaded during uninstallation.
-    $option_prefix = 'mso_meta_description_'; // Prefix used for plugin options.
-    $meta_key      = '_mso_meta_description'; // The meta key used for storing descriptions on posts/pages.
+    $option_prefix = 'mso_ai_meta_description_'; // Prefix used for plugin options.
+    $meta_key      = '_mso_ai_meta_description'; // The meta key used for storing descriptions on posts/pages.
 
     // --- Delete Plugin Options ---
 
@@ -68,13 +68,13 @@ function mso_meta_description_uninstall_site(): void
     // --- Delete Custom Tables (Example - If you had custom tables) ---
     /*
     global $wpdb;
-    $table_name = $wpdb->prefix . 'mso_custom_data'; // Example table name
+    $table_name = $wpdb->prefix . 'mso_ai_custom_data'; // Example table name
     $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
     */
 
     // --- Delete Scheduled Cron Events (Example - If you had cron jobs) ---
     /*
-    wp_clear_scheduled_hook('mso_daily_cron_event');
+    wp_clear_scheduled_hook('mso_ai_daily_cron_event');
     */
 }
 
@@ -94,7 +94,7 @@ if (is_multisite()) {
         switch_to_blog($site_id);
 
         // Call the site-specific uninstall function to clean up data for this site.
-        mso_meta_description_uninstall_site();
+        mso_ai_meta_description_uninstall_site();
 
         // Restore the context back to the original site (usually the main site).
         // This is crucial to avoid issues if the loop continues or other code runs after this.
@@ -102,7 +102,7 @@ if (is_multisite()) {
     }
 } else {
     // If it's not a multisite installation, just run the uninstall function once for the single site.
-    mso_meta_description_uninstall_site();
+    mso_ai_meta_description_uninstall_site();
 }
 
 // --- Final Cleanup ---

@@ -1,13 +1,13 @@
 <?php
 /**
- * MSO Meta Description MistralProvider
+ * MSO AI Meta Description MistralProvider
  * // ... docblock ...
  */
-namespace MSO_Meta_Description\Providers\Available;
+namespace MSO_AI_Meta_Description\Providers\Available;
 
 // Change 'use' for ProviderInterface to AbstractProvider if needed, or keep both
-use MSO_Meta_Description\Providers\AbstractProvider;
-use MSO_Meta_Description\Providers\ProviderInterface; // Still needed for type hints if AbstractProvider doesn't redeclare
+use MSO_AI_Meta_Description\Providers\AbstractProvider;
+use MSO_AI_Meta_Description\Providers\ProviderInterface; // Still needed for type hints if AbstractProvider doesn't redeclare
 use WP_Error;
 
 // Extend the abstract class
@@ -47,7 +47,7 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
         if (!isset($data['data']) || !is_array($data['data'])) {
             return new WP_Error(
                 'invalid_response_structure',
-                __('Unable to parse model list from Mistral: "data" array missing.', 'mso-meta-description')
+                __('Unable to parse model list from Mistral: "data" array missing.', 'mso-ai-meta-description')
             );
         }
 
@@ -77,7 +77,7 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
         if ($generated_text === null) {
             return new WP_Error(
                 'parse_error',
-                __('Mistral response missing expected summary data.', 'mso-meta-description')
+                __('Mistral response missing expected summary data.', 'mso-ai-meta-description')
             );
         }
         return trim($generated_text);

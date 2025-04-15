@@ -1,14 +1,14 @@
 <?php
 /**
- * MSO Meta Description Frontend
+ * MSO AI Meta Description Frontend
  *
  * Handles the output of the meta description tag in the website's <head> section.
  * Determines the appropriate description based on the current page context (post, page, archive, front page, etc.).
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description;
+namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -144,7 +144,7 @@ class Frontend
             // Check if the front page displays the latest posts.
             else { // 'posts' === $this->show_on_front (or default behavior)
                 // Retrieve the custom front page description saved in the plugin's settings (Reading settings page).
-                $description = get_option(MSO_Meta_Description::OPTION_PREFIX . 'front_page');
+                $description = get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page');
                 // If no custom description is set in options, use the site tagline as a fallback.
                 if (empty($description)) {
                     $description = get_bloginfo('description', 'display');
@@ -177,14 +177,14 @@ class Frontend
             // $description = get_the_author_meta('description', get_queried_object_id());
         }
         elseif (is_search()) {
-            // $description = sprintf(__('Search results for "%s"', 'mso-meta-description'), get_search_query());
+            // $description = sprintf(__('Search results for "%s"', 'mso-ai-meta-description'), get_search_query());
         }
         elseif (is_404()) {
-            // $description = __('Page not found.', 'mso-meta-description');
+            // $description = __('Page not found.', 'mso-ai-meta-description');
         }
         */
 
         // Allow other plugins or themes to filter the final description before output.
-        return apply_filters('mso_meta_description_output', $description);
+        return apply_filters('mso_ai_meta_description_output', $description);
     }
 }

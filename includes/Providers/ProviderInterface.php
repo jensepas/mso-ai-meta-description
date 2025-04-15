@@ -1,15 +1,15 @@
 <?php
 /**
- * MSO Meta Description ProviderInterface
+ * MSO AI Meta Description ProviderInterface
  *
  * Defines the contract for all AI provider implementations within the plugin.
  * Ensures that each provider class has a consistent set of methods for
  * identifying itself, fetching available models, and generating summaries.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Providers;
+namespace MSO_AI_Meta_Description\Providers;
 
 use WP_Error; // Used for type hinting in method signatures.
 

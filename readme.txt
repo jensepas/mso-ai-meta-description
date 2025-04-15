@@ -1,6 +1,6 @@
-=== MSO Meta Description: Custom Meta Descriptions with AI ===
-Contributors: MS-ONLY
-Tags: meta description, seo, AI, gemini mistral openai chatgpt
+=== MSO AI Meta Description: Custom Meta Descriptions with AI ===
+Contributors: jensepas
+Tags: meta description, seo, AI, Gemini Mistral OpenAI ChatGPT Anthropic
 Requires at least: 6.0
 Tested up to: 6.7
 Stable tag: 1.3.0
@@ -9,11 +9,11 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.ms-only.fr/donation
 
-Add easily customizable meta descriptions to your WordPress site, with optional AI-powered suggestions from Gemini, Mistral, and OpenAI (ChatGPT).
+Add easily customizable meta descriptions to your WordPress site, with optional AI-powered suggestions from Gemini, Mistral, OpenAI and Anthropic.
 
 == Description ==
 
-**Take control of your SEO snippets with MSO Meta Description.**
+**Take control of your SEO snippets with MSO AI Meta Description.**
 
 This plugin allows you to easily add custom meta description tags to the HTML header of your posts, pages, custom post types, and even your homepage. Optimize how your content appears in search engine results!
 
@@ -24,6 +24,7 @@ This plugin allows you to easily add custom meta description tags to the HTML he
     * Google Gemini
     * Mistral AI
     * OpenAI (ChatGPT)
+    * Anthropic
 * **Simple Configuration:** Configure API keys and select preferred AI models via the plugin's settings page (under Settings > General).
 * **Homepage Description:** Set a custom meta description for your homepage (whether it shows latest posts or a static page).
 * **Character Counter:** Easily track description length to stay within recommended limits (120-160 characters).
@@ -42,13 +43,13 @@ Improve your site's visibility and click-through rates by crafting perfect meta 
 
 1.  Log in to your WordPress admin dashboard.
 2.  Navigate to Plugins > Add New.
-3.  Search for "MSO Meta Description".
+3.  Search for "MSO AI Meta Description".
 4.  Find the plugin by MS-ONLY and click "Install Now".
 5.  Click "Activate" once installation is complete.
 
 **Manual Installation (Upload):**
 
-1.  Download the plugin zip file (mso-meta-description.zip) from the WordPress Plugin Directory (or source).
+1.  Download the plugin zip file (mso-ai-meta-description.zip) from the WordPress Plugin Directory (or source).
 2.  Log in to your WordPress admin dashboard.
 3.  Navigate to Plugins > Add New.
 4.  Click the "Upload Plugin" button at the top.
@@ -58,38 +59,41 @@ Improve your site's visibility and click-through rates by crafting perfect meta 
 **Manual Installation (FTP):**
 
 1.  Download the plugin zip file and unzip it.
-2.  Using an FTP client, upload the `mso-meta-description` folder to the `/wp-content/plugins/` directory on your server.
+2.  Using an FTP client, upload the `mso-ai-meta-description` folder to the `/wp-content/plugins/` directory on your server.
 3.  Log in to your WordPress admin dashboard.
 4.  Navigate to Plugins > Installed Plugins.
-5.  Find "MSO Meta Description" and click "Activate".
+5.  Find "MSO AI Meta Description" and click "Activate".
 
 **Configuration (Required for AI Features):**
 
-1.  After activation, go to Settings > General in your WordPress admin menu.
-2.  Scroll down to the "MSO Meta Description" section (or find the dedicated MSO Meta Description settings page if moved in future versions).
-3.  Enter your API keys for the AI services (Gemini, Mistral, OpenAI) you wish to use. API keys are **only** required if you want to use the AI generation feature.
-4.  Select the desired AI models from the dropdown lists (models are loaded dynamically if the API key is valid).
-5.  Click "Save Changes".
+1.  After activation, go to MSO AI Meta Description in your WordPress admin menu.
+2.  Enter your API keys for the AI services (Gemini, Mistral, OpenAI, Anthropic ) you wish to use. API keys are **only** required if you want to use the AI generation feature.
+3.  Select the desired AI models from the dropdown lists (models are loaded dynamically if the API key is valid).
+4.  Click "Save Changes".
+
+== Screenshots ==
+
+1. MSO AI Meta Description settings page
 
 == Frequently Asked Questions ==
 
 = Where are the plugin settings? =
 
-You can find the settings to enter API keys and select AI models under **Settings > General** in your WordPress admin dashboard. Look for the "MSO Meta Description" section.
+You can find the settings to enter API keys and select AI models under **MSO AI Meta Description** in your WordPress admin dashboard.
 
 = Do I need API keys to use this plugin? =
 
-No. You only need to provide API keys in the settings if you want to use the optional **AI-powered description generation** feature (Gemini, Mistral, ChatGPT). You can still manually write and save meta descriptions without any API keys.
+No. You only need to provide API keys in the settings if you want to use the optional **AI-powered description generation** feature (Gemini, Mistral, ChatGPT, Anthropic). You can still manually write and save meta descriptions without any API keys.
 
 = Which AI models can I use? =
 
-The plugin dynamically fetches compatible models from Gemini, Mistral, and OpenAI based on your API key. Popular default options include `gemini-2.0-flash`, `mistral-small-latest`, and `gpt-3.5-turbo`. You can select your preferred available model in the plugin settings.
+The plugin is designed to work with models from Gemini, Mistral, OpenAI and Anthropic based on your API key. Popular default options include `gemini-2.0-flash`, `mistral-small-latest`, `gpt-3.5-turbo` and `claude-3-sonnet-20240229`. You can select your preferred available model in the plugin settings.
 
 = Will this conflict with my existing SEO plugin (Yoast, Rank Math, etc.)? =
 
 This plugin adds its meta description tag directly to the `wp_head` action hook with an early priority. If your existing SEO plugin *also* outputs a meta description tag, you might end up with duplicates in your HTML source code, which is bad for SEO.
 
-**Recommendation:** It's best practice to only have **one** plugin managing your meta descriptions. If you use MSO Meta Description, consider disabling the meta description feature in your other SEO plugin(s), or vice-versa.
+**Recommendation:** It's best practice to only have **one** plugin managing your meta descriptions. If you use MSO AI Meta Description, consider disabling the meta description feature in your other SEO plugin(s), or vice-versa.
 
 = How do I set the description for the homepage? =
 

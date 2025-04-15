@@ -1,16 +1,16 @@
 <?php
 /**
- * MSO Meta Description Ajax Handlers
+ * MSO AI Meta Description Ajax Handlers
  *
- * This class manages the AJAX endpoints for the MSO Meta Description plugin.
+ * This class manages the AJAX endpoints for the MSO AI Meta Description plugin.
  * It handles requests for generating AI summaries and fetching available AI models.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description;
+namespace MSO_AI_Meta_Description;
 
-use MSO_Meta_Description\Api\ApiClient; // Used for API interactions and constants.
+use MSO_AI_Meta_Description\Api\ApiClient; // Used for API interactions and constants.
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -56,9 +56,9 @@ class Ajax
     public function register_hooks(): void
     {
         // Hook for generating meta description summaries.
-        add_action('wp_ajax_mso_generate_summary', [$this, 'handle_generate_summary']);
+        add_action('wp_ajax_mso_ai_generate_summary', [$this, 'handle_generate_summary']);
         // Hook for fetching available AI models for a given provider.
-        add_action('wp_ajax_mso_fetch_models', [$this, 'handle_fetch_models']);
+        add_action('wp_ajax_mso_ai_fetch_models', [$this, 'handle_fetch_models']);
     }
 
     /**
@@ -73,13 +73,13 @@ class Ajax
         // The third argument `false` prevents check_ajax_referer from dying automatically,
         // allowing us to send a custom JSON error response.
         if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
-            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-meta-description')], 403);
+            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
             // wp_send_json_error includes wp_die(), so no need for return/die after it.
         }
 
         // 2. Check if the current user has the capability to edit posts.
         if (!current_user_can('edit_posts')) {
-            wp_send_json_error(['message' => __('Permission denied.', 'mso-meta-description')], 403);
+            wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
         // 3. Sanitize input data from the POST request.
@@ -89,11 +89,11 @@ class Ajax
         // 4. Validate inputs.
         // Ensure content is not empty.
         if (empty($content)) {
-            wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
         // Ensure a valid provider is specified using the constant from ApiClient.
         if (empty($provider) || !in_array($provider, ApiClient::SUPPORTED_PROVIDERS)) {
-            wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
         // 5. Call the API client to generate the summary.
@@ -132,12 +132,12 @@ class Ajax
     {
         // 1. Verify the security nonce.
         if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
-            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-meta-description')], 403);
+            wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
         }
 
         // 2. Check if the current user has the capability to manage options (access settings page).
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => __('Permission denied.', 'mso-meta-description')], 403);
+            wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
         // 3. Sanitize input data from the POST request.
@@ -146,7 +146,7 @@ class Ajax
         // 4. Validate the API type (provider).
         // Ensure a valid provider is specified using the constant from ApiClient.
         if (empty($api_type) || !in_array($api_type, ApiClient::SUPPORTED_PROVIDERS)) {
-            wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
         // 5. Call the API client to fetch the models for the specified provider.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: MSO Meta Description: Custom Meta Descriptions with AI
+ * Plugin Name: MSO AI Meta Description: Custom Meta Descriptions with AI
  * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
  * Author: ms-only
  * Version: 1.3.0
@@ -10,12 +10,12 @@
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path: /languages
- * Text Domain: mso-meta-description
+ * Text Domain: mso-ai-meta-description
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  */
 
-namespace MSO_Meta_Description;
+namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly to prevent direct execution of the script.
 if (!defined('ABSPATH')) {
@@ -24,8 +24,8 @@ if (!defined('ABSPATH')) {
 
 // Use statements for classes used within this file's scope (mainly for type hinting and instantiation).
 // These help with code clarity and prevent potential naming conflicts.
-use MSO_Meta_Description\Providers\ProviderManager;
-use MSO_Meta_Description\Api\ApiClient;
+use MSO_AI_Meta_Description\Providers\ProviderManager;
+use MSO_AI_Meta_Description\Api\ApiClient;
 
 // Define the path to the autoloader file.
 $autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
@@ -46,41 +46,39 @@ if (file_exists($provider_interface)) {
 // --- Main Plugin Class Definition ---
 
 /**
- * Main plugin class (MSO_Meta_Description).
+ * Main plugin class (MSO_AI_Meta_Description).
  *
  * Initializes and coordinates different plugin components like Admin, Frontend, AJAX, Settings, etc.
  * Implements the Singleton pattern to ensure only one instance exists.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-final class MSO_Meta_Description
+final class MSO_AI_Meta_Description
 {
     /** Plugin version number. Used for cache busting scripts/styles. */
     const VERSION = '1.3.0';
 
     /** Text domain for localization (internationalization). Must match plugin header and .pot file. */
-    const TEXT_DOMAIN = 'mso-meta-description';
+    const TEXT_DOMAIN = 'mso-ai-meta-description';
 
     /** The meta key used to store the custom meta description in the post meta table. */
-    const META_KEY = '_mso_meta_description';
+    const META_KEY = '_mso_ai_meta_description';
 
     /** Nonce action string used for verifying the meta box save request. */
-    const META_BOX_NONCE_ACTION = 'mso_save_meta_description_nonce_action';
+    const META_BOX_NONCE_ACTION = 'mso_ai_save_meta_description_nonce_action';
     /** Nonce field name used in the meta box form. */
-    const META_BOX_NONCE_NAME = 'mso_save_meta_description_nonce_field';
+    const META_BOX_NONCE_NAME = 'mso_ai_save_meta_description_nonce_field';
 
     /**
      * Nonce action/name for general AJAX requests within the plugin.
      * Using 'wp_rest' might be okay if interacting with REST API, but a custom nonce is often better for non-REST AJAX.
-     * Consider changing to something like 'mso_ajax_nonce'.
+     * Consider changing to something like 'mso_ai_ajax_nonce'.
      */
-    const AJAX_NONCE = 'wp_rest';
-
-    const AJAX_NONCE_ACTION = 'mso_meta_description_ajax_actions';
+    const AJAX_NONCE_ACTION = 'mso_ai_meta_description_ajax_actions';
 
     /** Prefix used for all plugin options stored in the wp_options table. Helps avoid naming conflicts. */
-    const OPTION_PREFIX = 'mso_meta_description_';
+    const OPTION_PREFIX = 'mso_ai_meta_description_';
 
     /** Minimum recommended length for a meta description. */
     const MIN_DESCRIPTION_LENGTH = 120;
@@ -88,7 +86,7 @@ final class MSO_Meta_Description
     const MAX_DESCRIPTION_LENGTH = 160;
 
     /** Holds the single instance of this class (Singleton pattern). */
-    private static ?MSO_Meta_Description $instance = null;
+    private static ?MSO_AI_Meta_Description $instance = null;
 
     /** Instance of the Admin class, handling admin-specific functionality. */
     private Admin $admin;
@@ -123,9 +121,9 @@ final class MSO_Meta_Description
      * Creates the instance on the first call and runs the setup method.
      * Subsequent calls return the existing instance.
      *
-     * @return MSO_Meta_Description The single instance of the main plugin class.
+     * @return MSO_AI_Meta_Description The single instance of the main plugin class.
      */
-    public static function get_instance(): MSO_Meta_Description
+    public static function get_instance(): MSO_AI_Meta_Description
     {
         // Check if the instance hasn't been created yet.
         if (null === self::$instance) {
@@ -145,7 +143,7 @@ final class MSO_Meta_Description
     private function setup(): void
     {
         // Note: Provider registration is now handled separately via the 'plugins_loaded' hook
-        // in the `mso_init_dynamic_providers` function below. This ensures providers are
+        // in the `mso_ai_init_dynamic_providers` function below. This ensures providers are
         // registered early, before other components that might depend on them are instantiated.
 
         // Load any necessary files or libraries not handled by the autoloader.
@@ -224,7 +222,7 @@ final class MSO_Meta_Description
     /**
      * Static getter for the plugin's meta key.
      * Provides a consistent way to access the meta key constant.
-     * @return string The meta key ('_mso_meta_description').
+     * @return string The meta key ('_mso_ai_meta_description').
      */
     public static function get_meta_key(): string
     {
@@ -234,7 +232,7 @@ final class MSO_Meta_Description
     /**
      * Static getter for the plugin's option prefix.
      * Provides a consistent way to access the option prefix constant.
-     * @return string The option prefix ('mso_meta_description_').
+     * @return string The option prefix ('mso_ai_meta_description_').
      */
     public static function get_option_prefix(): string
     {
@@ -244,7 +242,7 @@ final class MSO_Meta_Description
     /**
      * Static getter for the plugin's text domain.
      * Provides a consistent way to access the text domain constant.
-     * @return string The text domain ('mso-meta-description').
+     * @return string The text domain ('mso-ai-meta-description').
      */
     public static function get_text_domain(): string
     {
@@ -267,7 +265,7 @@ final class MSO_Meta_Description
         // Deserialization is forbidden to maintain the singleton pattern.
     }
 
-} // --- End of MSO_Meta_Description Class ---
+} // --- End of MSO_AI_Meta_Description Class ---
 
 
 // --- Dynamic Provider Loading Initialization ---
@@ -279,10 +277,10 @@ final class MSO_Meta_Description
  * are loaded (including this one and its autoloader) but before most other hooks,
  * guaranteeing that providers are ready when needed by other components.
  */
-function mso_init_dynamic_providers(): void
+function mso_ai_init_dynamic_providers(): void
 {
     // Check if the ProviderManager class exists (it should have been automatically loaded).
-    if (!class_exists('\MSO_Meta_Description\Providers\ProviderManager')) {
+    if (!class_exists('\MSO_AI_Meta_Description\Providers\ProviderManager')) {
         return;
     }
 
@@ -300,7 +298,7 @@ function mso_init_dynamic_providers(): void
 
 // Hook the provider initialization function to the 'plugins_loaded' action.
 // Using priority 5 ensures it runs relatively early, before the default priority of 10.
-add_action('plugins_loaded', __NAMESPACE__ . '\mso_init_dynamic_providers', 5);
+add_action('plugins_loaded', __NAMESPACE__ . '\mso_ai_init_dynamic_providers', 5);
 
 
 // --- Plugin Execution ---
@@ -312,12 +310,12 @@ add_action('plugins_loaded', __NAMESPACE__ . '\mso_init_dynamic_providers', 5);
  * The `get_instance()` method handles the actual setup and hook registration
  * if it's the first time it's being called.
  */
-function mso_meta_description_run(): void
+function mso_ai_meta_description_run(): void
 {
     // Get the singleton instance. This triggers the setup process within the class.
     // Use the fully qualified class name because this function is in the global scope.
-    MSO_Meta_Description::get_instance();
+    MSO_AI_Meta_Description::get_instance();
 }
 
 // Call the function to start the plugin.
-mso_meta_description_run();
+mso_ai_meta_description_run();

@@ -1,18 +1,18 @@
 <?php
 /**
- * MSO Meta Description ApiClient
+ * MSO AI Meta Description ApiClient
  *
  * Acts as a facade for interacting with various AI provider APIs.
  * It uses the ProviderManager to get the appropriate provider instance
  * and delegates API calls (like fetching models or generating summaries) to it.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Api;
+namespace MSO_AI_Meta_Description\Api;
 
-use MSO_Meta_Description\Providers\ProviderInterface; // Interface for individual providers.
-use MSO_Meta_Description\Providers\ProviderManager; // Manages provider instances.
+use MSO_AI_Meta_Description\Providers\ProviderInterface; // Interface for individual providers.
+use MSO_AI_Meta_Description\Providers\ProviderManager; // Manages provider instances.
 use WP_Error; // Used for returning standardized errors.
 
 /**
@@ -47,7 +47,7 @@ class ApiClient
                 'provider_not_found', // Error code
                 sprintf(
                 /* translators: %s: Provider name (e.g., Mistral) */
-                    __('AI provider "%s" is not registered or supported.', 'mso-meta-description'), $provider_name) // Error message
+                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'), $provider_name) // Error message
             );
         }
 
@@ -76,7 +76,7 @@ class ApiClient
                 'provider_not_found', // Error code
                 sprintf(
                 /* translators: %s: Provider name (e.g., Mistral) */
-                    __('AI provider "%s" is not registered or supported.', 'mso-meta-description'), $provider_name) // Error message
+                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'), $provider_name) // Error message
             );
         }
 

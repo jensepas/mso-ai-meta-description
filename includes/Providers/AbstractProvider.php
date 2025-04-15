@@ -1,16 +1,16 @@
 <?php
 /**
- * MSO Meta Description AbstractProvider
+ * MSO AI Meta Description AbstractProvider
  *
  * Provides common functionality for AI provider implementations.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Providers;
+namespace MSO_AI_Meta_Description\Providers;
 
-use MSO_Meta_Description\MSO_Meta_Description;
-use MSO_Meta_Description\Utils\Logger;
+use MSO_AI_Meta_Description\MSO_AI_Meta_Description;
+use MSO_AI_Meta_Description\Utils\Logger;
 use WP_Error;
 
 abstract class AbstractProvider implements ProviderInterface
@@ -32,7 +32,7 @@ abstract class AbstractProvider implements ProviderInterface
      */
     public function __construct()
     {
-        $prefix = MSO_Meta_Description::get_option_prefix();
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
         // Retrieve API key, store false if empty to distinguish from not-yet-fetched (null)
         $this->api_key = get_option($prefix . $this->get_name() . '_api_key', false);
         // Retrieve model, using the provider-specific default
@@ -52,7 +52,7 @@ abstract class AbstractProvider implements ProviderInterface
                 'api_key_missing',
                 sprintf(
                 /* translators: %s: Provider name (e.g., Mistral) */
-                    __('API key for %s is not set.', 'mso-meta-description'),
+                    __('API key for %s is not set.', 'mso-ai-meta-description'),
                     ucfirst($this->get_name()) // Use get_name() for dynamic message
                 )
             );
@@ -127,7 +127,7 @@ abstract class AbstractProvider implements ProviderInterface
 
         // Handle non-200 responses
         if ($http_code !== 200) {
-            $error_message = $this->extract_error_message($data) ?? __('Unknown API error occurred.', 'mso-meta-description');
+            $error_message = $this->extract_error_message($data) ?? __('Unknown API error occurred.', 'mso-ai-meta-description');
             // Use the centralized logger
             Logger::debug(
                 sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint), // Main message
@@ -141,7 +141,7 @@ abstract class AbstractProvider implements ProviderInterface
                 'api_error',
                 sprintf(
                 /* translators: 1: Provider name, 2: HTTP status code, 3: Error message */
-                    __('%1$s API Error (%2$d): %3$s', 'mso-meta-description'),
+                    __('%1$s API Error (%2$d): %3$s', 'mso-ai-meta-description'),
                     ucfirst($this->get_name()),
                     $http_code,
                     $error_message
@@ -159,7 +159,7 @@ abstract class AbstractProvider implements ProviderInterface
             );
 
             // ... return WP_Error ...
-            return new WP_Error('json_decode_error', __('Failed to decode API response.', 'mso-meta-description'), ['body' => $body]);
+            return new WP_Error('json_decode_error', __('Failed to decode API response.', 'mso-ai-meta-description'), ['body' => $body]);
         }
 
         // Return the decoded data on success
@@ -176,9 +176,9 @@ abstract class AbstractProvider implements ProviderInterface
     {
         return sprintf(
         /* translators: 1: Minimum length, 2: Maximum length, 3: The content to summarize */
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-meta-description'),
-            MSO_Meta_Description::MIN_DESCRIPTION_LENGTH,
-            MSO_Meta_Description::MAX_DESCRIPTION_LENGTH,
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description'),
+            MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH,
+            MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
             $content
         );
     }

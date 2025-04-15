@@ -1,19 +1,19 @@
 <?php
 /**
- * MSO Meta Description GeminiProvider
+ * MSO AI Meta Description GeminiProvider
  *
  * Implements the ProviderInterface for interacting with the Google Gemini API.
  * Handles fetching available Gemini models and generating meta description summaries.
  * Extends AbstractProvider for common functionality.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
-namespace MSO_Meta_Description\Providers\Available;
+namespace MSO_AI_Meta_Description\Providers\Available;
 
 // Use the AbstractProvider and ProviderInterface
-use MSO_Meta_Description\Providers\AbstractProvider;
-use MSO_Meta_Description\Providers\ProviderInterface;
+use MSO_AI_Meta_Description\Providers\AbstractProvider;
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error;
 
 // Extend the abstract class
@@ -58,7 +58,7 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
         if (!isset($data['models']) || !is_array($data['models'])) {
             return new WP_Error(
                 'invalid_response_structure',
-                __('Unable to parse model list from Gemini: "models" array missing.', 'mso-meta-description')
+                __('Unable to parse model list from Gemini: "models" array missing.', 'mso-ai-meta-description')
             );
         }
 
@@ -106,7 +106,7 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
         if ($generated_text === null) {
             return new WP_Error(
                 'parse_error',
-                __('Gemini response missing expected summary data.', 'mso-meta-description')
+                __('Gemini response missing expected summary data.', 'mso-ai-meta-description')
             );
         }
         return trim($generated_text);

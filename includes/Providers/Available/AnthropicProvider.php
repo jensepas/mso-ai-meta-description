@@ -1,20 +1,20 @@
 <?php
 /**
- * MSO Meta Description AnthropicProvider
+ * MSO AI Meta Description AnthropicProvider
  *
  * Implements the ProviderInterface for interacting with the Anthropic API.
  * Handles generating meta description summaries using Anthropic models.
  * Extends AbstractProvider for common functionality.
  *
- * @package MSO_Meta_Description
+ * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
 
-namespace MSO_Meta_Description\Providers\Available;
+namespace MSO_AI_Meta_Description\Providers\Available;
 
 // Use the AbstractProvider and ProviderInterface
-use MSO_Meta_Description\Providers\AbstractProvider;
-use MSO_Meta_Description\Providers\ProviderInterface;
+use MSO_AI_Meta_Description\Providers\AbstractProvider;
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error;
 
 /**
@@ -76,7 +76,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
         if (!isset($data['data']) || !is_array($data['data'])) {
             return new WP_Error(
                 'invalid_response_structure',
-                __('Unable to parse model list from Anthropic: "data" array missing.', 'mso-meta-description')
+                __('Unable to parse model list from Anthropic: "data" array missing.', 'mso-ai-meta-description')
             );
         }
 
@@ -113,7 +113,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
         if ($generated_text === null) {
             return new WP_Error(
                 'parse_error',
-                __('Anthropic response missing expected summary data.', 'mso-meta-description')
+                __('Anthropic response missing expected summary data.', 'mso-ai-meta-description')
             );
         }
         return trim($generated_text);

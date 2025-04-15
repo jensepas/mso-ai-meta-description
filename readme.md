@@ -1,4 +1,4 @@
-# MSO Meta Description
+# MSO AI Meta Description
 
 **Easily add customizable meta descriptions to your WordPress site, with optional AI-powered suggestions from Gemini, Mistral, Anthropic, and OpenAI (ChatGPT).**
 
@@ -6,7 +6,7 @@
 
 ## 🧠 Introduction
 
-**MSO Meta Description** is a lightweight WordPress plugin designed to give you full control over your site's meta description tags for better SEO. Write them manually or get suggestions using the latest LLMs like Gemini, Mistral, Anthropic, and OpenAI (ChatGPT).
+**MSO AI Meta Description** is a lightweight WordPress plugin designed to give you full control over your site's meta description tags for better SEO. Write them manually or get suggestions using the latest LLMs like Gemini, Mistral, Anthropic, and OpenAI (ChatGPT).
 
 ---
 
@@ -50,12 +50,12 @@
 
 1. Go to your WordPress admin dashboard.
 2. Navigate to **Plugins > Add New**.
-3. Search for **"MSO Meta Description"**.
+3. Search for **"MSO AI Meta Description"**.
 4. Click **Install Now** and then **Activate**.
 
 ### Manual Installation (Upload)
 
-1. Download the plugin zip file (`mso-meta-description.zip`).
+1. Download the plugin zip file (`mso-ai-meta-description.zip`).
 2. Go to **Plugins > Add New > Upload Plugin**.
 3. Select the zip file and install.
 4. Click **Activate**.
@@ -63,7 +63,7 @@
 ### Manual Installation (FTP)
 
 1. Unzip the plugin.
-2. Upload the `mso-meta-description` folder to `/wp-content/plugins/`.
+2. Upload the `mso-ai-meta-description` folder to `/wp-content/plugins/`.
 3. Go to **Plugins > Installed Plugins** and **Activate** it.
 
 ---
@@ -73,7 +73,7 @@
 After activating the plugin:
 
 - Go to any post, page, or custom post type.
-- Scroll to the **MSO Meta Description** box.
+- Scroll to the **MSO AI Meta Description** box.
 - Write your custom description or use the AI buttons (if configured).
 - Save or publish the post.
 
@@ -82,7 +82,7 @@ After activating the plugin:
 ## ⚙️ Configuration of AI Features
 
 1. Navigate to **Settings > General**.
-2. Scroll to the **MSO Meta Description** section.
+2. Scroll to the **MSO AI Meta Description** section.
 3. Enter your API keys for OpenAI, Mistral, and Gemini.
 4. Choose your preferred model from the dropdowns (e.g., `gpt-3.5-turbo`, `mistral-small-latest`, `gemini-2.0-flash`).
 5. Click **Save Changes**.
@@ -159,4 +159,4 @@ Possibly. Both plugins may output a meta description. **Avoid duplication** by d
 
 ## 📄 License
 
-**MSO Meta Description** is licensed under the [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
+**MSO AI Meta Description** is licensed under the [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
