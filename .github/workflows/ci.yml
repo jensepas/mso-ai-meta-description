@@ -43,8 +43,5 @@ jobs:
       - name: Install ESLint
         run: npm install eslint --global
 
-      - name: Debug ESLint Files
-        run: ls -l assets/js/
-
       - name: Run ESLint
         run: npx eslint "assets/**/*.js"

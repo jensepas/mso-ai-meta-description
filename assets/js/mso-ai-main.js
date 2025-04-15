@@ -280,8 +280,8 @@
                 try {
                     const jsonError = JSON.parse(errorText);
                     throwError(jsonError.data?.message || `HTTP error ${response.status}`);
-                } catch (e) {
-                    throwError(`HTTP error ${response.status}: ${errorText} ${e}`);
+                } catch (err) {
+                    throwError(`HTTP error ${response.status}: ${errorText} ${err.message}`);
                 }
             }
 
