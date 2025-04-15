@@ -60,8 +60,6 @@ class ProviderManager
      */
     public static function get_provider(string $name): ?ProviderInterface
     {
-        // Make sure the registration process has run at least once.
-        self::ensure_providers_registered();
         // Return the provider from the static array if it exists, otherwise return null.
         return self::$providers[$name] ?? null;
     }
@@ -74,8 +72,6 @@ class ProviderManager
      */
     public static function get_providers(): array
     {
-        // Make sure the registration process has run at least once.
-        self::ensure_providers_registered();
         // Return the complete array of registered providers.
         return self::$providers;
     }
@@ -120,13 +116,13 @@ class ProviderManager
                 $className = $fileInfo->getBasename('.php');
                 // Construct the fully qualified class name using the current namespace and the 'Available' sub-namespace.
                 // Adjust this if your namespace structure differs.
-                $fqcn = __NAMESPACE__ . '\\Available\\' . $className;
+                $fullQualifiedName = __NAMESPACE__ . '\\Available\\' . $className;
 
                 try {
                     // Check if the class actually exists after including the file.
-                    if (class_exists($fqcn)) {
+                    if (class_exists($fullQualifiedName)) {
                         // Use Reflection to inspect the class without needing to know its exact type beforehand.
-                        $reflection = new ReflectionClass($fqcn);
+                        $reflection = new ReflectionClass($fullQualifiedName);
 
                         // Verify that the class implements the required ProviderInterface
                         // and that it's a concrete class that can be instantiated (not abstract or an interface itself).
@@ -141,14 +137,14 @@ class ProviderManager
                             // Log if a class was found but didn't meet the criteria.
                             Logger::error(
                                 'Class found but does not implement ProviderInterface or is not instantiable',
-                                ['class' => $fqcn]
+                                ['class' => $fullQualifiedName]
                             );
                         }
                     } else {
                         // Log if the file was included but the expected class name wasn't defined.
                         Logger::error(
                             'File included, but class not found',
-                            ['path' => $path, 'expected_class' => $fqcn]
+                            ['path' => $path, 'expected_class' => $fullQualifiedName]
                         );
                     }
                 } catch (Exception $e) {
@@ -163,25 +159,5 @@ class ProviderManager
 
         // Mark the registration process as complete for this request.
         self::$providers_registered = true;
-    }
-
-    /**
-     * Helper function to ensure the provider registration process has been executed.
-     *
-     * This is called by get_provider() and get_providers() to ensure the $providers array is populated.
-     * Ideally, register_providers_from_directory() should be called explicitly early in the plugin's
-     * initialization sequence rather than relying on this lazy check.
-     */
-    protected static function ensure_providers_registered(): void
-    {
-        if (!self::$providers_registered) {
-            // This warning indicates that providers are being accessed before explicit registration.
-            // It's generally better practice to call register_providers_from_directory()
-            // during plugin setup (e.g., hooked into 'plugins_loaded').
-            //trigger_error("Provider registration was not run before accessing providers.", E_USER_WARNING);
-
-            // As a fallback, you could attempt registration here, but it's less predictable.
-            // self::register_providers_from_directory();
-        }
     }
 }

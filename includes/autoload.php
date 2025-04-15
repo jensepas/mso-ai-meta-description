@@ -33,7 +33,7 @@ spl_autoload_register(function ($class) {
 
     // Check if the requested class uses the plugin's base namespace.
     // If the class name doesn't start with the prefix, this autoloader is not responsible
-    // for loading it, so we return early to let other autoloaders (if any) handle it.
+    // for loading it, so we return early to let other autoloader (if any) handle it.
     if (!str_starts_with($class, $prefix)) {
         return;
     }

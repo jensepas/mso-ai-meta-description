@@ -22,6 +22,13 @@ if (!defined('ABSPATH')) {
  */
 class Admin
 {
+
+    /**
+     * The AJAX action hook for saving settings.
+     * @var string
+     */
+    const AJAX_SAVE_ACTION = 'mso_save_settings';
+
     /**
      * Instance of the Settings class.
      * @var Settings
@@ -65,7 +72,7 @@ class Admin
 
         // Hook the method to add the custom meta box to post editing screens.
         add_action('add_meta_boxes', [$this->meta_box, 'add_meta_box']);
-        // Hook the method to save the custom meta data when a post is saved.
+        // Hook the method to save the custom metadata when a post is saved.
         add_action('save_post', [$this->meta_box, 'save_meta_data']);
 
         // Hook the method to enqueue scripts and styles on admin pages.
@@ -100,10 +107,10 @@ class Admin
         wp_enqueue_script(
             'mso-admin-script', // Unique handle for the script.
             // Get the URL for the script file relative to the plugin's root directory.
-            plugin_dir_url(dirname(__FILE__)) . 'assets/js/mso-script.js',
+            plugin_dir_url(dirname(__FILE__)) . 'assets/js/mso-main.js',
             ['jquery'], // Dependencies: This script requires jQuery.
             // Add file modification time as version number for cache busting.
-            filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/js/mso-script.js'),
+            filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/js/mso-main.js'),
             true // Load the script in the footer.
         );
 
@@ -148,6 +155,11 @@ class Admin
             'selectedMistralModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'mistral_model'),
             'selectedOpenaiModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'openai_model'),
             'selectedAnthropicModel' => get_option(MSO_Meta_Description::OPTION_PREFIX . 'anthropic_model'),
+            'action' => MSO_Meta_Description::AJAX_NONCE_ACTION, // The AJAX action name.
+            // Localized strings for user feedback in JavaScript.
+            'saving_text' => esc_html__('Saving...', 'mso-meta-description'),
+            'saved_text' => esc_html__('Settings Saved', 'mso-meta-description'),
+            'error_text' => esc_html__('Error Saving Settings', 'mso-meta-description'),
         ];
 
         // Make the PHP variables available in JavaScript under the 'msoScriptVars' object.
@@ -171,7 +183,7 @@ class Admin
         $settings_link = sprintf(
         // Use admin_url() to generate the correct URL for the settings page.
             '<a href="%s">%s</a>',
-            esc_url(admin_url('options-general.php?page=' . Settings::PAGE_SLUG)), // Use constant for page slug
+            esc_url(admin_url('admin.php?page=' . Settings::PAGE_SLUG)), // Use constant for page slug
             // Localized text for the link.
             __('Settings', 'mso-meta-description')
         );

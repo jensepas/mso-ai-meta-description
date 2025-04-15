@@ -15,12 +15,6 @@ use MSO_Meta_Description\Providers\ProviderInterface; // Interface for individua
 use MSO_Meta_Description\Providers\ProviderManager; // Manages provider instances.
 use WP_Error; // Used for returning standardized errors.
 
-// --- Suppression des 'use' pour les providers spécifiques ici, car les constantes ne sont plus utilisées ---
-// use MSO_Meta_Description\Providers\Available\GeminiProvider;
-// use MSO_Meta_Description\Providers\Available\MistralProvider;
-// use MSO_Meta_Description\Providers\Available\OpenAIProvider;
-
-
 /**
  * Client for interacting with AI APIs through registered providers.
  */
@@ -32,14 +26,6 @@ class ApiClient
      * @var string[]
      */
     const SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai', 'anthropic'];
-
-    // --- Suppression des constantes DEFAULT_*_MODEL ---
-    // const DEFAULT_GEMINI_MODEL = GeminiProvider::DEFAULT_MODEL; // Supprimé
-    // const DEFAULT_MISTRAL_MODEL = MistralProvider::DEFAULT_MODEL; // Supprimé
-    // const DEFAULT_OPENAI_MODEL = OpenAIProvider::DEFAULT_MODEL; // Supprimé
-
-    // Removed the $provider_manager property and the constructor.
-    // Provider registration is handled via the 'plugins_loaded' hook now.
 
     /**
      * Fetches the list of available models for a specific provider.

@@ -60,12 +60,8 @@ class Settings
      */
     const SECTION_ANTHROPIC_ID = 'mso_meta_description_anthropic_section';
 
+    const ICON_BASE64_SVG = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjgwMHB4IiB3aWR0aD0iODAwcHgiIHZlcnNpb249IjEuMSIgaWQ9IkNhcGFfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgDQoJIHZpZXdCb3g9IjAgMCA0OTAgNDkwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDE2LDBINzRDMzMuMywwLDAsMzMuNCwwLDc0djM0MmMwLDQwLjcsMzMuNCw3NCw3NCw3NGgzNDJjNDAuNywwLDc0LTMzLjQsNzQtNzRWNzRDNDkwLDMzLjQsNDU2LjYsMCw0MTYsMHogTTQ0OS4zLDQxNg0KCQkJYzAsMTguOC0xNC42LDMzLjQtMzMuNCwzMy40SDc0Yy0xOC44LDAtMzMuNC0xNC42LTMzLjQtMzMuNFY3NGMwLTE4LjgsMTQuNi0zMy40LDMzLjQtMzMuNGgzNDJjMTguOCwwLDMzLjQsMTQuNiwzMy40LDMzLjR2MzQyDQoJCQlINDQ5LjN6Ii8+DQoJCTxnPg0KCQkJPHBhdGggZD0iTTIzNC44LDE2OS44Yy0yLjQtNS41LTcuOC05LTEzLjgtOXMtMTEuNCwzLjUtMTMuOCw5TDE0NywzMDguM2MtMy4zLDcuNiwwLjIsMTYuNCw3LjgsMTkuN2MyLDAuOSw0LDEuMyw2LDEuMw0KCQkJCWM1LjgsMCwxMS4zLTMuNCwxMy44LTlsMTMuMi0zMC4yaDY2LjlsMTMuMiwzMC4yYzMuMyw3LjYsMTIuMSwxMS4xLDE5LjcsNy44YzcuNi0zLjMsMTEuMS0xMi4yLDcuOC0xOS43TDIzNC44LDE2OS44eg0KCQkJCSBNMjAwLjcsMjYwbDIwLjQtNDYuOGwyMC40LDQ2LjhIMjAwLjd6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMjE3LjljLTguMywwLTE1LDYuNy0xNSwxNXY4MS40YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTgxLjRDMzQ0LjMsMjI0LjYsMzM3LjYsMjE3LjksMzI5LjMsMjE3Ljl6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMTY2LjRjLTguMywwLTE1LDYuNy0xNSwxNXY0YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTRDMzQ0LjMsMTczLjEsMzM3LjYsMTY2LjQsMzI5LjMsMTY2LjR6Ii8+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8L3N2Zz4=';
 
-    /**
-     * The AJAX action hook for saving settings.
-     * @var string
-     */
-    const AJAX_SAVE_ACTION = 'mso_save_settings';
     /**
      * Instance of the ApiClient, potentially used for model fetching or validation.
      * @var ApiClient
@@ -82,55 +78,7 @@ class Settings
         $this->api_client = $api_client;
 
         // Hook the AJAX handler for saving settings.
-        add_action('wp_ajax_' . self::AJAX_SAVE_ACTION, [$this, 'handle_ajax_save_settings']);
-
-        // Hook to enqueue scripts and styles on admin pages.
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
-
-        // Note: add_action('admin_menu', [$this, 'add_options_page']);
-        // and add_action('admin_init', [$this, 'register_settings']);
-        // should be called from the main plugin file or another appropriate place.
-    }
-
-    /**
-     * Enqueue scripts and styles needed specifically for the plugin's settings page.
-     *
-     * @param string $hook_suffix The hook suffix of the current admin page.
-     */
-    public function enqueue_admin_scripts(string $hook_suffix): void
-    {
-        // Get the current screen object to check its ID.
-        $current_screen = get_current_screen();
-
-        // Only load scripts if we are on *our* specific settings page.
-        if ($current_screen && $current_screen->id === $hook_suffix) {
-
-            // Enqueue the main JavaScript file for handling AJAX requests on the settings page.
-            wp_enqueue_script(
-                'mso-settings-ajax',
-                // Get the URL for the settings AJAX JavaScript file relative to this PHP file.
-                plugins_url('../assets/js/mso-settings-ajax.js', __FILE__),
-                ['jquery'], // Dependencies: This script requires jQuery.
-                // Add file modification time as version number for cache busting.
-                filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/js/mso-settings-ajax.js'),
-                true // Load the script in the footer.
-            );
-
-            // Pass PHP variables to the JavaScript file ('mso-settings-ajax').
-            wp_localize_script(
-                'mso-settings-ajax', // The handle of the script to localize.
-                'msoSettingsAjax',   // The name of the JavaScript object that will contain the data.
-                [
-                    'ajax_url' => admin_url('admin-ajax.php'), // URL for WordPress AJAX requests.
-                    'nonce' => wp_create_nonce(self::AJAX_SAVE_ACTION), // Security nonce for the AJAX action.
-                    'action' => self::AJAX_SAVE_ACTION, // The AJAX action name.
-                    // Localized strings for user feedback in JavaScript.
-                    'saving_text' => esc_html__('Saving...', 'mso-meta-description'),
-                    'saved_text' => esc_html__('Settings Saved', 'mso-meta-description'),
-                    'error_text' => esc_html__('Error Saving Settings', 'mso-meta-description'),
-                ]
-            );
-        }
+        add_action('wp_ajax_' . MSO_Meta_Description::AJAX_NONCE_ACTION, [$this, 'handle_ajax_save_settings']);
     }
 
     /**
@@ -139,12 +87,13 @@ class Settings
      */
     public function add_options_page(): void
     {
-        add_options_page(
-            esc_html__('MSO Meta Description Settings', 'mso-meta-description'), // Page title
-            esc_html__('MSO Meta Description', 'mso-meta-description'),       // Menu title
+        add_menu_page(
+            esc_html__('AI Meta Description Settings', 'mso-meta-description'), // Page title
+            esc_html__('Meta Description', 'mso-meta-description'),       // Menu title
             'manage_options', // Capability required to access
             self::PAGE_SLUG,  // Menu slug (unique identifier)
             [$this, 'render_options_page'], // Function to render the page content
+            self::ICON_BASE64_SVG,
             25 // Position in the menu (optional)
         );
     }
@@ -179,7 +128,7 @@ class Settings
                         // Build the URL for each tab link.
                         $tab_url = add_query_arg(
                             ['page' => self::PAGE_SLUG, 'tab' => $tab_slug],
-                            admin_url('options-general.php') // Base URL for settings pages.
+                            admin_url('admin.php') // Base URL for settings pages.
                         );
 
                         // Add a nonce to the tab URL for basic verification.
@@ -363,7 +312,7 @@ class Settings
     {
         // 1. Verify the security nonce sent with the AJAX request.
         // 'nonce' is the key expected in the $_POST data (matches wp_localize_script).
-        check_ajax_referer(self::AJAX_SAVE_ACTION, 'nonce');
+        check_ajax_referer(MSO_Meta_Description::AJAX_NONCE_ACTION, 'nonce');
 
         // 2. Check if the current user has the required capability to manage options.
         if (!current_user_can('manage_options')) {
@@ -427,7 +376,7 @@ class Settings
             // Input fields that are empty will still be present in $_POST with an empty string value.
             if (isset($_POST[$option_name])) {
                 // Sanitize the submitted value. Use sanitize_text_field for general text inputs.
-                // wp_unslash() is important to remove slashes added by WordPress.
+                // Remove slashes added by WordPress.
                 $sanitized_value = sanitize_text_field(wp_unslash($_POST[$option_name]));
 
                 // Save the sanitized value to the WordPress options table.
@@ -435,17 +384,6 @@ class Settings
 
                 // Store the sanitized value to potentially send back in the response.
                 $saved_data[$option_name] = $sanitized_value;
-
-                // --- Optional: Add specific server-side validation after sanitization ---
-                /*
-                if (str_contains($option_name, '_api_key') && !empty($sanitized_value)) {
-                    // Example: Basic length check for API keys.
-                    if (strlen($sanitized_value) < 10) {
-                        $errors[$option_name] = esc_html__('API Key seems too short.', 'mso-meta-description');
-                    }
-                    // Example: You could add more complex validation, like making a test API call.
-                }
-                */
 
             } else {
                 // If an expected field is *completely missing* from the POST data (unlikely for text/select fields
@@ -524,7 +462,7 @@ class Settings
             esc_attr($field_id),    // 'id' attribute.
             esc_attr($value)        // Current value.
         );
-        // Output the show/hide password button (styled with Dashicons).
+        // Output the show/hide password button
         // The functionality is handled by the inline JavaScript enqueued earlier.
         printf(
             '<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="%s">

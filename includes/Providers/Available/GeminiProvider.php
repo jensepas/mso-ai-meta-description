@@ -28,7 +28,7 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
 
     protected function get_api_base(): string
     {
-        // Base URL for the Google Generative Language API (v1beta).
+        // Base URL for the Google Generative Language API (v1 beta).
         return 'https://generativelanguage.googleapis.com/v1beta/';
     }
 
@@ -43,7 +43,7 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
         // The endpoint path requires the model name within it for Gemini.
         // The AbstractProvider::request method will append this to the base URL.
         // Note: The API key is added as a query parameter in AbstractProvider::request for POST.
-        return "models/{$this->model}:generateContent"; // Use the selected model property
+        return "models/$this->model:generateContent"; // Use the selected model property
     }
 
     protected function extract_error_message(?array $data): ?string

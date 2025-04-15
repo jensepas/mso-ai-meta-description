@@ -56,7 +56,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
 
     protected function extract_error_message(?array $data): ?string
     {
-        // Extracts the error message from Anthropic's specific JSON error structure
+        // Extracts the error message from Anthropic specific JSON error structure
         return $data['error']['message'] ?? null;
     }
 
@@ -91,7 +91,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
 
     protected function build_summary_request_body(string $prompt): array
     {
-        // Builds the POST request body for summary generation, specific to Anthropic's Messages API
+        // Builds the POST request body for summary generation, specific to Anthropic Messages API
         return [
             'model' => $this->model, // Uses the selected model
             'messages' => [['role' => 'user', 'content' => $prompt]],
@@ -103,7 +103,7 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface {
 
     protected function parse_summary(array $data): string|WP_Error
     {
-        // Extracts the generated summary text from Anthropic's specific JSON response structure
+        // Extracts the generated summary text from Anthropic specific JSON response structure
         // Anthropic returns content as an array of blocks; we expect a single text block.
         $generated_text = null;
         if (isset($data['content'][0]['type']) && is_array($data['content']) && $data['content'][0]['type'] === 'text') {

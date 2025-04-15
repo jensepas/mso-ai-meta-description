@@ -75,7 +75,7 @@ class MetaBox
         foreach ($post_types as $post_type) {
             // Add the meta box to the edit screen for each post type.
             add_meta_box(
-                'mso_meta_description_metabox', // Unique ID for the meta box.
+                'mso_meta_description_meta_box', // Unique ID for the meta box.
                 __('MSO Meta Description', 'mso-meta-description'), // Title displayed in the meta box header.
                 [$this, 'render_meta_box_content'], // Callback function to render the meta box HTML.
                 $post_type, // The post type screen where the meta box should appear.
@@ -184,7 +184,7 @@ class MetaBox
                     <?php // Spinner element shown during AJAX requests (controlled by JS). ?>
                     <span class="spinner mso-spinner"></span> <?php // Inline styles to position spinner correctly and hide initially. ?>
                     <?php // Paragraph to display potential error messages from AJAX requests (controlled by JS). ?>
-                    <p id="mso-ai-error" class="mso-ai-error"></p> <?php // Ensure space even when empty. ?>
+                    <p id="mso-ai-error" class="mso-ai-error mso-model-error"></p> <?php // Ensure space even when empty. ?>
 
                 </div> <?php // End mso-ai-generator div ?>
             <?php
@@ -206,7 +206,7 @@ class MetaBox
     public function save_meta_data(int $post_id): void
     {
         // 1. Verify the nonce sent from the meta box form.
-        // Use sanitize_text_field and wp_unslash for security.
+        // Use sanitize_text_field for security.
         if (!isset($_POST[$this->nonce_name]) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action)) {
             return; // Nonce is missing or invalid, do not proceed.
         }
@@ -235,7 +235,7 @@ class MetaBox
         }
 
         // 5. Sanitize and save the submitted data.
-        // Use sanitize_text_field for plain text content. wp_unslash removes slashes added by WP.
+        // Use sanitize_text_field for plain text content. removes slashes added by WP.
         $new_value = sanitize_text_field(wp_unslash($_POST[$field_name]));
 
         // 6. Update or delete the post meta.

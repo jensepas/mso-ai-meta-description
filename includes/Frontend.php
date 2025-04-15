@@ -110,7 +110,6 @@ class Frontend
         }
 
         $description = ''; // Initialize description variable.
-        $post_id = 0; // Initialize post ID variable.
 
         // Check if the current view is a single post, page, or custom post type item.
         if (is_singular()) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: MSO Meta Description: Custom Meta Descriptions with AI
- * Description: Plugin WordPress pour ajouter des balises méta description personnalisées dans l'entête HTML, avec l'option de génération par IA.
+ * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
  * Author: ms-only
  * Version: 1.3.0
  * Requires at least: 6.0
@@ -27,8 +27,6 @@ if (!defined('ABSPATH')) {
 use MSO_Meta_Description\Providers\ProviderManager;
 use MSO_Meta_Description\Api\ApiClient;
 
-// --- Autoloader and Interface Check ---
-
 // Define the path to the autoloader file.
 $autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
 // Check if the autoloader file exists. If not, the plugin cannot function.
@@ -39,8 +37,6 @@ if (!file_exists($autoloader)) {
 require_once $autoloader;
 
 // Explicitly include the ProviderInterface.
-// While the autoloader might handle this, including it here ensures it's available
-// before the ProviderManager might use Reflection to check against it, preventing potential errors.
 $provider_interface = plugin_dir_path(__FILE__) . 'includes/Providers/ProviderInterface.php';
 if (file_exists($provider_interface)) {
     require_once $provider_interface;
@@ -143,7 +139,7 @@ final class MSO_Meta_Description
     }
 
     /**
-     * Setup the plugin: load dependencies, instantiate components, register hooks.
+     * Set up the plugin: load dependencies, instantiate components, register hooks.
      * This method is called only once when the singleton instance is created.
      */
     private function setup(): void
@@ -180,7 +176,7 @@ final class MSO_Meta_Description
         $this->api_client = new ApiClient();
         // Instantiate the Settings manager, passing the API client (might be needed for model fetching/validation).
         $this->settings = new Settings($this->api_client);
-        // Instantiate the MetaBox handler, passing necessary keys and nonces.
+        // Instantiate the MetaBox handler, passing necessary keys and nonce's.
         $this->meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME);
         // Instantiate the Admin handler, passing Settings and MetaBox instances.
         $this->admin = new Admin($this->settings, $this->meta_box);
@@ -264,11 +260,11 @@ final class MSO_Meta_Description
     }
 
     /**
-     * Prevent unserialization of the singleton instance.
+     * Prevent deserialization of the singleton instance.
      */
     public function __wakeup()
     {
-        // Unserializing is forbidden to maintain the singleton pattern.
+        // Deserialization is forbidden to maintain the singleton pattern.
     }
 
 } // --- End of MSO_Meta_Description Class ---
@@ -285,7 +281,7 @@ final class MSO_Meta_Description
  */
 function mso_init_dynamic_providers(): void
 {
-    // Check if the ProviderManager class exists (it should have been autoloaded).
+    // Check if the ProviderManager class exists (it should have been automatically loaded).
     if (!class_exists('\MSO_Meta_Description\Providers\ProviderManager')) {
         return;
     }
@@ -319,7 +315,7 @@ add_action('plugins_loaded', __NAMESPACE__ . '\mso_init_dynamic_providers', 5);
 function mso_meta_description_run(): void
 {
     // Get the singleton instance. This triggers the setup process within the class.
-    // Use the fully qualified class name (FQCN) because this function is in the global scope.
+    // Use the fully qualified class name because this function is in the global scope.
     MSO_Meta_Description::get_instance();
 }
 

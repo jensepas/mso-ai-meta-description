@@ -59,7 +59,6 @@ class Ajax
         add_action('wp_ajax_mso_generate_summary', [$this, 'handle_generate_summary']);
         // Hook for fetching available AI models for a given provider.
         add_action('wp_ajax_mso_fetch_models', [$this, 'handle_fetch_models']);
-        // Note: No 'wp_ajax_nopriv_' hooks are added, meaning these actions are only available to logged-in users.
     }
 
     /**
@@ -84,7 +83,6 @@ class Ajax
         }
 
         // 3. Sanitize input data from the POST request.
-        // Use wp_unslash to remove slashes added by WordPress.
         $content = isset($_POST['content']) ? sanitize_text_field( wp_unslash($_POST['content'])) : '';
         $provider = isset($_POST['provider']) ? sanitize_text_field( wp_unslash($_POST['provider'])) : '';
 
