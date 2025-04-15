@@ -44,7 +44,7 @@ jobs:
         run: npm install eslint --global
 
       - name: Debug ESLint Files
-        run: ls assets/js/**/*.js
+        run: ls "assets/js/**/*.js"
 
       - name: Run ESLint
         run: eslint "assets/js/**/*.js"  --env browser --env es2021 --rule "no-unused-vars:warn"
