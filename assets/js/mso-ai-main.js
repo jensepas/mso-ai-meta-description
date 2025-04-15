@@ -225,7 +225,6 @@
             }
 
         } catch (err) {
-            console.error(`Error loading ${apiType} models:`, err);
             $errorContainer.text(errorLoadingModels + ' ' + (err.message || ''));
             $select.html(`<option value="">${errorLoadingModels}</option>`);
         } finally {
@@ -282,7 +281,7 @@
                     const jsonError = JSON.parse(errorText);
                     throwError(jsonError.data?.message || `HTTP error ${response.status}`);
                 } catch (e) {
-                    throwError(`HTTP error ${response.status}: ${errorText}`);
+                    throwError(`HTTP error ${response.status}: ${errorText} ${e}`);
                 }
             }
 
@@ -294,7 +293,6 @@
                 throwError(result.data?.message || 'Unknown error during summary generation.');
             }
         } catch (err) {
-            console.error('Summarization Error:', err);
             $aiErrorContainer.text('Error: ' + (err.message || 'Failed to generate summary.'));
         } finally {
             $spinner.css('visibility', 'hidden');
@@ -348,8 +346,6 @@
      * @param {string} errorThrown - Error message.
      */
     const handleAjaxError = (jqXHR, textStatus, errorThrown) => {
-        console.error("AJAX Error:", textStatus, errorThrown, jqXHR.responseText);
-
         let errorMsg = `${error_text} (${textStatus})`;
         if (jqXHR.responseText) {
             errorMsg += `<br><pre>${jqXHR.responseText}</pre>`;
