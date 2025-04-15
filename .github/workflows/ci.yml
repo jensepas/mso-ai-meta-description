@@ -47,4 +47,4 @@ jobs:
         run: ls -l assets/js/
 
       - name: Run ESLint
-        run: eslint "assets/**/*.js"
+        run: npx eslint "assets/**/*.js"
