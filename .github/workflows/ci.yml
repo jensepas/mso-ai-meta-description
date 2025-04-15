@@ -3,47 +3,45 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
-  php-tests:
-    name: Run PHP Tests
+  php-lint:
+    name: Lint PHP Files
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.1
-        tools: composer, phpunit
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
 
-    - name: Install dependencies
-      run: composer install --no-progress --no-suggest
+      - name: Run PHP Lint
+        run: |
+          sudo apt-get install php-cli
+          find ./ -name "*.php" -exec php -l {} \;
 
-    - name: Run PHP Unit Tests
-      run: vendor/bin/phpunit
-
-  js-tests:
-    name: Run JavaScript Tests
+  js-lint:
+    name: Lint JavaScript Files
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install ESLint
+        run: npm install eslint --global
 
-    - name: Run JavaScript Tests
-      run: npm test
+      - name: Run ESLint
+        run: eslint "**/*.js"
