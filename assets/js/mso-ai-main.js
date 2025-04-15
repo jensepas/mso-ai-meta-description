@@ -343,10 +343,10 @@
      * Handle AJAX errors from settings form submission.
      * @param {object} jqXHR - jQuery XHR object.
      * @param {string} textStatus - Error status text.
-     * @param {string} _errorThrown - Error message.
+     * @param {string} errorThrown - Error message.
      */
-    const handleAjaxError = (jqXHR, textStatus, _errorThrown) => {
-        let errorMsg = `${error_text} (${textStatus})`;
+    const handleAjaxError = (jqXHR, textStatus, errorThrown) => {
+        let errorMsg = `${error_text} (${textStatus}) ${errorThrown}`;
         if (jqXHR.responseText) {
             errorMsg += `<br><pre>${jqXHR.responseText}</pre>`;
         }
