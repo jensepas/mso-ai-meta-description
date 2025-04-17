@@ -14,7 +14,6 @@ namespace MSO_AI_Meta_Description;
 
 use MSO_AI_Meta_Description\Api\ApiClient;
 
-// Exit if accessed directly.
 if (! defined('ABSPATH')) {
     die;
 }
@@ -26,13 +25,11 @@ class Ajax
 {
     /**
      * Instance of the ApiClient used to interact with external AI APIs.
-     * @var ApiClient
      */
     private ApiClient $api_client;
 
     /**
      * The nonce action string used for verifying AJAX requests.
-     * @var string
      */
     private string $nonce_action;
 
@@ -65,9 +62,7 @@ class Ajax
      */
     public function register_hooks(): void
     {
-        // Hook for generating meta description summaries.
         add_action('wp_ajax_mso_ai_generate_summary', [$this, 'handle_generate_summary']);
-        // Hook for fetching available AI models for a given provider.
         add_action('wp_ajax_mso_ai_fetch_models', [$this, 'handle_fetch_models']);
     }
 
@@ -79,60 +74,45 @@ class Ajax
      */
     public function handle_generate_summary(): void
     {
-        // 1. Verify the security nonce.
-        // The third argument `false` prevents check_ajax_referer from dying automatically,
-        // allowing us to send a custom JSON error response.
         if (! check_ajax_referer($this->nonce_action, 'nonce', false)) {
             wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
-            // wp_send_json_error includes wp_die(), so no need for return/die after it.
         }
 
-        // 2. Check if the current user has the capability to edit posts.
         if (! current_user_can('edit_posts')) {
             wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
-        // 3. Sanitize input data from the POST request.
         $content = isset($_POST['content']) ? sanitize_text_field(wp_unslash($_POST['content'])) : '';
         $provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
 
-        // 4. Validate inputs.
-        // Ensure content is not empty.
         if (empty($content)) {
-            wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-ai-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-ai-meta-description')], 400);
         }
 
-        // Ensure a valid provider is specified using the constant from ApiClient.
         if (empty($provider) || ! in_array($provider, $this->registered_providers)) {
-            wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-ai-meta-description')], 400);
         }
 
-        // 5. Call the API client to generate the summary.
         $result = $this->api_client->generate_summary($provider, $content);
 
-        // 6. Handle the result from the API client.
         if (is_wp_error($result)) {
-            // If the API client returned a WP_Error object.
             $error_data = $result->get_error_data();
-            $status_code = 500; // Default to Internal Server Error.
-            // Check if the error data contains a specific HTTP status code from the API call.
+            $status_code = 500;
+
             if (is_array($error_data) && isset($error_data['status'])) {
                 $status_code = (int) $error_data['status'];
-                // Ensure the status code is a valid client or server error code (4xx or 5xx).
+
                 if ($status_code < 400) {
                     $status_code = 500;
                 }
             }
-            // Send a JSON error response with the message and status code.
+
             wp_send_json_error(['message' => $result->get_error_message()], $status_code);
         } else {
-            // If the API call was successful.
-            // The ApiClient::generate_summary method should return a clean, trimmed string.
             $summary = $result;
-            // Send a JSON success response containing the generated summary.
+
             wp_send_json_success(['summary' => $summary]);
         }
-        // Note: wp_send_json_success() and wp_send_json_error() both call wp_die() internally.
     }
 
     /**
@@ -143,53 +123,41 @@ class Ajax
      */
     public function handle_fetch_models(): void
     {
-        // 1. Verify the security nonce.
         if (! check_ajax_referer($this->nonce_action, 'nonce', false)) {
             wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
         }
 
-        // 2. Check if the current user has the capability to manage options (access settings page).
         if (! current_user_can('manage_options')) {
             wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
-        // 3. Sanitize input data from the POST request.
         $api_type = isset($_POST['apiType']) ? sanitize_text_field(wp_unslash($_POST['apiType'])) : '';
 
-        // 4. Validate the API type (provider).
-        // Ensure a valid provider is specified using the constant from ApiClient.
         if (empty($api_type) || ! in_array($api_type, $this->registered_providers)) {
-            wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
+            wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-ai-meta-description')], 400);
         }
 
-        // 5. Call the API client to fetch the models for the specified provider.
         $result = $this->api_client->fetch_models($api_type);
 
-        // 6. Handle the result from the API client.
         if (is_wp_error($result)) {
-            // If the API client returned a WP_Error object.
             $error_data = $result->get_error_data();
-            $status_code = 500; // Default to Internal Server Error.
-            // Check if the error data contains a specific HTTP status code.
+            $status_code = 500;
+
             if (is_array($error_data) && isset($error_data['status'])) {
                 $status_code = (int) $error_data['status'];
-                // Ensure the status code is a valid client or server error code.
+
                 if ($status_code < 400) {
                     $status_code = 500;
                 }
             }
-            // Check for a specific error code indicating the API key is missing for this provider.
-            // This helps provide clearer feedback to the user on the settings page.
+
             if ($result->get_error_code() === 'api_key_missing') {
-                $status_code = 400; // Bad Request, as the key is required.
+                $status_code = 400;
             }
-            // Send a JSON error response.
+
             wp_send_json_error(['message' => $result->get_error_message()], $status_code);
         } else {
-            // If the API call was successful.
-            // The result is expected to be an array of model data (e.g., [{id: 'model-id', name: 'Model Name'}, ...]).
             wp_send_json_success($result);
         }
-        // Note: wp_send_json_success() and wp_send_json_error() both call wp_die() internally.
     }
 }

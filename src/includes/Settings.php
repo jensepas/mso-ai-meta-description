@@ -13,11 +13,9 @@
 
 namespace MSO_AI_Meta_Description;
 
-// Import necessary classes
 use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use MSO_AI_Meta_Description\Providers\ProviderManager;
 
-// Exit if accessed directly.
 if (! defined('ABSPATH')) {
     die;
 }
@@ -65,7 +63,6 @@ class Settings
      */
     public function __construct(array $providers)
     {
-        // Hook the AJAX handler for saving settings.
         $this->providers = $providers;
         add_action('wp_ajax_' . MSO_AI_Meta_Description::AJAX_NONCE_ACTION, [$this, 'handle_ajax_save_settings']);
     }
@@ -77,13 +74,13 @@ class Settings
     public function add_options_page(): void
     {
         add_menu_page(
-            esc_html__('MSO AI Meta Description Settings', 'mso-ai-meta-description'), // Page title
-            esc_html__('Meta Description', 'mso-ai-meta-description'),       // Menu title
-            'manage_options', // Capability required to access
-            self::PAGE_SLUG,  // Menu slug (unique identifier)
-            [$this, 'render_options_page'], // Function to render the page content
+            esc_html__('MSO AI Meta Description Settings', 'mso-ai-meta-description'),
+            esc_html__('Meta Description', 'mso-ai-meta-description'),
+            'manage_options',
+            self::PAGE_SLUG,
+            [$this, 'render_options_page'],
             self::ICON_BASE64_SVG,
-            25 // Position in the menu (optional)
+            25
         );
     }
 
@@ -92,10 +89,8 @@ class Settings
      */
     public function render_options_page(): void
     {
-
         $tabs = $this->get_tabs();
 
-        // If no providers/tabs are available, show a message.
         if (empty($tabs)) {
             ?>
             <div class="wrap">
@@ -105,14 +100,11 @@ class Settings
                 </div>
             </div>
             <?php
-            return; // Stop rendering if no tabs
+            return;
         }
 
         if (! isset($_GET['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_GET['_wpnonce']))) {
-            // Determine the active tab based on the 'tab' query parameter, default to the first tab.
-            $active_tab = isset($_GET['tab']) && array_key_exists(sanitize_text_field(wp_unslash($_GET['tab'])), $tabs) ? sanitize_text_field(wp_unslash($_GET['tab'])) : array_key_first($tabs); // Get the key (slug) of the first tab.
-
-
+            $active_tab = isset($_GET['tab']) && array_key_exists(sanitize_text_field(wp_unslash($_GET['tab'])), $tabs) ? sanitize_text_field(wp_unslash($_GET['tab'])) : array_key_first($tabs);
             ?>
             <div class="wrap"> <!-- Standard WordPress admin page wrapper -->
                 <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -124,19 +116,14 @@ class Settings
                 <h2 class="nav-tab-wrapper">
                     <?php
                     foreach ($tabs as $tab_slug => $tab_label) {
-                        // Build the URL for each tab link.
                         $tab_url = add_query_arg(
                             ['page' => self::PAGE_SLUG, 'tab' => $tab_slug],
-                            admin_url('admin.php') // Base URL for settings pages.
+                            admin_url('admin.php')
                         );
 
-                        // Add a nonce to the tab URL for basic verification.
                         $tab_url = wp_nonce_url($tab_url, 'action');
-
-                        // Add 'nav-tab-active' class to the currently active tab.
                         $active_class = ($active_tab === $tab_slug) ? ' nav-tab-active' : '';
 
-                        // Output the tab link.
                         printf('<a href="%s" class="nav-tab%s">%s</a>', esc_url($tab_url), esc_attr($active_class), esc_html($tab_label));
                     }
             ?>
@@ -145,29 +132,23 @@ class Settings
                 <!-- Settings form - Submission is handled via AJAX, so 'action' is empty -->
                 <form method="post" action="" id="mso-ai-settings-form">
                     <?php
-            // Output hidden fields necessary for the settings API (like nonce),
-            // though primarily used for non-AJAX submissions to options.php.
             settings_fields(self::OPTIONS_GROUP);
 
-            // Output the settings sections and fields for the *active* tab only.
-            // The section ID is now dynamically generated based on the provider name (tab slug).
             $section_id = self::get_section_id_for_provider($active_tab);
             do_settings_sections($section_id);
 
-            // Output the standard WordPress submit button.
             submit_button(
-                esc_html__('Save Changes', 'mso-ai-meta-description'), // Button text
-                'primary', // Button class
-                'mso-ai-save-settings-button', // 'name' attribute
-                true, // Wrap in <p> tags
-                ['id' => 'mso-ai-submit-button'] // HTML ID
+                esc_html__('Save Changes', 'mso-ai-meta-description'),
+                'primary',
+                'mso-ai-save-settings-button',
+                true,
+                ['id' => 'mso-ai-submit-button']
             );
             ?><span class="spinner mso-ai-spinner"></span>
                 </form>
             </div>
             <?php
         } else {
-
             wp_die(esc_html__('Invalid nonce specified.', 'mso-ai-meta-description'), esc_html__('Error', 'mso-ai-meta-description'), ['response' => 403, 'back_link' => true,]);
         }
     }
@@ -183,7 +164,6 @@ class Settings
 
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
-            // Use ucfirst for a nicer label, allow providers to maybe define a label later if needed.
             $tabs[$provider_name] = sprintf(/* translators: 1: label */ esc_html__('%s Settings', 'mso-ai-meta-description'), ucfirst($provider_name));
         }
 
@@ -198,7 +178,6 @@ class Settings
      */
     private static function get_section_id_for_provider(string $provider_name): string
     {
-        // Example: 'mso_ai_meta_description_mistral_section'
         return MSO_AI_Meta_Description::OPTION_PREFIX . $provider_name . '_section';
     }
 
@@ -211,53 +190,43 @@ class Settings
         $option_group = self::OPTIONS_GROUP;
         $prefix = MSO_AI_Meta_Description::get_option_prefix();
 
-        // Loop through each loaded provider
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $provider_title = $provider->get_title();
             $provider_url_api_key = $provider->get_url_api_key();
-
-            // Construct option names and section ID
             $api_key_option = $prefix . $provider_name . '_api_key';
             $model_option = $prefix . $provider_name . '_model';
-            $section_id = self::get_section_id_for_provider($provider_name); // Use helper method
+            $section_id = self::get_section_id_for_provider($provider_name);
 
-            // --- Register Settings for this provider ---
             register_setting($option_group, $api_key_option, Settings::MY_ARRAY);
             register_setting($option_group, $model_option, Settings::MY_ARRAY);
 
-            // --- Add Section for this provider ---
-            // The section title is left empty as the tab provides context.
             add_settings_section(
                 $section_id,
-                '', // No visible title for the section itself
-                [$this, 'render_section_callback'], // Callback for potential description
-                $section_id // Page slug (use section_id itself to group fields)
+                '',
+                [$this, 'render_section_callback'],
+                $section_id
             );
 
-            // --- Add API Key Field for this provider ---
             add_settings_field(
-                $api_key_option, // Field ID (use option name)
-                sprintf(/* translators: 1: API key */ esc_html__('%s API Key', 'mso-ai-meta-description'), ucfirst($provider_name)), // Field Label
-                [$this, 'render_api_key_field'], // Render callback
-                $section_id, // Page slug (use section_id)
-                $section_id, // Section ID within the page
-                ['provider' => $provider_name, 'provider_title' => $provider_title, 'provider_url_api_key' => $provider_url_api_key] // Args for the callback
+                $api_key_option,
+                sprintf(/* translators: 1: API key */ esc_html__('%s API Key', 'mso-ai-meta-description'), ucfirst($provider_name)),
+                [$this, 'render_api_key_field'],
+                $section_id,
+                $section_id,
+                ['provider' => $provider_name, 'provider_title' => $provider_title, 'provider_url_api_key' => $provider_url_api_key]
             );
 
-            // --- Add Model Field for this provider ---
             add_settings_field(
-                $model_option, // Field ID
-                sprintf(/* translators: 1: Model */ esc_html__('%s Model', 'mso-ai-meta-description'), ucfirst($provider_name)), // Field Label
-                [$this, 'render_model_field'], // Render callback
-                $section_id, // Page slug
-                $section_id, // Section ID
-                ['provider' => $provider_name] // Args for the callback
+                $model_option,
+                sprintf(/* translators: 1: Model */ esc_html__('%s Model', 'mso-ai-meta-description'), ucfirst($provider_name)),
+                [$this, 'render_model_field'],
+                $section_id,
+                $section_id,
+                ['provider' => $provider_name]
             );
         }
 
-
-        // Conditionally register the front page description setting
         if ('posts' === get_option('show_on_front')) {
             $this->register_front_page_setting();
         }
@@ -274,8 +243,6 @@ class Settings
         add_settings_field('mso_ai_front_page_description_field', esc_html__('Front page meta description', 'mso-ai-meta-description'), [$this, 'render_front_page_description_input'], 'reading', 'default', ['label_for' => $option_name]);
     }
 
-    // Dans /includes/Settings.php
-
     /**
      * Handles the AJAX request to save settings for the currently active tab (provider).
      * Saves the default model if an API key is provided but no model is selected.
@@ -289,33 +256,26 @@ class Settings
         }
 
         $active_tab = isset($_POST['active_tab']) ? sanitize_key($_POST['active_tab']) : null;
-
         if (! $active_tab) {
             wp_send_json_error(['message' => esc_html__('Missing active tab identifier.', 'mso-ai-meta-description')], 400);
         }
 
-        $provider_instance = ProviderManager::get_provider($active_tab); // Get the specific provider instance
-
-        // Check if the active tab corresponds to a loaded provider
+        $provider_instance = ProviderManager::get_provider($active_tab);
         if (! $provider_instance) {
             wp_send_json_error(['message' => sprintf(/* translators: %s: Settings tab name */ esc_html__('Unknown settings tab: %s', 'mso-ai-meta-description'), esc_html($active_tab))], 400);
         }
 
-        // Define option names for the current provider
         $option_prefix = MSO_AI_Meta_Description::OPTION_PREFIX;
         $api_key_option = $option_prefix . $active_tab . '_api_key';
         $model_option = $option_prefix . $active_tab . '_model';
-
         $saved_data = [];
 
-        // --- Process API Key ---
         if (isset($_POST[$api_key_option])) {
             $sanitized_api_key = sanitize_text_field(wp_unslash($_POST[$api_key_option]));
             update_option($api_key_option, $sanitized_api_key);
             $saved_data[$api_key_option] = $sanitized_api_key;
-            $new_api_key_value = $sanitized_api_key; // Store the saved value
+            $new_api_key_value = $sanitized_api_key;
         } else {
-            // If API key field is missing, clear the option (or handle as needed)
             update_option($api_key_option, '');
             $saved_data[$api_key_option] = '';
             $new_api_key_value = '';
@@ -323,34 +283,24 @@ class Settings
 
         $submitted_model = isset($_POST[$model_option]) ? sanitize_text_field(wp_unslash($_POST[$model_option])) : null;
 
-        // Condition: Save default model if API key is provided AND model is empty/not submitted
         if (! empty($new_api_key_value) && empty($submitted_model)) {
-            // API key is present, but model is empty. Get and save the default model.
-            // Need to access the get_default_model method, requires provider instance
-            // We already checked $provider_instance is valid above.
-
-            // Check if the provider class has the get_default_model method (it should via AbstractProvider)
             if (method_exists($provider_instance, 'get_default_model')) {
                 $default_model = $provider_instance->get_default_model();
                 update_option($model_option, $default_model);
                 $saved_data[$model_option] = $default_model;
             } else {
-                // Fallback if method doesn't exist (shouldn't happen with AbstractProvider)
                 update_option($model_option, '');
                 $saved_data[$model_option] = '';
             }
         } elseif (isset($submitted_model)) {
-            // Model was submitted (might be empty string or a value), save the submitted value
             update_option($model_option, $submitted_model);
             $saved_data[$model_option] = $submitted_model;
         } else {
-            // Model field wasn't submitted at all (unlikely with current form), treat as empty
             update_option($model_option, '');
             $saved_data[$model_option] = '';
         }
 
-        // --- Send Response ---
-        wp_send_json_success(['message' => esc_html__('Settings saved successfully.', 'mso-ai-meta-description'), 'saved_data' => $saved_data, // Send back the actual saved data (including potential default model)
+        wp_send_json_success(['message' => esc_html__('Settings saved successfully.', 'mso-ai-meta-description'), 'saved_data' => $saved_data,
         ]);
     }
 
@@ -361,11 +311,9 @@ class Settings
      */
     public function render_section_callback(array $args): void
     {
-        // Extract provider name from section ID if needed for description
         $section_id = $args['id'];
         $prefix_length = strlen(MSO_AI_Meta_Description::OPTION_PREFIX);
         $suffix_length = strlen('_section');
-        // Extract 'providername' from 'mso_ai_meta_description_providername_section'
         $provider_name = substr($section_id, $prefix_length, -$suffix_length);
 
         if ($provider_name) {
@@ -384,7 +332,6 @@ class Settings
         $provider = $args['provider'];
         $provider_name_display = $args['provider_title'];
         $provider_url_api_key = $args['provider_url_api_key'];
-
         $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_api_key';
         $value = (string)get_option($option_name, '');
         $field_id = esc_attr($option_name . '_id');
@@ -409,9 +356,7 @@ class Settings
         $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_model';
         $select_id = MSO_AI_Meta_Description::OPTION_PREFIX . $provider . '_model_id';
         $current_value = (string)get_option($option_name, '');
-
         printf('<select id="%s" name="%s" data-provider="%s" class="mso-model-select regular-text">', esc_attr($select_id), esc_attr($option_name), esc_attr($provider));
-
         echo '<option value="">' . esc_html__('Loading models...', 'mso-ai-meta-description') . '</option>';
 
         if (! empty($current_value)) {
@@ -419,7 +364,6 @@ class Settings
         }
 
         echo '</select><span class="spinner mso-ai-spinner"></span>';
-
         echo '<p class="description">' . sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Select the %s model to use. Models loaded dynamically if API key is valid.', 'mso-ai-meta-description'), esc_html(ucfirst($provider))) . '</p>';
         echo '<div id="mso-model-error-' . esc_attr($provider) . '" class="mso-ai-model-error"></div>';
     }
@@ -470,13 +414,13 @@ class Settings
                             if (length > 0) {
                                 if (length < <?php  echo esc_js((string)MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH) ?>) {
                                     color = 'orange';
-                                    indicatorText = status[0]; // "(Too short)"
+                                    indicatorText = status[0];
                                 } else if (length > <?php  echo esc_js((string)MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH) ?>) {
                                     color = 'red';
-                                    indicatorText = status[1]; // "(Too long)"
+                                    indicatorText = status[1];
                                 } else {
                                     color = 'green';
-                                    indicatorText = status[2]; // "(Good)"
+                                    indicatorText = status[2];
                                 }
                             }
                             countSpan.text(length);

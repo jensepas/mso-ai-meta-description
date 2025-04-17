@@ -33,22 +33,22 @@ class ApiClient
      */
     public function fetch_models(string $provider_name): array|WP_Error
     {
-        // Get the specific provider instance directly using the static method.
+        
         $provider = ProviderManager::get_provider($provider_name);
 
-        // Check if a provider instance was found for the given name.
+        
         if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
-                'provider_not_found', // Error code
+                'provider_not_found', 
                 sprintf(
                     /* translators: %s: Provider name (e.g., Mistral) */
                     __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
                     $provider_name
-                ) // Error message
+                ) 
             );
         }
 
-        // Delegate the call to the provider's fetch_models method.
+        
         return $provider->fetch_models();
     }
 
@@ -64,22 +64,22 @@ class ApiClient
      */
     public function generate_summary(string $provider_name, string $content): string|WP_Error
     {
-        // Get the specific provider instance directly using the static method.
+        
         $provider = ProviderManager::get_provider($provider_name);
 
-        // Check if a provider instance was found for the given name.
+        
         if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
-                'provider_not_found', // Error code
+                'provider_not_found', 
                 sprintf(
                     /* translators: %s: Provider name (e.g., Mistral) */
                     __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
                     $provider_name
-                ) // Error message
+                ) 
             );
         }
 
-        // Delegate the call to the provider's generate_summary method.
+        
         return $provider->generate_summary($content);
     }
 
@@ -91,7 +91,7 @@ class ApiClient
      */
     public function get_providers(): array
     {
-        // Return the list of providers obtained directly using the static method.
+        
         return ProviderManager::get_providers();
     }
 }

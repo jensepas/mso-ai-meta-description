@@ -13,7 +13,6 @@
 
 namespace MSO_AI_Meta_Description\Providers\Available;
 
-// Use the AbstractProvider and ProviderInterface
 use MSO_AI_Meta_Description\Providers\AbstractProvider;
 use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error;
@@ -53,14 +52,12 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     protected function get_api_base(): string
     {
-        // Base URL for the Google Generative Language API (v1 beta).
         return 'https://generativelanguage.googleapis.com/v1beta/';
     }
 
     /**
      * Returns the base URL for the Anthropic API key.
      *
-     * @return string
      */
     public function get_url_api_key(): string
     {
@@ -74,13 +71,11 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     public function get_default_model(): string
     {
-        // Default Gemini model.
         return 'gemini-1.5-flash-latest';
     }
 
     protected function get_summary_endpoint(): string
     {
-        // Endpoint for chat completions.
         return "models/$this->model:generateContent";
     }
 
@@ -94,7 +89,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     protected function extract_error_message(?array $data): string
     {
-        // Gemini specific error structure
         if (isset($data['body']) && is_string($data['body'])) {
             return $data['body'];
         }
@@ -114,7 +108,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_model_list(array $data): array|WP_Error
     {
-        // Gemini specific model list structure
         if (! isset($data['models']) || ! is_array($data['models'])) {
             $provider = $this->get_name();
 
@@ -128,7 +121,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
             );
         }
 
-        // Filter models supporting 'generateContent'
         $models = array_filter(
             $data['models'],
             fn ($model) =>
@@ -138,7 +130,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
             (! str_starts_with($model['displayName'], 'Gemini 1.0'))
         );
 
-        // Map to consistent format
         return array_map(function ($model) {
             return [
                 'id' => str_replace('models/', '', $model['name'] ?? ''),
@@ -158,7 +149,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     protected function build_summary_request_body(string $prompt): array
     {
-        // Gemini specific request body structure
         return [
             'contents' => [
                 [
@@ -184,11 +174,9 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_summary(array $data): string|WP_Error
     {
-        // Gemini specific summary structure
         $generated_text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
         if ($generated_text === null) {
-            // Return an error if the summary text is missing or not a string.
             $provider = $this->get_name();
 
             return new WP_Error(
@@ -213,7 +201,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
  */
     protected function prepare_headers(array $headers): array
     {
-        // Gemini doesn't use the Bearer token header.
         unset($headers['Authorization']);
 
         return $headers;

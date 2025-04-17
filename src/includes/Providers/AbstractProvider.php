@@ -35,9 +35,7 @@ abstract class AbstractProvider implements ProviderInterface
     public function __construct()
     {
         $prefix = MSO_AI_Meta_Description::get_option_prefix();
-        // Retrieve API key, store false if empty to distinguish from not-yet-fetched (null)
         $this->api_key = (string)get_option($prefix . $this->get_name() . '_api_key', '');
-        // Retrieve model, using the provider-specific default
         $this->model = (string)get_option($prefix . $this->get_name() . '_model', $this->get_default_model());
     }
 
@@ -55,7 +53,7 @@ abstract class AbstractProvider implements ProviderInterface
                 sprintf(
                     /* translators: %s: Provider name (e.g., Mistral) */
                     __('API key for %s is not set.', 'mso-ai-meta-description'),
-                    ucfirst($this->get_name()) // Use get_name() for dynamic message
+                    ucfirst($this->get_name())
                 )
             );
         }
@@ -81,68 +79,60 @@ abstract class AbstractProvider implements ProviderInterface
 
         $url = $this->get_api_base() . $endpoint;
 
-        // Prepare default headers - allow specific providers to override/add
         $default_headers = [
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->api_key, // Common for Mistral/OpenAI
+            'Authorization' => 'Bearer ' . $this->api_key,
         ];
-        // Allow specific providers (like Gemini) to modify headers if needed
+
         $headers = $this->prepare_headers($default_headers);
 
         $default_args = [
-            'timeout' => 15, // Default timeout for non-generating requests
+            'timeout' => 15,
             'headers' => $headers,
         ];
 
-        // Merge provided args with defaults. array_replace_recursive handles nested arrays like headers well.
         $request_args = array_replace_recursive($default_args, $args);
-        // Ensure timeout from $args overrides default if present (array_replace_recursive handles this)
-        // Ensure body is JSON encoded if present and method is POST
+
         if (strtoupper($method) === 'POST' && isset($request_args['body']) && is_array($request_args['body'])) {
             $request_args['body'] = wp_json_encode($request_args['body']);
-            // Check for JSON encoding errors
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return new WP_Error('json_encode_error', __('Failed to encode request body.', 'mso-ai-meta-description'), ['error' => json_last_error_msg()]);
             }
         }
 
-        // Add API key for Gemini requests if needed (handled in prepare_headers)
         if ($this->get_name() === 'gemini') {
             $url = add_query_arg('key', $this->api_key, $url);
         }
 
-        // Make the request
         if (strtoupper($method) === 'POST') {
             $response = wp_remote_post($url, $request_args);
         } else {
             $response = wp_remote_get($url, $request_args);
         }
 
-        // --- Common Error Handling ---
         if (is_wp_error($response)) {
             Logger::error('WP HTTP API Error', ['url' => $url, 'error_code' => $response->get_error_code(), 'error_message' => $response->get_error_message()]);
 
-            return $response; // WordPress HTTP API error
+            return $response;
         }
 
         $http_code = wp_remote_retrieve_response_code($response);
         $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true); // Decode as associative array
+        $data = json_decode($body, true);
 
-        // Handle non-200 responses
-        if ($http_code < 200 || $http_code >= 300) { // Check for any non-2xx status
+        if ($http_code < 200 || $http_code >= 300) {
             $error_message = $this->extract_error_message($response) !== ''
                 ? $this->extract_error_message($response)
                 : __('Unknown API error occurred.', 'mso-ai-meta-description');
 
-            // Use the centralized logger
             Logger::error(
-                sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint), // Main message
-                [ // Context array
+                sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint),
+                [
                     'url' => $url,
                     'status' => $http_code,
                     'message' => $error_message,
-                    'response_body' => $body, // Log the raw body for debugging
+                    'response_body' => $body,
                 ]
             );
 
@@ -155,35 +145,28 @@ abstract class AbstractProvider implements ProviderInterface
                     $http_code,
                     $error_message
                 ),
-                ['status' => $http_code, 'response_body' => $body] // Include body in WP_Error data
+                ['status' => $http_code, 'response_body' => $body]
             );
         }
 
-        // Handle JSON decoding errors specifically for successful HTTP status codes
-        // (Errors for non-200 codes are handled above)
         if ($data === '' && json_last_error() !== JSON_ERROR_NONE) {
-            // Use the centralized logger
             Logger::error(
-                sprintf('%s API JSON Decode Error (%s)', ucfirst($this->get_name()), $endpoint), // Main message
-                ['url' => $url, 'status' => $http_code, 'response_body' => $body, 'json_error' => json_last_error_msg()] // Context array
+                sprintf('%s API JSON Decode Error (%s)', ucfirst($this->get_name()), $endpoint),
+                ['url' => $url, 'status' => $http_code, 'response_body' => $body, 'json_error' => json_last_error_msg()]
             );
 
             return new WP_Error('json_decode_error', __('Failed to decode API response.', 'mso-ai-meta-description'), ['status' => $http_code, 'response_body' => $body]);
         }
 
-        // Ensure $data is an array before returning, even if the API returns valid JSON that isn't an array (e.g., "true")
         if (! is_array($data)) {
             Logger::error(
                 sprintf('%s API Response Not An Array (%s)', ucfirst($this->get_name()), $endpoint),
                 ['url' => $url, 'status' => $http_code, 'response_body' => $body]
             );
 
-            // Decide how to handle this: return an error or an empty array?
-            // Returning an empty array might be safer for subsequent code expecting an array.
             return [];
         }
 
-        // Return the decoded data on success
         return $data;
     }
 
@@ -212,7 +195,6 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected function prepare_headers(array $headers): array
     {
-        // Example: Gemini doesn't use Bearer token, uses key in URL for GET
         if ($this->get_name() === 'gemini') {
             unset($headers['Authorization']);
         }
@@ -222,9 +204,8 @@ abstract class AbstractProvider implements ProviderInterface
 
     /**
      * Get the base URL for the provider's API.
-     * Example: 'https://api.mistral.ai/v1/'
+     * Example: 'https:
      *
-     * @return string
      */
     abstract protected function get_api_base(): string;
 
@@ -232,7 +213,6 @@ abstract class AbstractProvider implements ProviderInterface
      * Get the default model ID for this provider.
      * Example: 'mistral-small-latest'
      *
-     * @return string
      */
     abstract public function get_default_model(): string;
 
@@ -278,15 +258,11 @@ abstract class AbstractProvider implements ProviderInterface
      */
     public function fetch_models(): array|WP_Error
     {
-        // Use the shared request method
-        $result = $this->request('models'); // Assumes 'models' is the common endpoint path part
-
-        // If the request resulted in an error, return it directly
+        $result = $this->request('models');
         if (is_wp_error($result)) {
             return $result;
         }
 
-        // Delegate parsing the successful response to the concrete class
         return $this->parse_model_list($result);
     }
 
@@ -302,22 +278,19 @@ abstract class AbstractProvider implements ProviderInterface
         $prompt = $this->build_summary_prompt($content);
         $request_body = $this->build_summary_request_body($prompt);
 
-        // Use the shared request method for POST
         $result = $this->request(
-            $this->get_summary_endpoint(), // Get endpoint path from concrete class
+            $this->get_summary_endpoint(),
             [
-                'timeout' => 30, // Longer timeout for generation
+                'timeout' => 30,
                 'body' => $request_body,
             ],
             'POST'
         );
 
-        // If the request resulted in an error, return it directly
         if (is_wp_error($result)) {
             return $result;
         }
 
-        // Delegate parsing the successful response to the concrete class
         return $this->parse_summary($result);
     }
 
@@ -325,7 +298,6 @@ abstract class AbstractProvider implements ProviderInterface
      * Gets the specific endpoint path for summary generation.
      * Example: 'chat/completions'
      *
-     * @return string
      */
     abstract protected function get_summary_endpoint(): string;
 }

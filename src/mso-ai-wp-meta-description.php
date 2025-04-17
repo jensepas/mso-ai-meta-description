@@ -18,33 +18,24 @@
 
 namespace MSO_AI_Meta_Description;
 
-// Exit if accessed directly to prevent direct execution of the script.
 if (! defined('ABSPATH')) {
     die;
 }
 
-// Use statements for classes used within this file's scope (mainly for type hinting and instantiation).
-// These help with code clarity and prevent potential naming conflicts.
 use MSO_AI_Meta_Description\Api\ApiClient;
 use MSO_AI_Meta_Description\Providers\ProviderManager;
 
-// Define the path to the autoloader file.
 $autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
-// Check if the autoloader file exists. If not, the plugin cannot function.
 if (! file_exists($autoloader)) {
-    return; // Stop plugin execution if the autoloader is missing.
+    return;
 }
-// Include the autoloader to handle automatic class loading.
+
 require_once $autoloader;
 
-// Explicitly include the ProviderInterface.
 $provider_interface = plugin_dir_path(__FILE__) . 'includes/Providers/ProviderInterface.php';
 if (file_exists($provider_interface)) {
     require_once $provider_interface;
 }
-
-
-// --- Main Plugin Class Definition ---
 
 /**
  * Main plugin class (MSO_AI_Meta_Description).
@@ -104,7 +95,7 @@ final class MSO_AI_Meta_Description
      */
     private function __construct()
     {
-        // Constructor is intentionally kept private.
+
     }
 
     /**
@@ -117,15 +108,11 @@ final class MSO_AI_Meta_Description
      */
     public static function get_instance(): MSO_AI_Meta_Description
     {
-        // Check if the instance hasn't been created yet.
         if (null === self::$instance) {
-            // Create the single instance.
             self::$instance = new self();
-            // Run the setup process (load dependencies, instantiate components, register hooks).
             self::$instance->setup();
         }
 
-        // Return the existing or newly created instance.
         return self::$instance;
     }
 
@@ -135,15 +122,8 @@ final class MSO_AI_Meta_Description
      */
     private function setup(): void
     {
-        // Note: Provider registration is now handled separately via the 'plugins_loaded' hook
-        // in the `mso_ai_init_dynamic_providers` function below. This ensures providers are
-        // registered early, before other components that might depend on them are instantiated.
-
-        // Load any necessary files or libraries not handled by the autoloader.
         $this->load_dependencies();
-        // Create instances of all the core plugin component classes.
         $this->instantiate_components();
-        // Register WordPress action and filter hooks for the instantiated components.
         $this->register_hooks();
     }
 
@@ -153,8 +133,7 @@ final class MSO_AI_Meta_Description
      */
     private function load_dependencies(): void
     {
-        // Currently, the autoloader handles class loading.
-        // Add any other necessary `require_once` calls here if needed.
+
     }
 
     /**
@@ -166,18 +145,11 @@ final class MSO_AI_Meta_Description
         ProviderManager::register_providers_from_directory();
         $providers = ProviderManager::get_providers();
         $registered_providers = ProviderManager::get_provider_names();
-
-        // Instantiate the API client (facade for AI providers).
         $api_client = new ApiClient();
-        // Instantiate the Settings manager (might be needed for model fetching/validation).
         $settings = new Settings($providers);
-        // Instantiate the MetaBox handler, passing necessary keys and nonce's.
         $meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME, $providers);
-        // Instantiate the Admin handler, passing Settings and MetaBox instances.
         $this->admin = new Admin($settings, $meta_box, $providers);
-        // Instantiate the Frontend handler, passing the meta key.
         $this->frontend = new Frontend(self::META_KEY);
-        // Instantiate the AJAX handler, passing the API client and nonce identifier.
         $this->ajax = new Ajax($api_client, self::AJAX_NONCE_ACTION, $registered_providers);
     }
 
@@ -187,18 +159,14 @@ final class MSO_AI_Meta_Description
      */
     private function register_hooks(): void
     {
-        // Hook the method to load the plugin's text domain for localization.
         add_action('plugins_loaded', [$this, 'load_plugin_text_domain']);
 
-        // Register hooks defined within the Frontend and Ajax classes.
         $this->frontend->register_hooks();
         $this->ajax->register_hooks();
 
-        // Only register admin-specific hooks if we are in the admin area or running WP-CLI.
         if (is_admin() || (defined('WP_CLI') && WP_CLI)) {
-            // Register hooks defined within the Admin class (e.g., menu pages, settings registration, meta boxes).
             $this->admin->register_hooks();
-            // Add the "Settings" link to the plugin's entry on the WordPress Plugins page.
+
             add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this->admin, 'add_settings_link']);
         }
     }
@@ -227,7 +195,7 @@ final class MSO_AI_Meta_Description
      */
     public function __wakeup()
     {
-        // Deserialization is forbidden to maintain the singleton pattern.
+
     }
 
     /**
@@ -235,12 +203,9 @@ final class MSO_AI_Meta_Description
      */
     private function __clone()
     {
-        // Cloning is forbidden to maintain the singleton pattern.
+
     }
 }
-
-
-// --- Plugin Execution ---
 
 /**
  * Begins execution of the plugin.
@@ -251,10 +216,7 @@ final class MSO_AI_Meta_Description
  */
 function mso_ai_meta_description_run(): void
 {
-    // Get the singleton instance. This triggers the setup process within the class.
-    // Use the fully qualified class name because this function is in the global scope.
     MSO_AI_Meta_Description::get_instance();
 }
 
-// Call the function to start the plugin.
 mso_ai_meta_description_run();

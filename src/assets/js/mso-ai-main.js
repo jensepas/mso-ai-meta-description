@@ -14,14 +14,9 @@
      * Main object for the plugin's admin JavaScript functionality.
      */
     const MSO_AI_Admin = {
-        // --- Constants ---
         MIN_DESCRIPTION_LENGTH: 120,
         MAX_DESCRIPTION_LENGTH: 160,
-
-        // --- Cached DOM Elements ---
         elements: {},
-
-        // --- Localized Variables ---
         config: {
             selectedModels: {},
             selectModel: '-- Select a Model --',
@@ -41,7 +36,6 @@
          * Initializes the script. Caches elements and binds events.
          */
         init() {
-            // Merge localized variables if available
             if (typeof msoAiScriptVars !== 'undefined') {
                 this.config = { ...this.config, ...msoAiScriptVars };
             }
@@ -56,17 +50,14 @@
          */
         cacheElements() {
             this.elements = {
-                // Meta Box
                 $metaBoxField: $('#mso_ai_meta_description_field'),
                 $charCountSpan: $('.mso-ai-char-count'),
                 $lengthIndicatorSpan: $('.mso-ai-length-indicator'),
                 $generateButtons: $('.mso-ai-generate-button'),
-                $metaBoxGenerator: $('.mso-ai-generator'), // Container for buttons and spinner
+                $metaBoxGenerator: $('.mso-ai-generator'), 
                 $metaBoxSpinner: $('.mso-ai-generator .spinner'),
                 $aiErrorContainer: $('#mso-ai-error'),
-                $content: $('#content'), // Classic editor content area
-
-                // Settings Page
+                $content: $('#content'),
                 $settingsForm: $('#mso-ai-settings-form'),
                 $submitButton: $('#mso-ai-submit-button'),
                 $messagesDiv: $('#mso-ai-settings-messages'),
@@ -79,14 +70,12 @@
         /**
          * Binds event listeners.
          */
-        bindEvents() {
-            // Meta Box Events
+        bindEvents() {            
             if (this.elements.$metaBoxField.length) {
                 this.elements.$metaBoxField.on('keyup input paste change', this.updateCharacterCount.bind(this));
                 this.elements.$metaBoxGenerator.on('click', '.mso-ai-generate-button', this.handleGenerateClick.bind(this));
             }
-
-            // Settings Page Events
+            
             if (this.elements.$settingsForm.length) {
                 this.elements.$passwordToggleButtons.on('click', this.handlePasswordToggleClick.bind(this));
                 this.elements.$settingsForm.on('submit', this.handleSettingsSubmit.bind(this));
@@ -99,15 +88,13 @@
          */
         initPageSpecificFeatures() {
             if (this.elements.$metaBoxField.length) {
-                this.updateCharacterCount(); // Initial count
+                this.updateCharacterCount(); 
             }
 
             if (this.elements.$settingsForm.length) {
                 this.populateAllModelSelects();
             }
         },
-
-        // --- Meta Box Methods ---
 
         /**
          * Updates the character count display and color indicator.
@@ -121,13 +108,13 @@
             if (length > 0) {
                 if (length < this.MIN_DESCRIPTION_LENGTH) {
                     color = 'orange';
-                    indicatorText = this.config.status[0]; // "(Too short)"
+                    indicatorText = this.config.status[0]; 
                 } else if (length > this.MAX_DESCRIPTION_LENGTH) {
                     color = 'red';
-                    indicatorText = this.config.status[1]; // "(Too long)"
+                    indicatorText = this.config.status[1]; 
                 } else {
                     color = 'green';
-                    indicatorText = this.config.status[2]; // "(Good)"
+                    indicatorText = this.config.status[2]; 
                 }
             }
 
@@ -202,8 +189,6 @@
                 .trim();
             return text;
         },
-
-        // --- Settings Page Methods ---
 
         /**
          * Handles click events on password visibility toggle buttons.
@@ -405,8 +390,6 @@
             });
         },
 
-        // --- Utility Methods ---
-
         /**
          * Performs an AJAX request to the WordPress backend.
          * Automatically includes the action and nonce.
@@ -501,7 +484,6 @@
         }
     };
 
-    // --- Initialization ---
     $(document).ready(() => {
         MSO_AI_Admin.init();
     });

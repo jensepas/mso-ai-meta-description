@@ -64,24 +64,17 @@ class Logger
      */
     private static function log_message(string $level, string $message, array $context): void
     {
-        // Check if WordPress debug mode is enabled before proceeding.
         if (defined('WP_DEBUG') && WP_DEBUG === true) {
-            // Prepare the log message with a clear prefix based on the level.
             $log_entry = sprintf('[MSO AI Meta Description %s] %s', $level, $message);
 
-            // If additional context data is provided...
             if (! empty($context)) {
-                // Convert the context into a readable string (uses print_r for arrays/objects).
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Used to serialize context data for logging purposes.
                 $context_str = print_r($context, true);
-                // Add the formatted context to the log message.
                 $log_entry .= ' | Context: ' . $context_str;
             }
 
-            // Call error_log to write to the WordPress debug.log file.
-            // The phpcs:ignore annotations are now centralized here.
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Centralized logging method.
             error_log($log_entry);
         }
     }
-} // End class Logger
+}

@@ -13,7 +13,6 @@
 
 namespace MSO_AI_Meta_Description\Providers\Available;
 
-// Change 'use' for ProviderInterface to AbstractProvider if needed, or keep both
 use MSO_AI_Meta_Description\Providers\AbstractProvider;
 use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error;
@@ -59,7 +58,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     /**
      * Returns the base URL for the Anthropic API key.
      *
-     * @return string
      */
     public function get_url_api_key(): string
     {
@@ -73,7 +71,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
      */
     public function get_default_model(): string
     {
-        // Default Mistral model.
         return 'mistral-small-latest';
     }
 
@@ -84,7 +81,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
      */
     protected function get_summary_endpoint(): string
     {
-        // Endpoint for chat completions.
         return 'chat/completions';
     }
 
@@ -98,7 +94,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
      */
     protected function extract_error_message(array $data): string
     {
-        // Mistral specific error structure
         if (isset($data['body']) && is_string($data['body'])) {
             return $data['body'];
         }
@@ -118,7 +113,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_model_list(array $data): array|WP_Error
     {
-        // Mistral specific model list structure
         if (! isset($data['data']) || ! is_array($data['data'])) {
             $provider = $this->get_name();
 
@@ -137,7 +131,7 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
                 'id' => $model['id'] ?? '',
                 'displayName' => $model['id'] ?? '',
             ];
-        }, array_values($data['data'])); // Re-index the array just in case.
+        }, array_values($data['data']));
     }
 
     /**
@@ -152,7 +146,7 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     protected function build_summary_request_body(string $prompt): array
     {
         return [
-            'model' => $this->model, // Use the model stored in the property
+            'model' => $this->model,
             'messages' => [['role' => 'user', 'content' => $prompt]],
             'max_tokens' => 70,
             'temperature' => 0.6,
@@ -169,11 +163,9 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_summary(array $data): string|WP_Error
     {
-        // Mistral specific summary structure
         $generated_text = $data['choices'][0]['message']['content'] ?? null;
 
         if ($generated_text === null) {
-            // Return an error if the summary text is missing or not a string.
             $provider = $this->get_name();
 
             return new WP_Error(

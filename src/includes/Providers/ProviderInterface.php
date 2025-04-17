@@ -13,7 +13,7 @@
 
 namespace MSO_AI_Meta_Description\Providers;
 
-use WP_Error; // Used for type hinting in method signatures.
+use WP_Error; 
 
 /**
  * Interface for AI service providers.

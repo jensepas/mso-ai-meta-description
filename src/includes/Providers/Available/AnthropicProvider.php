@@ -13,7 +13,6 @@
 
 namespace MSO_AI_Meta_Description\Providers\Available;
 
-// Use the AbstractProvider and ProviderInterface
 use MSO_AI_Meta_Description\Providers\AbstractProvider;
 use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Error;
@@ -24,7 +23,6 @@ use WP_Error;
  * Extends the AbstractProvider to inherit common API interaction logic
  * and implements ProviderInterface methods specific to Anthropic API.
  */
-// Extend the abstract class
 class AnthropicProvider extends AbstractProvider implements ProviderInterface
 {
     /**
@@ -34,7 +32,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     public function get_name(): string
     {
-        // Unique lowercase identifier for Anthropic
         return 'anthropic';
     }
 
@@ -55,14 +52,12 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function get_api_base(): string
     {
-        // Base URL for the Anthropic API
         return 'https://api.anthropic.com/v1/';
     }
 
     /**
      * Returns the base URL for the Anthropic API key.
      *
-     * @return string
      */
     public function get_url_api_key(): string
     {
@@ -76,7 +71,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     public function get_default_model(): string
     {
-        // Default Anthropic model
         return 'claude-3-sonnet-20240229';
     }
 
@@ -87,7 +81,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function get_summary_endpoint(): string
     {
-        // Endpoint for generating messages (summaries)
         return 'messages';
     }
 
@@ -101,7 +94,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function extract_error_message(?array $data): string
     {
-        // Check if the expected keys exist and the message is a string
         if (isset($data['body']) && is_string($data['body'])) {
             return $data['body'];
         }
@@ -118,9 +110,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_model_list(array $data): array|WP_Error
     {
-        // $data is ignored as we are not fetching from API
-        // Return a hardcoded list of popular Anthropic 3 models
-        // Anthropic specific model list structure
         if (! isset($data['data']) || ! is_array($data['data'])) {
             $provider = $this->get_name();
 
@@ -134,7 +123,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
             );
         }
 
-        // Ensure the format matches the expected structure
         return array_map(function ($model) {
             return [
                 'id' => $model['id'],
@@ -154,13 +142,11 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function build_summary_request_body(string $prompt): array
     {
-        // Builds the POST request body for summary generation, specific to Anthropic Messages API
         return [
-            'model' => $this->model, // Uses the selected model
+            'model' => $this->model,
             'messages' => [['role' => 'user', 'content' => $prompt]],
-            'max_tokens' => 150, // Anthropic needs a reasonable max_tokens; 70 might be too low sometimes
+            'max_tokens' => 150,
             'temperature' => 0.6,
-            // 'system' => 'You are an expert meta description writer.' // Optional system prompt
         ];
     }
 
@@ -174,15 +160,12 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function parse_summary(array $data): string|WP_Error
     {
-        // Extracts the generated summary text from Anthropic specific JSON response structure
-        // Anthropic returns content as an array of blocks; we expect a single text block.
         $generated_text = null;
         if (isset($data['content'][0]['type']) && is_array($data['content']) && $data['content'][0]['type'] === 'text') {
             $generated_text = $data['content'][0]['text'] ?? null;
         }
 
         if ($generated_text === null) {
-            // Return an error if the summary text is missing or not a string.
             $provider = $this->get_name();
 
             return new WP_Error(
@@ -206,7 +189,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
      */
     protected function prepare_headers(array $headers): array
     {
-        // Remove the default 'Authorization: Bearer' header
         unset($headers['Authorization']);
 
         $headers += [
