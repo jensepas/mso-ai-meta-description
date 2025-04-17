@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description Frontend
  *
@@ -8,10 +9,11 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     die;
 }
 
@@ -43,7 +45,7 @@ class Frontend
     {
         $this->meta_key = $meta_key;
         // Get the WordPress setting for what is displayed on the front page.
-        $this->show_on_front = get_option('show_on_front'); // Possible values: 'static', 'page', 'posts'
+        $this->show_on_front = (string)get_option('show_on_front');
     }
 
     /**
@@ -74,7 +76,7 @@ class Frontend
         $description = $this->get_current_page_description();
 
         // Only output the meta tag if a description was found.
-        if (!empty($description)) {
+        if (! empty($description)) {
             // Print the meta description tag, ensuring the content is properly escaped.
             printf(
                 "\n\n<meta name=\"description\" content=\"%s\">\n\n",

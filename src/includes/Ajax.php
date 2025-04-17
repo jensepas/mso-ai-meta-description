@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description Ajax Handlers
  *
@@ -8,12 +9,13 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description;
 
-use MSO_AI_Meta_Description\Api\ApiClient; // Used for API interactions and constants.
+use MSO_AI_Meta_Description\Api\ApiClient;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     die;
 }
 
@@ -72,19 +74,19 @@ class Ajax
         // 1. Verify the security nonce.
         // The third argument `false` prevents check_ajax_referer from dying automatically,
         // allowing us to send a custom JSON error response.
-        if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
+        if (! check_ajax_referer($this->nonce_action, 'nonce', false)) {
             wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
             // wp_send_json_error includes wp_die(), so no need for return/die after it.
         }
 
         // 2. Check if the current user has the capability to edit posts.
-        if (!current_user_can('edit_posts')) {
+        if (! current_user_can('edit_posts')) {
             wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
         // 3. Sanitize input data from the POST request.
-        $content = isset($_POST['content']) ? sanitize_text_field( wp_unslash($_POST['content'])) : '';
-        $provider = isset($_POST['provider']) ? sanitize_text_field( wp_unslash($_POST['provider'])) : '';
+        $content = isset($_POST['content']) ? sanitize_text_field(wp_unslash($_POST['content'])) : '';
+        $provider = isset($_POST['provider']) ? sanitize_text_field(wp_unslash($_POST['provider'])) : '';
 
         // 4. Validate inputs.
         // Ensure content is not empty.
@@ -92,7 +94,7 @@ class Ajax
             wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
         // Ensure a valid provider is specified using the constant from ApiClient.
-        if (empty($provider) || !in_array($provider, ApiClient::SUPPORTED_PROVIDERS)) {
+        if (empty($provider) || ! in_array($provider, ApiClient::SUPPORTED_PROVIDERS)) {
             wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
@@ -108,7 +110,9 @@ class Ajax
             if (is_array($error_data) && isset($error_data['status'])) {
                 $status_code = (int) $error_data['status'];
                 // Ensure the status code is a valid client or server error code (4xx or 5xx).
-                if ($status_code < 400) $status_code = 500;
+                if ($status_code < 400) {
+                    $status_code = 500;
+                }
             }
             // Send a JSON error response with the message and status code.
             wp_send_json_error(['message' => $result->get_error_message()], $status_code);
@@ -131,21 +135,21 @@ class Ajax
     public function handle_fetch_models(): void
     {
         // 1. Verify the security nonce.
-        if (!check_ajax_referer($this->nonce_action, 'nonce', false)) {
+        if (! check_ajax_referer($this->nonce_action, 'nonce', false)) {
             wp_send_json_error(['message' => __('Invalid nonce.', 'mso-ai-meta-description')], 403);
         }
 
         // 2. Check if the current user has the capability to manage options (access settings page).
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_send_json_error(['message' => __('Permission denied.', 'mso-ai-meta-description')], 403);
         }
 
         // 3. Sanitize input data from the POST request.
-        $api_type = isset($_POST['apiType']) ? sanitize_text_field( wp_unslash($_POST['apiType'])) : '';
+        $api_type = isset($_POST['apiType']) ? sanitize_text_field(wp_unslash($_POST['apiType'])) : '';
 
         // 4. Validate the API type (provider).
         // Ensure a valid provider is specified using the constant from ApiClient.
-        if (empty($api_type) || !in_array($api_type, ApiClient::SUPPORTED_PROVIDERS)) {
+        if (empty($api_type) || ! in_array($api_type, ApiClient::SUPPORTED_PROVIDERS)) {
             wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
@@ -161,7 +165,9 @@ class Ajax
             if (is_array($error_data) && isset($error_data['status'])) {
                 $status_code = (int) $error_data['status'];
                 // Ensure the status code is a valid client or server error code.
-                if ($status_code < 400) $status_code = 500;
+                if ($status_code < 400) {
+                    $status_code = 500;
+                }
             }
             // Check for a specific error code indicating the API key is missing for this provider.
             // This helps provide clearer feedback to the user on the settings page.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description ApiClient
  *
@@ -9,6 +10,7 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description\Api;
 
 use MSO_AI_Meta_Description\Providers\ProviderInterface; // Interface for individual providers.
@@ -25,7 +27,7 @@ class ApiClient
      * This should align with the names returned by ProviderInterface::get_name().
      * @var string[]
      */
-    const SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai', 'anthropic'];
+    public const array SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai', 'anthropic'];
 
     /**
      * Fetches the list of available models for a specific provider.
@@ -33,7 +35,7 @@ class ApiClient
      * Retrieves the provider instance using the ProviderManager and calls its fetch_models() method.
      *
      * @param string $provider_name The unique name of the provider (e.g., 'gemini', 'openai').
-     * @return array|WP_Error An array of model data on success, or a WP_Error object on failure
+     * @return array<string, string>|WP_Error An array of model data on success, or a WP_Error object on failure
      *                        (e.g., if provider not found or API call fails).
      */
     public function fetch_models(string $provider_name): array|WP_Error
@@ -42,12 +44,14 @@ class ApiClient
         $provider = ProviderManager::get_provider($provider_name);
 
         // Check if a provider instance was found for the given name.
-        if (!$provider instanceof ProviderInterface) {
+        if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
                 'provider_not_found', // Error code
                 sprintf(
-                /* translators: %s: Provider name (e.g., Mistral) */
-                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'), $provider_name) // Error message
+                    /* translators: %s: Provider name (e.g., Mistral) */
+                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
+                    $provider_name
+                ) // Error message
             );
         }
 
@@ -71,12 +75,14 @@ class ApiClient
         $provider = ProviderManager::get_provider($provider_name);
 
         // Check if a provider instance was found for the given name.
-        if (!$provider instanceof ProviderInterface) {
+        if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
                 'provider_not_found', // Error code
                 sprintf(
-                /* translators: %s: Provider name (e.g., Mistral) */
-                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'), $provider_name) // Error message
+                    /* translators: %s: Provider name (e.g., Mistral) */
+                    __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
+                    $provider_name
+                ) // Error message
             );
         }
 

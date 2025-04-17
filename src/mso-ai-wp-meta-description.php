@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: MSO AI Meta Description: Custom Meta Descriptions with AI
  * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
@@ -18,19 +19,19 @@
 namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly to prevent direct execution of the script.
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     die;
 }
 
 // Use statements for classes used within this file's scope (mainly for type hinting and instantiation).
 // These help with code clarity and prevent potential naming conflicts.
-use MSO_AI_Meta_Description\Providers\ProviderManager;
 use MSO_AI_Meta_Description\Api\ApiClient;
+use MSO_AI_Meta_Description\Providers\ProviderManager;
 
 // Define the path to the autoloader file.
 $autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
 // Check if the autoloader file exists. If not, the plugin cannot function.
-if (!file_exists($autoloader)) {
+if (! file_exists($autoloader)) {
     return; // Stop plugin execution if the autoloader is missing.
 }
 // Include the autoloader to handle automatic class loading.
@@ -57,33 +58,33 @@ if (file_exists($provider_interface)) {
 final class MSO_AI_Meta_Description
 {
     /** Plugin version number. Used for cache busting scripts/styles. */
-    const VERSION = '1.3.0';
+    public const string VERSION = '1.3.0';
 
     /** Text domain for localization (internationalization). Must match plugin header and .pot file. */
-    const TEXT_DOMAIN = 'mso-ai-meta-description';
+    public const string TEXT_DOMAIN = 'mso-ai-meta-description';
 
     /** The meta key used to store the custom meta description in the post meta table. */
-    const META_KEY = '_mso_ai_meta_description';
+    public const string META_KEY = '_mso_ai_meta_description';
 
     /** Nonce action string used for verifying the meta box save request. */
-    const META_BOX_NONCE_ACTION = 'mso_ai_save_meta_description_nonce_action';
+    public const string META_BOX_NONCE_ACTION = 'mso_ai_save_meta_description_nonce_action';
     /** Nonce field name used in the meta box form. */
-    const META_BOX_NONCE_NAME = 'mso_ai_save_meta_description_nonce_field';
+    public const string META_BOX_NONCE_NAME = 'mso_ai_save_meta_description_nonce_field';
 
     /**
      * Nonce action/name for general AJAX requests within the plugin.
      * Using 'wp_rest' might be okay if interacting with REST API, but a custom nonce is often better for non-REST AJAX.
      * Consider changing to something like 'mso_ai_ajax_nonce'.
      */
-    const AJAX_NONCE_ACTION = 'mso_ai_meta_description_ajax_actions';
+    public const string AJAX_NONCE_ACTION = 'mso_ai_meta_description_ajax_actions';
 
     /** Prefix used for all plugin options stored in the wp_options table. Helps avoid naming conflicts. */
-    const OPTION_PREFIX = 'mso_ai_meta_description_';
+    public const string OPTION_PREFIX = 'mso_ai_meta_description_';
 
     /** Minimum recommended length for a meta description. */
-    const MIN_DESCRIPTION_LENGTH = 120;
+    public const int MIN_DESCRIPTION_LENGTH = 120;
     /** Maximum recommended length for a meta description. */
-    const MAX_DESCRIPTION_LENGTH = 160;
+    public const int MAX_DESCRIPTION_LENGTH = 160;
 
     /** Holds the single instance of this class (Singleton pattern). */
     private static ?MSO_AI_Meta_Description $instance = null;
@@ -132,6 +133,7 @@ final class MSO_AI_Meta_Description
             // Run the setup process (load dependencies, instantiate components, register hooks).
             self::$instance->setup();
         }
+
         // Return the existing or newly created instance.
         return self::$instance;
     }
@@ -172,8 +174,8 @@ final class MSO_AI_Meta_Description
     {
         // Instantiate the API client (facade for AI providers).
         $this->api_client = new ApiClient();
-        // Instantiate the Settings manager, passing the API client (might be needed for model fetching/validation).
-        $this->settings = new Settings($this->api_client);
+        // Instantiate the Settings manager (might be needed for model fetching/validation).
+        $this->settings = new Settings();
         // Instantiate the MetaBox handler, passing necessary keys and nonce's.
         $this->meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME);
         // Instantiate the Admin handler, passing Settings and MetaBox instances.
@@ -264,7 +266,6 @@ final class MSO_AI_Meta_Description
     {
         // Deserialization is forbidden to maintain the singleton pattern.
     }
-
 } // --- End of MSO_AI_Meta_Description Class ---
 
 
@@ -280,7 +281,7 @@ final class MSO_AI_Meta_Description
 function mso_ai_init_dynamic_providers(): void
 {
     // Check if the ProviderManager class exists (it should have been automatically loaded).
-    if (!class_exists('\MSO_AI_Meta_Description\Providers\ProviderManager')) {
+    if (! class_exists('\MSO_AI_Meta_Description\Providers\ProviderManager')) {
         return;
     }
 
@@ -288,7 +289,7 @@ function mso_ai_init_dynamic_providers(): void
     $provider_scan_dir = plugin_dir_path(__FILE__) . 'includes/Providers/Available/';
 
     // Check if the directory actually exists.
-    if (!is_dir($provider_scan_dir)) {
+    if (! is_dir($provider_scan_dir)) {
         return;
     }
 

@@ -5,6 +5,7 @@
  * Handles the creation, rendering, and saving of the meta description
  * meta box displayed on post edit screens. Allows users to manually
  * enter or generate a meta description using AI.
+ * Dynamically displays generation buttons based on configured providers.
  *
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
@@ -12,7 +13,9 @@
 
 namespace MSO_AI_Meta_Description;
 
-use WP_Post; // Type hint for WordPress Post object.
+// Import necessary classes
+use MSO_AI_Meta_Description\Providers\ProviderManager; // <-- Importer ProviderManager
+use WP_Post;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -47,9 +50,9 @@ class MetaBox
      *
      * Initializes the meta box handler with necessary keys and identifiers.
      *
-     * @param string $meta_key     The key used for storing the meta description in the database.
+     * @param string $meta_key The key used for storing the meta description in the database.
      * @param string $nonce_action The action string for nonce verification.
-     * @param string $nonce_name   The name attribute for the nonce input field.
+     * @param string $nonce_name The name attribute for the nonce input field.
      */
     public function __construct(string $meta_key, string $nonce_action, string $nonce_name)
     {
@@ -89,6 +92,7 @@ class MetaBox
      * Render the content of the meta description meta box.
      *
      * Outputs the HTML for the textarea, character count, and AI generation buttons.
+     * Dynamically determines which AI buttons to show based on configured providers.
      *
      * @param WP_Post $post The current post object being edited.
      */
@@ -97,12 +101,12 @@ class MetaBox
         // Add a nonce field for security verification when saving.
         wp_nonce_field($this->nonce_action, $this->nonce_name);
         // Get the currently saved meta description value for this post.
-        $value = get_post_meta($post->ID, $this->meta_key, true); // 'true' gets a single value.
+        $value = (string)get_post_meta($post->ID, $this->meta_key, true); // 'true' gets a single value.
 
-        // Define variables used in the template (consider making these constants or class properties if used elsewhere).
+        // Define variables used in the template
         $field_name = 'mso_ai_add_description'; // Name attribute for the textarea input. Must match save_meta_data().
-        $min_length = MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH; // Minimum recommended length.
-        $max_length = MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH; // Maximum recommended length.
+        $min_length = (string)MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH; // Minimum recommended length.
+        $max_length = (string)MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH; // Maximum recommended length.
         $option_prefix = MSO_AI_Meta_Description::get_option_prefix(); // Get the plugin's option prefix.
 
         ?>
@@ -113,15 +117,16 @@ class MetaBox
                 </label>
             </p>
             <textarea
-                    id="mso_ai_meta_description_field" <?php // Unique ID for the textarea, used by label and JavaScript. ?>
-                    name="<?php echo esc_attr($field_name); ?>" <?php // Name attribute for form submission. ?>
+                    id="mso_ai_meta_description_field"
+                    name="<?php echo esc_attr($field_name); ?>"
                     rows="4"
                     class="large-text"
-                    maxlength="<?php echo esc_attr($max_length + 20); // Allow some buffer beyond max recommended length for easier editing. ?>"
-                    aria-describedby="mso-ai-description-hint" <?php // Accessibility: Links textarea to the description paragraph below. ?>
-            ><?php echo esc_textarea($value); /* Output the saved value, properly escaped for a textarea. */ ?></textarea>
+                    maxlength="<?php echo esc_attr($max_length); ?>"
+                    aria-describedby="mso-ai-description-hint"
+            ><?php echo esc_textarea($value); ?></textarea>
 
-            <p class="description" id="mso-ai_description-hint"> <?php // Hint paragraph linked by aria-describedby. ?>
+            <p class="description" id="mso-ai_description-hint"> <?php // Hint paragraph linked by aria-describedby.
+                ?>
                 <?php
                 // Display recommended length information.
                 printf(
@@ -132,66 +137,58 @@ class MetaBox
                 );
                 ?>
                 <?php esc_html_e('Current count:', 'mso-ai-meta-description'); ?>
-                <span class="mso-ai-char-count">0</span><?php // Span to display the live character count (updated by JS). ?>
-                <span class="mso-ai-length-indicator"></span><?php // Span to display length status (e.g., "Too short", "Good", updated by JS). ?>
+                <span class="mso-ai-char-count">0</span>
+                <span class="mso-ai-length-indicator"></span>
             </p>
 
             <?php
-            // Check if API keys are set in the plugin settings for each provider.
-            $mistral_key_set = !empty(get_option($option_prefix . 'mistral_api_key'));
-            $gemini_key_set = !empty(get_option($option_prefix . 'gemini_api_key'));
-            $openai_key_set = !empty(get_option($option_prefix . 'openai_api_key'));
-            $anthropic_key_set = !empty(get_option($option_prefix . 'anthropic_api_key'));
+            // --- Dynamically find configured providers ---
+            ProviderManager::register_providers_from_directory(); // Ensure providers are loaded
+            $all_providers = ProviderManager::get_providers();
+            $configured_providers = []; // Store providers with API keys set
 
-            // Only show the AI generator section if at least one API key is configured.
-            if ($mistral_key_set || $gemini_key_set || $openai_key_set || $anthropic_key_set) :
+            foreach ($all_providers as $provider) {
+                $provider_name = $provider->get_name();
+                $api_key_option = $option_prefix . $provider_name . '_api_key';
+                if (!empty(get_option($api_key_option))) {
+                    $configured_providers[$provider_name] = $provider; // Add to configured list
+                }
+            }
+            // --- End dynamic check ---
+
+            // Only show the AI generator section if at least one provider is configured.
+            if (!empty($configured_providers)) :
                 ?>
                 <div class="mso-ai-generator">
                     <p><strong><?php esc_html_e('Generate with AI:', 'mso-ai-meta-description'); ?></strong></p>
 
-                    <?php // Conditionally display the button for Mistral if its API key is set. ?>
-                    <?php if ($mistral_key_set) : ?>
-                        <button type="button" id="summarize-mistral" class="button mso-ai-generate-button"
-                                data-provider="mistral" <?php // Data attribute used by JS to identify the provider. ?>>
-                            <?php esc_html_e('Generate with Mistral', 'mso-ai-meta-description'); ?>
+                    <?php
+                    // --- Dynamically render buttons ---
+                    foreach ($configured_providers as $provider_name => $provider) :
+                        // Special label for OpenAI
+                        $provider_title = $provider->get_title();
+                        $button_label = sprintf(
+                            /* translators: %s: Provider title  */
+                                __('Generate with %s', 'mso-ai-meta-description'),
+                                ucfirst($provider_title) // Capitalize the provider name
+                            );
+                        ?>
+                        <button type="button" id="summarize-<?php echo esc_attr($provider_name); ?>"
+                                class="button mso-ai-generate-button"
+                                data-provider="<?php echo esc_attr($provider_name); ?>">
+                            <?php echo esc_html($button_label); ?>
                         </button>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php // --- End dynamic rendering --- ?>
 
-                    <?php // Conditionally display the button for Gemini if its API key is set. ?>
-                    <?php if ($gemini_key_set) : ?>
-                        <button type="button" id="summarize-gemini" class="button mso-ai-generate-button"
-                                data-provider="gemini">
-                            <?php esc_html_e('Generate with Gemini', 'mso-ai-meta-description'); ?>
-                        </button>
-                    <?php endif; ?>
+                    <span class="spinner mso-ai-spinner"></span>
+                    <p id="mso-ai-error" class="mso-ai-error mso-ai-model-error"></p>
 
-                    <?php // Conditionally display the button for OpenAI if its API key is set. ?>
-                    <?php if ($openai_key_set) : ?>
-                        <button type="button" id="summarize-openai" class="button mso-ai-generate-button"
-                                data-provider="openai">
-                            <?php esc_html_e('Generate with ChatGPT', 'mso-ai-meta-description'); ?>
-                        </button>
-                    <?php endif; ?>
-
-                    <?php // Conditionally display the button for OpenAI if its API key is set. ?>
-                    <?php if ($anthropic_key_set) : ?>
-                        <button type="button" id="summarize-anthropic" class="button mso-ai-generate-button"
-                                data-provider="anthropic">
-                            <?php esc_html_e('Generate with Anthropic', 'mso-ai-meta-description'); ?>
-                        </button>
-                    <?php endif; ?>
-
-                    <?php // Spinner element shown during AJAX requests (controlled by JS). ?>
-                    <span class="spinner mso-spinner"></span> <?php // Inline styles to position spinner correctly and hide initially. ?>
-                    <?php // Paragraph to display potential error messages from AJAX requests (controlled by JS). ?>
-                    <p id="mso-ai-error" class="mso-ai-error mso-model-error"></p> <?php // Ensure space even when empty. ?>
-
-                </div> <?php // End mso-ai-generator div ?>
+                </div>
             <?php
-            endif; // End check for any API key set
+            endif; // End check for configured providers
             ?>
-        </div> <?php // End mso-meta-box-wrapper div ?>
-
+        </div>
         <?php
     }
 
@@ -219,18 +216,22 @@ class MetaBox
 
         // 3. Check if the user has permission to edit the post.
         $post_type = get_post_type($post_id); // Get the post type of the post being saved.
-        $post_type_object = get_post_type_object($post_type); // Get the post type object to access capabilities.
+
+        if (!$post_type) {
+            // Could not determine post type, likely invalid post ID.
+            return;
+        }
+
+        $post_type_object = get_post_type_object($post_type);
         // Check if the current user has the 'edit_post' capability for this specific post ID.
-        if (!current_user_can($post_type_object->cap->edit_post, $post_id)) {
-            return; // User does not have permission.
+        if (!$post_type_object || !current_user_can($post_type_object->cap->edit_post, $post_id)) {
+            return;
         }
 
         // 4. Check if our specific meta description field was submitted.
         $field_name = 'mso_ai_add_description'; // This MUST match the 'name' attribute of the textarea.
         if (!isset($_POST[$field_name])) {
             // Field not submitted (e.g., maybe meta box was conditionally hidden).
-            // Depending on requirements, you might want to delete existing meta here,
-            // but returning is safer if the field might legitimately not be present.
             return;
         }
 
@@ -244,7 +245,6 @@ class MetaBox
             delete_post_meta($post_id, $this->meta_key);
         } else {
             // If the submitted value is not empty, update the meta key with the new sanitized value.
-            // update_post_meta() handles both adding and updating.
             update_post_meta($post_id, $this->meta_key, $new_value);
         }
     }

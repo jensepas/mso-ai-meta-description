@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-15 14:43+0200\n"
-"PO-Revision-Date: 2025-04-15 14:43+0200\n"
+"POT-Creation-Date: 2025-04-16 18:42+0200\n"
+"PO-Revision-Date: 2025-04-16 18:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,123 +18,117 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/Admin.php:129
+#: ../includes/Admin.php:141 ../includes/Settings.php:543
 msgid "(Too short)"
 msgstr "(Trop court)"
 
-#: ../includes/Admin.php:130
+#: ../includes/Admin.php:142 ../includes/Settings.php:544
 msgid "(Too long)"
 msgstr "(Trop long)"
 
-#: ../includes/Admin.php:131
+#: ../includes/Admin.php:143 ../includes/Settings.php:545
 msgid "(Good)"
 msgstr "(Bien)"
 
-#: ../includes/Admin.php:136
+#: ../includes/Admin.php:148
 msgid "-- Select a Model --"
 msgstr "-- Sélectionnez un modèle --"
 
-#: ../includes/Admin.php:138
+#: ../includes/Admin.php:150
 msgid "Error loading models."
 msgstr "Erreur lors du chargement des modèles."
 
-#: ../includes/Admin.php:153
+#: ../includes/Admin.php:160
 msgid "Saving..."
 msgstr "Enregistrement…"
 
-#: ../includes/Admin.php:154
+#: ../includes/Admin.php:161
 msgid "Settings Saved"
 msgstr "Paramètres enregistrés"
 
-#: ../includes/Admin.php:155
+#: ../includes/Admin.php:162
 msgid "Error Saving Settings"
 msgstr "Erreur lors de l'enregistrement des paramètres"
 
-#: ../includes/Admin.php:181
+#: ../includes/Admin.php:185
 msgid "Settings"
 msgstr "Réglages"
 
-#: ../includes/Ajax.php:76 ../includes/Ajax.php:135
+#: ../includes/Ajax.php:78 ../includes/Ajax.php:139
 msgid "Invalid nonce."
 msgstr "Nonce non valide."
 
-#: ../includes/Ajax.php:82 ../includes/Ajax.php:140
+#: ../includes/Ajax.php:84 ../includes/Ajax.php:144
+#: ../includes/Settings.php:300
 msgid "Permission denied."
 msgstr "Permission refusée."
 
-#: ../includes/Ajax.php:92
+#: ../includes/Ajax.php:94
 msgid "Content cannot be empty."
 msgstr "Le contenu ne peut pas être vide."
 
-#: ../includes/Ajax.php:96
+#: ../includes/Ajax.php:98
 msgid "Invalid AI provider specified."
 msgstr "Fournisseur d'IA non valide spécifié."
 
-#: ../includes/Ajax.php:149
+#: ../includes/Ajax.php:153
 msgid "Invalid API type specified."
 msgstr "Type d'API spécifié non valide."
 
-#: ../includes/Api/ApiClient.php:50 ../includes/Api/ApiClient.php:79
+#: ../includes/Api/ApiClient.php:52 ../includes/Api/ApiClient.php:83
 #, php-format
 msgid "AI provider \"%s\" is not registered or supported."
 msgstr "Le fournisseur d'IA \"%s\" n'est pas enregistré ni pris en charge."
 
-#: ../includes/MetaBox.php:79
+#: ../includes/MetaBox.php:82
 msgid "MSO AI Meta Description"
 msgstr "MSO AI Meta Description"
 
-#: ../includes/MetaBox.php:112 ../includes/Settings.php:92
+#: ../includes/MetaBox.php:116 ../includes/Settings.php:66
 msgid "Meta Description"
 msgstr "Méta description"
 
-#: ../includes/MetaBox.php:129
+#: ../includes/MetaBox.php:134
 #, php-format
 msgid "Recommended length: %1$d-%2$d characters."
 msgstr "Longueur recommandée : %1$d-%2$d caractères."
 
-#: ../includes/MetaBox.php:134
+#: ../includes/MetaBox.php:139
 msgid "Current count:"
 msgstr "Nombre actuel :"
 
-#: ../includes/MetaBox.php:150
+#: ../includes/MetaBox.php:163
 msgid "Generate with AI:"
 msgstr "Générer avec l'IA :"
 
-#: ../includes/MetaBox.php:156
-msgid "Generate with Mistral"
-msgstr "Générer avec Mistral"
-
-#: ../includes/MetaBox.php:164
-msgid "Generate with Gemini"
-msgstr "Générer avec Gemini"
-
 #: ../includes/MetaBox.php:172
-msgid "Generate with ChatGPT"
-msgstr "Générer avec ChatGPT"
+#, php-format
+msgid "Generate with %s"
+msgstr "Générer avec %s"
 
-#: ../includes/MetaBox.php:180
-msgid "Generate with Anthropic"
-msgstr "Générer avec Anthropic"
-
-#: ../includes/Providers/AbstractProvider.php:55
+#: ../includes/Providers/AbstractProvider.php:57
 #, php-format
 msgid "API key for %s is not set."
 msgstr "API key for %s is not set."
 
-#: ../includes/Providers/AbstractProvider.php:130
+#: ../includes/Providers/AbstractProvider.php:105
+msgid "Failed to encode request body."
+msgstr "Échec de l'encodage du corps de la requête."
+
+#: ../includes/Providers/AbstractProvider.php:138
 msgid "Unknown API error occurred."
 msgstr "Une erreur API inconnue s'est produite."
 
-#: ../includes/Providers/AbstractProvider.php:144
+#: ../includes/Providers/AbstractProvider.php:155
 #, php-format
 msgid "%1$s API Error (%2$d): %3$s"
 msgstr "Erreur API %1$s (%2$d) : %3$s"
 
-#: ../includes/Providers/AbstractProvider.php:162
+#: ../includes/Providers/AbstractProvider.php:173
 msgid "Failed to decode API response."
 msgstr "Échec du décodage de la réponse de l'API."
 
-#: ../includes/Providers/AbstractProvider.php:179
+#: ../includes/Providers/AbstractProvider.php:202
 #, php-format
 msgid ""
 "Summarize the following text into a concise meta description between %1$d "
@@ -149,161 +143,93 @@ msgstr ""
 "de phrase. N'affichez que le texte de description, sans phrases "
 "d'introduction telles que \"Voici le résumé :\" : %3$s"
 
-#: ../includes/Providers/Available/AnthropicProvider.php:79
-msgid "Unable to parse model list from Anthropic: \"data\" array missing."
+#: ../includes/Providers/Available/AnthropicProvider.php:117
+#: ../includes/Providers/Available/GeminiProvider.php:111
+#: ../includes/Providers/Available/MistralProvider.php:117
+#: ../includes/Providers/Available/OpenAIProvider.php:118
+#, php-format
+msgid "Unable to parse model list from %1$d: \"models\" array missing."
 msgstr ""
-"Impossible d'analyser la liste des modèles de Anthropic: tableau \"data\" "
+"Impossible d'analyser la liste des modèles de %1$d : tableau \"modèles\" "
 "manquant."
 
-#: ../includes/Providers/Available/AnthropicProvider.php:116
-msgid "Anthropic response missing expected summary data."
-msgstr "Réponse Anthropic manquante des données récapitulatives attendues."
-
-#: ../includes/Providers/Available/GeminiProvider.php:61
-msgid "Unable to parse model list from Gemini: \"models\" array missing."
+#: ../includes/Providers/Available/AnthropicProvider.php:177
+#: ../includes/Providers/Available/GeminiProvider.php:183
+#: ../includes/Providers/Available/MistralProvider.php:170
+#: ../includes/Providers/Available/OpenAIProvider.php:190
+#, php-format
+msgid "%1$d response missing expected summary data or invalid format."
 msgstr ""
-"Impossible d'analyser la liste des modèles de Gemini : tableau \"modèles\" "
-"manquant."
+"%1$d réponse manquante dans les données récapitulatives attendues ou format "
+"non valide."
 
-#: ../includes/Providers/Available/GeminiProvider.php:109
-msgid "Gemini response missing expected summary data."
-msgstr "Réponse Gemini manquante de données récapitulatives attendues."
-
-#: ../includes/Providers/Available/MistralProvider.php:50
-msgid "Unable to parse model list from Mistral: \"data\" array missing."
-msgstr ""
-"Impossible d'analyser la liste des modèles de Mistral : tableau \"data\" "
-"manquant."
-
-#: ../includes/Providers/Available/MistralProvider.php:80
-msgid "Mistral response missing expected summary data."
-msgstr "Réponse Mistral manquante données récapitulatives attendues."
-
-#: ../includes/Providers/Available/OpenAIProvider.php:63
-msgid "Unable to parse model list from OpenAI: \"data\" array missing."
-msgstr ""
-"Impossible d'analyser la liste des modèles d'OpenAI : tableau \"data\" "
-"manquant."
-
-#: ../includes/Providers/Available/OpenAIProvider.php:101
-msgid "OpenAI response missing expected summary data."
-msgstr "Réponse OpenAI manquante dans les données récapitulatives attendues."
-
-#: ../includes/Settings.php:91
+#: ../includes/Settings.php:65
 msgid "MSO AI Meta Description Settings"
 msgstr "MSO AI Meta Description Paramètres Personnalisés"
 
-#: ../includes/Settings.php:179
+#: ../includes/Settings.php:90
+msgid "No AI providers found or loaded."
+msgstr "Aucun fournisseur d'IA trouvé ou chargé."
+
+#: ../includes/Settings.php:152
 msgid "Save Changes"
 msgstr "Enregistrer les modifications"
 
-#: ../includes/Settings.php:194
+#: ../includes/Settings.php:164
 msgid "Invalid nonce specified."
 msgstr "Nonce non valide spécifié."
 
-#: ../includes/Settings.php:194
+#: ../includes/Settings.php:164
 msgid "Error"
 msgstr "Erreur"
 
-#: ../includes/Settings.php:209
-msgid "Mistral Settings"
-msgstr "Paramètres Mistral"
+#: ../includes/Settings.php:186
+#, php-format
+msgid "%s Settings"
+msgstr "Paramètres %s"
 
-#: ../includes/Settings.php:210
-msgid "Gemini Settings"
-msgstr "Paramètres Gemini"
-
-#: ../includes/Settings.php:211
-msgid "OpenAI Settings"
-msgstr "Paramètres OpenAI"
-
-#: ../includes/Settings.php:212
-msgid "Anthropic Settings"
-msgstr "Paramètres Anthropic"
+#: ../includes/Settings.php:244
+#, php-format
+msgid "%s API Key"
+msgstr "Clé API %s"
 
 #: ../includes/Settings.php:256
-msgid "Mistral API Key"
-msgstr "Clé API Mistral"
+#, php-format
+msgid "%s Model"
+msgstr "Modèle %s"
 
-#: ../includes/Settings.php:257
-msgid "Mistral Model"
-msgstr "Modèle Mistral"
-
-#: ../includes/Settings.php:261
-msgid "Gemini API Key"
-msgstr "Clé API Gemini"
-
-#: ../includes/Settings.php:262
-msgid "Gemini Model"
-msgstr "Modèle Gemini"
-
-#: ../includes/Settings.php:266
-msgid "OpenAI (ChatGPT) API Key"
-msgstr "Clé API OpenAI (ChatGPT)"
-
-#: ../includes/Settings.php:267
-msgid "OpenAI Model"
-msgstr "Modèle OpenAI"
-
-#: ../includes/Settings.php:271
-msgid "Anthropic API Key"
-msgstr "Clé API Anthropic"
-
-#: ../includes/Settings.php:272
-msgid "Anthropic AI Model"
-msgstr "Modèle Anthropic"
-
-#: ../includes/Settings.php:298
+#: ../includes/Settings.php:281
 msgid "Front page meta description"
 msgstr "Balise méta description de la page"
 
-#: ../includes/Settings.php:319
-msgid "You do not have permission to save these settings."
-msgstr "Vous n'avez pas l'autorisation d'enregistrer ces paramètres."
+#: ../includes/Settings.php:306
+msgid "Missing active tab identifier."
+msgstr "Identifiant d'onglet actif manquant."
 
-#: ../includes/Settings.php:329
-msgid "Could not determine which settings tab to save."
-msgstr "Impossible de déterminer quel onglet de paramètres enregistrer."
-
-#: ../includes/Settings.php:366
+#: ../includes/Settings.php:318
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr "Onglet Paramètres inconnus : %s"
 
-#: ../includes/Settings.php:400
-msgid "Settings saved with validation errors."
-msgstr "Paramètres enregistrés avec des erreurs de validation."
-
-#: ../includes/Settings.php:407
+#: ../includes/Settings.php:373
 msgid "Settings saved successfully."
 msgstr "Paramètres enregistrés avec succès."
 
-#: ../includes/Settings.php:424
-msgid "Configure the settings for using the Mistral API."
-msgstr "Configurez les paramètres d'utilisation de l'API Mistral."
+#: ../includes/Settings.php:395
+#, php-format
+msgid "Configure the settings for using the %s API."
+msgstr "Configurez les paramètres d’utilisation de l’API %s."
 
-#: ../includes/Settings.php:427
-msgid "Configure the settings for using the Google Gemini API."
-msgstr "Configurez les paramètres d’utilisation de l’API Google Gemini."
-
-#: ../includes/Settings.php:430
-msgid "Configure the settings for using the OpenAI API."
-msgstr "Configurez les paramètres d’utilisation de l’API OpenAI."
-
-#: ../includes/Settings.php:433
-msgid "Configure the settings for using the Anthropic API."
-msgstr "Configurez les paramètres d’utilisation de l’API Anthropic."
-
-#: ../includes/Settings.php:498
+#: ../includes/Settings.php:451
 #, php-format
 msgid "Get your %s API key"
 msgstr "Obtenez votre clé API %s"
 
-#: ../includes/Settings.php:528
+#: ../includes/Settings.php:477
 msgid "Loading models..."
 msgstr "Chargement des modèles..."
 
-#: ../includes/Settings.php:544
+#: ../includes/Settings.php:492
 #, php-format
 msgid ""
 "Select the %s model to use. Models loaded dynamically if API key is valid."
@@ -311,7 +237,7 @@ msgstr ""
 "Sélectionnez le modèle %s à utiliser. Les modèles sont chargés dynamiquement "
 "si la clé API est valide."
 
-#: ../includes/Settings.php:582
+#: ../includes/Settings.php:522
 #, php-format
 msgid ""
 "Enter the meta description for the site's front page when it displays the "
@@ -320,9 +246,93 @@ msgstr ""
 "Saisissez la méta-description de la page d'accueil du site pour afficher les "
 "derniers articles. Longueur recommandée : %1$d-%2$d caractères."
 
-#: ../includes/Settings.php:586
-msgid "Character count"
-msgstr "Nombre de caractères"
+#: ../includes/Settings.php:526
+msgid "Character count:"
+msgstr "Nombre de caractères :"
+
+#~ msgid "Generate with Mistral"
+#~ msgstr "Générer avec Mistral"
+
+#~ msgid "Generate with Gemini"
+#~ msgstr "Générer avec Gemini"
+
+#~ msgid "Generate with ChatGPT"
+#~ msgstr "Générer avec ChatGPT"
+
+#~ msgid "Generate with Anthropic"
+#~ msgstr "Générer avec Anthropic"
+
+#~ msgid "Unable to parse model list from Anthropic: \"data\" array missing."
+#~ msgstr ""
+#~ "Impossible d'analyser la liste des modèles de Anthropic: tableau \"data\" "
+#~ "manquant."
+
+#~ msgid "Unable to parse model list from Mistral: \"data\" array missing."
+#~ msgstr ""
+#~ "Impossible d'analyser la liste des modèles de Mistral : tableau \"data\" "
+#~ "manquant."
+
+#~ msgid "Unable to parse model list from OpenAI: \"data\" array missing."
+#~ msgstr ""
+#~ "Impossible d'analyser la liste des modèles d'OpenAI : tableau \"data\" "
+#~ "manquant."
+
+#~ msgid "Anthropic response missing expected summary data."
+#~ msgstr "Réponse Anthropic manquante des données récapitulatives attendues."
+
+#~ msgid "Gemini response missing expected summary data."
+#~ msgstr "Réponse Gemini manquante de données récapitulatives attendues."
+
+#~ msgid "Mistral response missing expected summary data."
+#~ msgstr "Réponse Mistral manquante données récapitulatives attendues."
+
+#~ msgid "Mistral Settings"
+#~ msgstr "Paramètres Mistral"
+
+#~ msgid "Gemini Settings"
+#~ msgstr "Paramètres Gemini"
+
+#~ msgid "OpenAI Settings"
+#~ msgstr "Paramètres OpenAI"
+
+#~ msgid "Anthropic Settings"
+#~ msgstr "Paramètres Anthropic"
+
+#~ msgid "Gemini API Key"
+#~ msgstr "Clé API Gemini"
+
+#~ msgid "Gemini Model"
+#~ msgstr "Modèle Gemini"
+
+#~ msgid "OpenAI (ChatGPT) API Key"
+#~ msgstr "Clé API OpenAI (ChatGPT)"
+
+#~ msgid "OpenAI Model"
+#~ msgstr "Modèle OpenAI"
+
+#~ msgid "Anthropic API Key"
+#~ msgstr "Clé API Anthropic"
+
+#~ msgid "Anthropic AI Model"
+#~ msgstr "Modèle Anthropic"
+
+#~ msgid "You do not have permission to save these settings."
+#~ msgstr "Vous n'avez pas l'autorisation d'enregistrer ces paramètres."
+
+#~ msgid "Could not determine which settings tab to save."
+#~ msgstr "Impossible de déterminer quel onglet de paramètres enregistrer."
+
+#~ msgid "Settings saved with validation errors."
+#~ msgstr "Paramètres enregistrés avec des erreurs de validation."
+
+#~ msgid "Configure the settings for using the Google Gemini API."
+#~ msgstr "Configurez les paramètres d’utilisation de l’API Google Gemini."
+
+#~ msgid "Configure the settings for using the OpenAI API."
+#~ msgstr "Configurez les paramètres d’utilisation de l’API OpenAI."
+
+#~ msgid "Configure the settings for using the Anthropic API."
+#~ msgstr "Configurez les paramètres d’utilisation de l’API Anthropic."
 
 #~ msgid "API key for Gemini is not set."
 #~ msgstr "La clé API pour Gemini n'est pas définie."

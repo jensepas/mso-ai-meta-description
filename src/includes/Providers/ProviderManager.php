@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description ProviderManager
  *
@@ -9,13 +10,17 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description\Providers;
 
-use FilesystemIterator; // Used for directory iteration options.
-use GlobIterator; // Used for finding files matching a pattern.
-use MSO_AI_Meta_Description\Utils\Logger;
-use ReflectionClass; // Used for inspecting classes to ensure they implement the interface.
-use Exception; // Import base Exception class for catching errors during reflection/instantiation.
+use Exception; // Used for directory iteration options.
+use FilesystemIterator; // Used for finding files matching a pattern.
+use GlobIterator;
+use MSO_AI_Meta_Description\Utils\Logger; // Used for inspecting classes to ensure they implement the interface.
+use ReflectionClass;
+use SplFileInfo;
+
+// Import base Exception class for catching errors during reflection/instantiation.
 
 /**
  * Manages AI provider instances.
@@ -43,9 +48,9 @@ class ProviderManager
     public static function register_provider(ProviderInterface $provider): void
     {
         // Optional: Log if overriding an existing provider with the same name
-         if (isset(self::$providers[$provider->get_name()])) {
-             Logger::debug('Overriding registered provider', ['name' => $provider->get_name()]);
-         }
+        if (isset(self::$providers[$provider->get_name()])) {
+            Logger::debug('Overriding registered provider', ['name' => $provider->get_name()]);
+        }
 
         // Store the provider instance in the static array using its name as the key.
         self::$providers[$provider->get_name()] = $provider;
@@ -96,8 +101,9 @@ class ProviderManager
         $providers_dir = __DIR__ . '/Available/';
 
         // Check if the directory exists before attempting to scan it.
-        if (!is_dir($providers_dir)) {
+        if (! is_dir($providers_dir)) {
             self::$providers_registered = true;
+
             return;
         }
 
@@ -107,6 +113,11 @@ class ProviderManager
 
         // Iterate through each found PHP file.
         foreach ($iterator as $path => $fileInfo) {
+
+            if (! $fileInfo instanceof SplFileInfo) {
+                continue;
+            }
+
             // Double-check if it's a file and readable (though GlobIterator usually handles this).
             if ($fileInfo->isFile() && $fileInfo->isReadable()) {
                 // Include the provider file. Use require_once to prevent fatal errors if included elsewhere.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description Uninstall
  *
@@ -12,7 +13,7 @@
 
 // Exit if uninstall.php is not called by WordPress.
 // WP_UNINSTALL_PLUGIN is defined by WordPress only when uninstalling a plugin.
-if (!defined('WP_UNINSTALL_PLUGIN')) {
+if (! defined('WP_UNINSTALL_PLUGIN')) {
     die; // Protects the script from direct access.
 }
 
@@ -32,7 +33,7 @@ function mso_ai_meta_description_uninstall_site(): void
     // It's generally safer to hardcode these critical keys in uninstall.php
     // because the main plugin files are not loaded during uninstallation.
     $option_prefix = 'mso_ai_meta_description_'; // Prefix used for plugin options.
-    $meta_key      = '_mso_ai_meta_description'; // The meta key used for storing descriptions on posts/pages.
+    $meta_key = '_mso_ai_meta_description'; // The meta key used for storing descriptions on posts/pages.
 
     // --- Delete Plugin Options ---
 
@@ -64,18 +65,6 @@ function mso_ai_meta_description_uninstall_site(): void
     // This is more efficient than querying all posts and deleting meta individually.
     // Requires WordPress 3.4+ (Plugin requires 6.0+, so this is safe).
     delete_post_meta_by_key($meta_key);
-
-    // --- Delete Custom Tables (Example - If you had custom tables) ---
-    /*
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'mso_ai_custom_data'; // Example table name
-    $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
-    */
-
-    // --- Delete Scheduled Cron Events (Example - If you had cron jobs) ---
-    /*
-    wp_clear_scheduled_hook('mso_ai_daily_cron_event');
-    */
 }
 
 // --- Handle Multisite ---
@@ -84,7 +73,7 @@ function mso_ai_meta_description_uninstall_site(): void
 if (is_multisite()) {
     // Get all site (blog) IDs within the network.
     // 'fields' => 'ids' returns an array of IDs directly.
-    $site_ids = get_sites(['fields' => 'ids', 'network_id' => null, 'deleted' => 0, 'archived' => 0]); // Ensure we get active sites
+    $site_ids = get_sites(['fields' => 'ids']); // Ensure we get active sites
 
     // Iterate through each site ID in the network.
     foreach ($site_ids as $site_id) {

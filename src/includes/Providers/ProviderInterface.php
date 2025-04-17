@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description ProviderInterface
  *
@@ -9,6 +10,7 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description\Providers;
 
 use WP_Error; // Used for type hinting in method signatures.
@@ -32,13 +34,20 @@ interface ProviderInterface
     public function get_name(): string;
 
     /**
+     * Get the title for this provider.
+     *
+     * @return string The unique name of the provider.
+     */
+    public function get_title(): string;
+
+    /**
      * Fetches the list of available models supported by this provider's API.
      *
      * This method should make an API call to retrieve model information.
      * It should filter or format the results as needed for display in the plugin settings
      * (e.g., returning an array where each item has 'id' and 'displayName').
      *
-     * @return array|WP_Error An array of model data on success, or a WP_Error object on failure.
+     * @return array<string, string>|WP_Error An array of model data on success, or a WP_Error object on failure.
      *                        The array format should be consistent, e.g., [['id' => 'model-1', 'displayName' => 'Model 1'], ...].
      */
     public function fetch_models(): array|WP_Error;

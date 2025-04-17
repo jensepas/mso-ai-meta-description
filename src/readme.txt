@@ -1,8 +1,8 @@
 === MSO AI Meta Description: Custom Meta Descriptions with AI ===
 Contributors: jensepas
 Tags: meta description, seo, AI, Gemini Mistral OpenAI ChatGPT Anthropic
-Requires at least: 6.0
-Tested up to: 6.7
+Requires at least: 6.7
+Tested up to: 6.8
 Stable tag: 1.3.0
 Requires PHP: 8.1
 License: GPLv2 or later

@@ -44,4 +44,4 @@ jobs:
         run: npm install eslint --global
 
       - name: Run ESLint
-        run: npx eslint "assets/**/*.js"
+        run: npx eslint "src/assets/**/*.js"

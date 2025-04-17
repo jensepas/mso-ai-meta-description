@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description Admin Class
  *
@@ -10,10 +11,13 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+use MSO_AI_Meta_Description\Providers\ProviderManager;
+
+if (! defined('ABSPATH')) {
     die;
 }
 
@@ -89,46 +93,54 @@ class Admin
         $is_post_edit_page = $screen && $screen->base === 'post';
         // Determine if the current page is the plugin's settings page.
         // Note: The hook suffix for pages added via add_options_page is 'settings_page_{menu_slug}'.
-        $is_settings_page = $hook_suffix === $screen->id; // Use constant from Settings class
+        $settings_page_hook = 'toplevel_page_' . Settings::PAGE_SLUG;
+        $is_settings_page = $hook_suffix === $settings_page_hook; // Use constant from Settings class
 
         // Only proceed if we are on a relevant admin page.
-        if (!$is_post_edit_page && !$is_settings_page) {
+        if (! $is_post_edit_page && ! $is_settings_page) {
             return; // Exit early if not on a relevant page.
         }
 
         // Enqueue the main admin JavaScript file.
         wp_enqueue_script(
-            'mso-ai-admin-script', // Unique handle for the script.
-            // Get the URL for the script file relative to the plugin's root directory.
+            'mso-ai-admin-script',
             plugin_dir_url(dirname(__FILE__)) . 'assets/js/mso-ai-main.js',
-            ['jquery'], // Dependencies: This script requires jQuery.
-            // Add file modification time as version number for cache busting.
-            filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/js/mso-ai-main.js'),
-            true // Load the script in the footer.
+            ['jquery'],
+            MSO_AI_Meta_Description::VERSION,
+            true
         );
 
         // Enqueue the admin CSS file.
         wp_enqueue_style(
-            'mso-ai-admin-style', // Unique handle for the stylesheet.
-            // Get the URL for the CSS file relative to the plugin's root directory.
-            plugin_dir_url(dirname(__FILE__)) . 'assets/css/mso-ai-admin.css', // Adjusted path
-            [], // Dependencies: No CSS dependencies.
-            // Add file modification time as version number for cache busting.
-            filemtime(plugin_dir_path(dirname(__FILE__)) . 'assets/css/mso-ai-admin.css') // Adjusted path
+            'mso-ai-admin-style',
+            plugin_dir_url(dirname(__FILE__)) . 'assets/css/mso-ai-admin.css',
+            [],
+            MSO_AI_Meta_Description::VERSION
         );
+
+        // --- Dynamically build selected models array ---
+        $selected_models = [];
+        // Ensure providers are loaded before trying to get them
+        ProviderManager::register_providers_from_directory();
+        $providers = ProviderManager::get_providers();
+        $option_prefix = MSO_AI_Meta_Description::get_option_prefix();
+
+        foreach ($providers as $provider) {
+            $provider_name = $provider->get_name();
+            $option_name = $option_prefix . $provider_name . '_model';
+            // Get the saved model for this provider, default to empty string if not set
+            $selected_models[$provider_name] = (string) get_option($option_name, '');
+        }
 
         // Prepare an array of PHP variables to pass to the JavaScript file ('mso-ai-admin-script').
         $script_vars = [
             // Pass selected models (or defaults) from settings.
-            'geminiModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'gemini_model'),
-            'mistralModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'mistral_model'),
-            'openaiModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'openai_model'),
-            'anthropicModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'anthropic_model'),
+            'selectedModels' => $selected_models,
             // Localized strings for character count status messages.
             'status' => [
                 __('(Too short)', 'mso-ai-meta-description'),
                 __('(Too long)', 'mso-ai-meta-description'),
-                __('(Good)', 'mso-ai-meta-description')
+                __('(Good)', 'mso-ai-meta-description'),
             ],
             // URL for WordPress AJAX requests.
             'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -138,11 +150,6 @@ class Admin
             'errorLoadingModels' => __('Error loading models.', 'mso-ai-meta-description'),
             // Security nonce for AJAX requests initiated by this script.
             'nonce' => wp_create_nonce(MSO_AI_Meta_Description::AJAX_NONCE_ACTION), // Use constant defined in main plugin file or Ajax class
-            // Boolean flags indicating if API keys have been set (useful for enabling/disabling UI elements).
-            'geminiApiKeySet' => !empty(get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'gemini_api_key')),
-            'mistralApiKeySet' => !empty(get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'mistral_api_key')),
-            'openaiApiKeySet' => !empty(get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'openai_api_key')),
-            'anthropicApiKeySet' => !empty(get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'anthropic_api_key')),
             // Pass the currently selected models again (might be redundant if already passed above, but can be useful for specific JS logic).
             'selectedGeminiModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'gemini_model'),
             'selectedMistralModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'mistral_model'),
@@ -157,9 +164,6 @@ class Admin
 
         // Make the PHP variables available in JavaScript under the 'msoAiScriptVars' object.
         wp_localize_script('mso-ai-admin-script', 'msoAiScriptVars', $script_vars);
-
-        // Optional: Enqueue other specific admin CSS if needed.
-        // wp_enqueue_style('mso-ai-admin-style', plugin_dir_url(dirname(__FILE__)) . 'css/admin-style.css', [], MSO_AI_Meta_Description::VERSION);
     }
 
     /**
@@ -167,14 +171,14 @@ class Admin
      *
      * This method is typically hooked into 'plugin_action_links_{plugin_basename}'.
      *
-     * @param array $links An array of existing plugin action links (e.g., Activate, Deactivate, Edit).
-     * @return array An updated array of plugin action links including the new Settings link.
+     * @param array<string, string> $links An array of existing plugin action links (e.g., Activate, Deactivate, Edit).
+     * @return array<int|string, string> An updated array of plugin action links including the new Settings link.
      */
     public function add_settings_link(array $links): array
     {
         // Create the HTML for the settings link.
         $settings_link = sprintf(
-        // Use admin_url() to generate the correct URL for the settings page.
+            // Use admin_url() to generate the correct URL for the settings page.
             '<a href="%s">%s</a>',
             esc_url(admin_url('admin.php?page=' . Settings::PAGE_SLUG)), // Use constant for page slug
             // Localized text for the link.
@@ -182,6 +186,7 @@ class Admin
         );
         // Add the new settings link to the beginning of the links array.
         array_unshift($links, $settings_link);
+
         // Return the modified links array.
         return $links;
     }

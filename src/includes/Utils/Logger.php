@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MSO AI Meta Description Logger Utility
  *
@@ -7,6 +8,7 @@
  * @package MSO_AI_Meta_Description
  * @since   1.3.0
  */
+
 namespace MSO_AI_Meta_Description\Utils;
 
 /**
@@ -58,7 +60,7 @@ class Logger
      *
      * @param string $level   The log level ('DEBUG', 'ERROR', 'INFO').
      * @param string $message The main log message.
-     * @param array  $context The context data array.
+     * @param array<int|string, mixed>  $context The context data array.
      */
     private static function log_message(string $level, string $message, array $context): void
     {
@@ -68,7 +70,7 @@ class Logger
             $log_entry = sprintf('[MSO AI Meta Description %s] %s', $level, $message);
 
             // If additional context data is provided...
-            if (!empty($context)) {
+            if (! empty($context)) {
                 // Convert the context into a readable string (uses print_r for arrays/objects).
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Used to serialize context data for logging purposes.
                 $context_str = print_r($context, true);
@@ -82,5 +84,4 @@ class Logger
             error_log($log_entry);
         }
     }
-
 } // End class Logger

@@ -1,0 +1,229 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MSO AI Meta Description\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-16 18:42+0200\n"
+"PO-Revision-Date: 2015-07-09 16:19+0100\n"
+"Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_html__;esc_html_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: ../includes/Admin.php:141 ../includes/Settings.php:543
+msgid "(Too short)"
+msgstr ""
+
+#: ../includes/Admin.php:142 ../includes/Settings.php:544
+msgid "(Too long)"
+msgstr ""
+
+#: ../includes/Admin.php:143 ../includes/Settings.php:545
+msgid "(Good)"
+msgstr ""
+
+#: ../includes/Admin.php:148
+msgid "-- Select a Model --"
+msgstr ""
+
+#: ../includes/Admin.php:150
+msgid "Error loading models."
+msgstr ""
+
+#: ../includes/Admin.php:160
+msgid "Saving..."
+msgstr ""
+
+#: ../includes/Admin.php:161
+msgid "Settings Saved"
+msgstr ""
+
+#: ../includes/Admin.php:162
+msgid "Error Saving Settings"
+msgstr ""
+
+#: ../includes/Admin.php:185
+msgid "Settings"
+msgstr ""
+
+#: ../includes/Ajax.php:78 ../includes/Ajax.php:139
+msgid "Invalid nonce."
+msgstr ""
+
+#: ../includes/Ajax.php:84 ../includes/Ajax.php:144
+#: ../includes/Settings.php:300
+msgid "Permission denied."
+msgstr ""
+
+#: ../includes/Ajax.php:94
+msgid "Content cannot be empty."
+msgstr ""
+
+#: ../includes/Ajax.php:98
+msgid "Invalid AI provider specified."
+msgstr ""
+
+#: ../includes/Ajax.php:153
+msgid "Invalid API type specified."
+msgstr ""
+
+#: ../includes/Api/ApiClient.php:52 ../includes/Api/ApiClient.php:83
+#, php-format
+msgid "AI provider \"%s\" is not registered or supported."
+msgstr ""
+
+#: ../includes/MetaBox.php:82
+msgid "MSO AI Meta Description"
+msgstr ""
+
+#: ../includes/MetaBox.php:116 ../includes/Settings.php:66
+msgid "Meta Description"
+msgstr ""
+
+#: ../includes/MetaBox.php:134
+#, php-format
+msgid "Recommended length: %1$d-%2$d characters."
+msgstr ""
+
+#: ../includes/MetaBox.php:139
+msgid "Current count:"
+msgstr ""
+
+#: ../includes/MetaBox.php:163
+msgid "Generate with AI:"
+msgstr ""
+
+#: ../includes/MetaBox.php:172
+#, php-format
+msgid "Generate with %s"
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:57
+#, php-format
+msgid "API key for %s is not set."
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:105
+msgid "Failed to encode request body."
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:138
+msgid "Unknown API error occurred."
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:155
+#, php-format
+msgid "%1$s API Error (%2$d): %3$s"
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:173
+msgid "Failed to decode API response."
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:202
+#, php-format
+msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
+msgstr ""
+
+#: ../includes/Providers/Available/AnthropicProvider.php:117
+#: ../includes/Providers/Available/GeminiProvider.php:111
+#: ../includes/Providers/Available/MistralProvider.php:117
+#: ../includes/Providers/Available/OpenAIProvider.php:118
+#, php-format
+msgid "Unable to parse model list from %1$d: \"models\" array missing."
+msgstr ""
+
+#: ../includes/Providers/Available/AnthropicProvider.php:177
+#: ../includes/Providers/Available/GeminiProvider.php:183
+#: ../includes/Providers/Available/MistralProvider.php:170
+#: ../includes/Providers/Available/OpenAIProvider.php:190
+#, php-format
+msgid "%1$d response missing expected summary data or invalid format."
+msgstr ""
+
+#: ../includes/Settings.php:65
+msgid "MSO AI Meta Description Settings"
+msgstr ""
+
+#: ../includes/Settings.php:90
+msgid "No AI providers found or loaded."
+msgstr ""
+
+#: ../includes/Settings.php:152
+msgid "Save Changes"
+msgstr ""
+
+#: ../includes/Settings.php:164
+msgid "Invalid nonce specified."
+msgstr ""
+
+#: ../includes/Settings.php:164
+msgid "Error"
+msgstr ""
+
+#: ../includes/Settings.php:186
+#, php-format
+msgid "%s Settings"
+msgstr ""
+
+#: ../includes/Settings.php:244
+#, php-format
+msgid "%s API Key"
+msgstr ""
+
+#: ../includes/Settings.php:256
+#, php-format
+msgid "%s Model"
+msgstr ""
+
+#: ../includes/Settings.php:281
+msgid "Front page meta description"
+msgstr ""
+
+#: ../includes/Settings.php:306
+msgid "Missing active tab identifier."
+msgstr ""
+
+#: ../includes/Settings.php:318
+#, php-format
+msgid "Unknown settings tab: %s"
+msgstr ""
+
+#: ../includes/Settings.php:373
+msgid "Settings saved successfully."
+msgstr ""
+
+#: ../includes/Settings.php:395
+#, php-format
+msgid "Configure the settings for using the %s API."
+msgstr ""
+
+#: ../includes/Settings.php:451
+#, php-format
+msgid "Get your %s API key"
+msgstr ""
+
+#: ../includes/Settings.php:477
+msgid "Loading models..."
+msgstr ""
+
+#: ../includes/Settings.php:492
+#, php-format
+msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
+msgstr ""
+
+#: ../includes/Settings.php:522
+#, php-format
+msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
+msgstr ""
+
+#: ../includes/Settings.php:526
+msgid "Character count:"
+msgstr ""
