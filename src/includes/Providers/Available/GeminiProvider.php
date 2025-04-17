@@ -8,7 +8,7 @@
  * Extends AbstractProvider for common functionality.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers\Available;
@@ -55,6 +55,16 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
     {
         // Base URL for the Google Generative Language API (v1 beta).
         return 'https://generativelanguage.googleapis.com/v1beta/';
+    }
+
+    /**
+     * Returns the base URL for the Anthropic API key.
+     *
+     * @return string
+     */
+    public function get_url_api_key(): string
+    {
+        return 'https://aistudio.google.com';
     }
 
     /**

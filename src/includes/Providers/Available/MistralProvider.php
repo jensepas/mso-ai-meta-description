@@ -8,7 +8,7 @@
  * Extends AbstractProvider for common functionality.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers\Available;
@@ -54,6 +54,16 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     protected function get_api_base(): string
     {
         return 'https://api.mistral.ai/v1/';
+    }
+
+    /**
+     * Returns the base URL for the Anthropic API key.
+     *
+     * @return string
+     */
+    public function get_url_api_key(): string
+    {
+        return 'https://console.mistral.ai';
     }
 
     /**

@@ -8,7 +8,7 @@
  * and makes them available throughout the plugin.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers;
@@ -170,5 +170,15 @@ class ProviderManager
 
         // Mark the registration process as complete for this request.
         self::$providers_registered = true;
+    }
+    /**
+     * Gets the names of all registered providers.
+     *
+     * @return string[] An array of provider names (e.g., ['gemini', 'mistral']).
+     */
+    public static function get_provider_names(): array
+    {
+        self::register_providers_from_directory(); // Ensure loaded
+        return array_keys(self::$providers);
     }
 }

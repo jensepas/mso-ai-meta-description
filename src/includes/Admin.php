@@ -9,13 +9,13 @@
  * - Adding a settings link to the plugin list page.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description;
 
 // Exit if accessed directly.
-use MSO_AI_Meta_Description\Providers\ProviderManager;
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
 
 if (! defined('ABSPATH')) {
     die;
@@ -39,17 +39,25 @@ class Admin
     private MetaBox $meta_box;
 
     /**
+     * Providers.
+     * @var array<ProviderInterface>
+     */
+    private array $providers;
+
+    /**
      * Constructor.
      *
      * Injects dependencies for Settings and MetaBox classes.
      *
      * @param Settings $settings The Settings class instance.
      * @param MetaBox  $meta_box The MetaBox class instance.
+     * @param array<ProviderInterface> $providers.
      */
-    public function __construct(Settings $settings, MetaBox $meta_box)
+    public function __construct(Settings $settings, MetaBox $meta_box, array $providers)
     {
         $this->settings = $settings;
         $this->meta_box = $meta_box;
+        $this->providers = $providers;
     }
 
     /**
@@ -120,12 +128,10 @@ class Admin
 
         // --- Dynamically build selected models array ---
         $selected_models = [];
-        // Ensure providers are loaded before trying to get them
-        ProviderManager::register_providers_from_directory();
-        $providers = ProviderManager::get_providers();
+
         $option_prefix = MSO_AI_Meta_Description::get_option_prefix();
 
-        foreach ($providers as $provider) {
+        foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $option_name = $option_prefix . $provider_name . '_model';
             // Get the saved model for this provider, default to empty string if not set
@@ -178,10 +184,9 @@ class Admin
     {
         // Create the HTML for the settings link.
         $settings_link = sprintf(
-            // Use admin_url() to generate the correct URL for the settings page.
             '<a href="%s">%s</a>',
-            esc_url(admin_url('admin.php?page=' . Settings::PAGE_SLUG)), // Use constant for page slug
-            // Localized text for the link.
+            esc_url(admin_url('admin.php?page=' . Settings::PAGE_SLUG)),
+
             __('Settings', 'mso-ai-meta-description')
         );
         // Add the new settings link to the beginning of the links array.

@@ -4,7 +4,7 @@
  * Handles client-side interactions for the MSO AI Meta Description plugin.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 (($) => {

@@ -8,7 +8,7 @@
  * identifying itself, fetching available models, and generating summaries.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers;
@@ -36,9 +36,16 @@ interface ProviderInterface
     /**
      * Get the title for this provider.
      *
-     * @return string The unique name of the provider.
+     * @return string The title of the provider.
      */
     public function get_title(): string;
+
+    /**
+     * Get the url for this provider.
+     *
+     * @return string The url of the provider.
+     */
+    public function get_url_api_key(): string;
 
     /**
      * Fetches the list of available models supported by this provider's API.

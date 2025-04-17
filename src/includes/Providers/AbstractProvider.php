@@ -6,7 +6,7 @@
  * Provides common functionality for AI provider implementations.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers;
@@ -68,9 +68,9 @@ abstract class AbstractProvider implements ProviderInterface
      * Handles common logic like headers, timeout, WP_Error check, status code check, and JSON decoding.
      *
      * @param string               $endpoint The API endpoint (relative to base URL).
-     * @param array<string, mixed> $args     Arguments for wp_remote_get/post (merged with defaults). // <-- Correction
+     * @param array<string, mixed> $args     Arguments for wp_remote_get/post (merged with defaults).
      * @param string               $method   HTTP method ('GET' or 'POST').
-     * @return array<string, mixed>|WP_Error Decoded JSON data on success, WP_Error on failure. // <-- Précision du type de retour array
+     * @return array<string, mixed>|WP_Error Decoded JSON data on success, WP_Error on failure.
      */
     protected function request(string $endpoint, array $args = [], string $method = 'GET'): array|WP_Error
     {

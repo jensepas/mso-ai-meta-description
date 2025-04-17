@@ -8,7 +8,7 @@
  * Extends AbstractProvider for common functionality.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Providers\Available;
@@ -57,6 +57,16 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface
     {
         // Base URL for the OpenAI API (v1).
         return 'https://api.openai.com/v1/';
+    }
+
+    /**
+     * Returns the base URL for the Anthropic API key.
+     *
+     * @return string
+     */
+    public function get_url_api_key(): string
+    {
+        return 'https://platform.openai.com';
     }
 
     /**

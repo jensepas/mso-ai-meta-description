@@ -8,17 +8,17 @@
  * Dynamically displays generation buttons based on configured providers.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description;
 
 // Import necessary classes
-use MSO_AI_Meta_Description\Providers\ProviderManager; // <-- Importer ProviderManager
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
 use WP_Post;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     die;
 }
 
@@ -46,6 +46,13 @@ class MetaBox
     private string $nonce_name;
 
     /**
+     * Providers.
+     *
+     * @var array<ProviderInterface>
+     */
+    private array $providers;
+
+    /**
      * Constructor.
      *
      * Initializes the meta box handler with necessary keys and identifiers.
@@ -53,12 +60,14 @@ class MetaBox
      * @param string $meta_key The key used for storing the meta description in the database.
      * @param string $nonce_action The action string for nonce verification.
      * @param string $nonce_name The name attribute for the nonce input field.
+     * @param array<ProviderInterface> $providers List all provider.
      */
-    public function __construct(string $meta_key, string $nonce_action, string $nonce_name)
+    public function __construct(string $meta_key, string $nonce_action, string $nonce_name, array $providers)
     {
         $this->meta_key = $meta_key;
         $this->nonce_action = $nonce_action;
         $this->nonce_name = $nonce_name;
+        $this->providers = $providers;
     }
 
     /**
@@ -130,64 +139,60 @@ class MetaBox
                 <?php
                 // Display recommended length information.
                 printf(
-                /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
+                    /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
                     esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
                     esc_html($min_length),
                     esc_html($max_length)
                 );
-                ?>
+        ?>
                 <?php esc_html_e('Current count:', 'mso-ai-meta-description'); ?>
                 <span class="mso-ai-char-count">0</span>
                 <span class="mso-ai-length-indicator"></span>
             </p>
 
             <?php
-            // --- Dynamically find configured providers ---
-            ProviderManager::register_providers_from_directory(); // Ensure providers are loaded
-            $all_providers = ProviderManager::get_providers();
             $configured_providers = []; // Store providers with API keys set
-
-            foreach ($all_providers as $provider) {
-                $provider_name = $provider->get_name();
-                $api_key_option = $option_prefix . $provider_name . '_api_key';
-                if (!empty(get_option($api_key_option))) {
-                    $configured_providers[$provider_name] = $provider; // Add to configured list
-                }
+        foreach ($this->providers as $provider) {
+            $provider_name = $provider->get_name();
+            $api_key_option = $option_prefix . $provider_name . '_api_key';
+            if (! empty(get_option($api_key_option))) {
+                $configured_providers[$provider_name] = $provider; // Add to configured list
             }
-            // --- End dynamic check ---
+        }
+        // --- End dynamic check ---
 
-            // Only show the AI generator section if at least one provider is configured.
-            if (!empty($configured_providers)) :
-                ?>
+        // Only show the AI generator section if at least one provider is configured.
+        if (! empty($configured_providers)) :
+            ?>
                 <div class="mso-ai-generator">
                     <p><strong><?php esc_html_e('Generate with AI:', 'mso-ai-meta-description'); ?></strong></p>
 
                     <?php
-                    // --- Dynamically render buttons ---
-                    foreach ($configured_providers as $provider_name => $provider) :
-                        // Special label for OpenAI
-                        $provider_title = $provider->get_title();
-                        $button_label = sprintf(
-                            /* translators: %s: Provider title  */
-                                __('Generate with %s', 'mso-ai-meta-description'),
-                                ucfirst($provider_title) // Capitalize the provider name
-                            );
-                        ?>
+                // --- Dynamically render buttons ---
+                foreach ($configured_providers as $provider_name => $provider) :
+                    // Special label for OpenAI
+                    $provider_title = $provider->get_title();
+                    $button_label = sprintf(
+                        /* translators: %s: Provider title  */
+                        __('Generate with %s', 'mso-ai-meta-description'),
+                        ucfirst($provider_title) // Capitalize the provider name
+                    );
+                    ?>
                         <button type="button" id="summarize-<?php echo esc_attr($provider_name); ?>"
                                 class="button mso-ai-generate-button"
                                 data-provider="<?php echo esc_attr($provider_name); ?>">
                             <?php echo esc_html($button_label); ?>
                         </button>
                     <?php endforeach; ?>
-                    <?php // --- End dynamic rendering --- ?>
+                    <?php // --- End dynamic rendering ---?>
 
                     <span class="spinner mso-ai-spinner"></span>
                     <p id="mso-ai-error" class="mso-ai-error mso-ai-model-error"></p>
 
                 </div>
             <?php
-            endif; // End check for configured providers
-            ?>
+        endif; // End check for configured providers
+        ?>
         </div>
         <?php
     }
@@ -204,7 +209,7 @@ class MetaBox
     {
         // 1. Verify the nonce sent from the meta box form.
         // Use sanitize_text_field for security.
-        if (!isset($_POST[$this->nonce_name]) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action)) {
+        if (! isset($_POST[$this->nonce_name]) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action)) {
             return; // Nonce is missing or invalid, do not proceed.
         }
 
@@ -217,20 +222,20 @@ class MetaBox
         // 3. Check if the user has permission to edit the post.
         $post_type = get_post_type($post_id); // Get the post type of the post being saved.
 
-        if (!$post_type) {
+        if (! $post_type) {
             // Could not determine post type, likely invalid post ID.
             return;
         }
 
         $post_type_object = get_post_type_object($post_type);
         // Check if the current user has the 'edit_post' capability for this specific post ID.
-        if (!$post_type_object || !current_user_can($post_type_object->cap->edit_post, $post_id)) {
+        if (! $post_type_object || ! current_user_can($post_type_object->cap->edit_post, $post_id)) {
             return;
         }
 
         // 4. Check if our specific meta description field was submitted.
         $field_name = 'mso_ai_add_description'; // This MUST match the 'name' attribute of the textarea.
-        if (!isset($_POST[$field_name])) {
+        if (! isset($_POST[$field_name])) {
             // Field not submitted (e.g., maybe meta box was conditionally hidden).
             return;
         }

@@ -8,7 +8,7 @@
  * from the "Plugins" page. It does *not* run on deactivation.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 // Exit if uninstall.php is not called by WordPress.
@@ -82,7 +82,7 @@ if (is_multisite()) {
         // operate on the tables for that specific site (e.g., wp_2_options, wp_2_postmeta).
         switch_to_blog($site_id);
 
-        // Call the site-specific uninstall function to clean up data for this site.
+        // Call the site-specific uninstallation function to clean up data for this site.
         mso_ai_meta_description_uninstall_site();
 
         // Restore the context back to the original site (usually the main site).
@@ -90,7 +90,7 @@ if (is_multisite()) {
         restore_current_blog();
     }
 } else {
-    // If it's not a multisite installation, just run the uninstall function once for the single site.
+    // If it's not a multisite installation, just run the uninstallation function once for the single site.
     mso_ai_meta_description_uninstall_site();
 }
 

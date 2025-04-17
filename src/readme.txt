@@ -3,13 +3,13 @@ Contributors: jensepas
 Tags: meta description, seo, AI, Gemini Mistral OpenAI ChatGPT Anthropic
 Requires at least: 6.7
 Tested up to: 6.8
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.ms-only.fr/donation
 
-Add easily customizable meta descriptions to your WordPress site, with optional AI-powered suggestions from Gemini, Mistral, OpenAI and Anthropic.
+Add easily customizable meta descriptions to your WordPress site, with optional AI-powered suggestions.
 
 == Description ==
 
@@ -25,6 +25,7 @@ This plugin allows you to easily add custom meta description tags to the HTML he
     * Mistral AI
     * OpenAI (ChatGPT)
     * Anthropic
+    * Cohere
 * **Simple Configuration:** Configure API keys and select preferred AI models via the plugin's settings page (under Settings > General).
 * **Homepage Description:** Set a custom meta description for your homepage (whether it shows latest posts or a static page).
 * **Character Counter:** Easily track description length to stay within recommended limits (120-160 characters).
@@ -102,6 +103,10 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 
 == Changelog ==
 
+= 1.4.0 =
+* Date: 2025-04-17
+* Feature: Added support for Cohere
+
 = 1.3.0 =
 * Date: 2025-04-14
 * Feature: Added support for Anthropic.
@@ -125,5 +130,5 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 
 == Upgrade Notice ==
 
-= 1.3.0 =
-This version adds support for OpenAI (ChatGPT) Anthropic Gemini and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.
+= 1.4.0 =
+This version adds support for OpenAI (ChatGPT) Anthropic Gemini Cohere and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.

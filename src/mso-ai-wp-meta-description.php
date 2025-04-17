@@ -4,7 +4,7 @@
  * Plugin Name: MSO AI Meta Description: Custom Meta Descriptions with AI
  * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
  * Author: ms-only
- * Version: 1.3.0
+ * Version: 1.4.0
  * Requires at least: 6.0
  * Requires PHP: 8.1
  * Author URI: https://www.ms-only.fr/
@@ -53,12 +53,12 @@ if (file_exists($provider_interface)) {
  * Implements the Singleton pattern to ensure only one instance exists.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 final class MSO_AI_Meta_Description
 {
     /** Plugin version number. Used for cache busting scripts/styles. */
-    public const string VERSION = '1.3.0';
+    public const string VERSION = '1.4.0';
 
     /** Text domain for localization (internationalization). Must match plugin header and .pot file. */
     public const string TEXT_DOMAIN = 'mso-ai-meta-description';
@@ -97,15 +97,6 @@ final class MSO_AI_Meta_Description
 
     /** Instance of the Ajax class, handling AJAX requests. */
     private Ajax $ajax;
-
-    /** Instance of the Settings class, managing the plugin's settings page. */
-    private Settings $settings;
-
-    /** Instance of the ApiClient class, acting as a facade for AI provider interactions. */
-    private ApiClient $api_client;
-
-    /** Instance of the MetaBox class, handling the post editor meta box. */
-    private MetaBox $meta_box;
 
     /**
      * Private constructor to prevent direct instantiation (Singleton pattern).
@@ -172,18 +163,22 @@ final class MSO_AI_Meta_Description
      */
     private function instantiate_components(): void
     {
+        ProviderManager::register_providers_from_directory();
+        $providers = ProviderManager::get_providers();
+        $registered_providers = ProviderManager::get_provider_names();
+
         // Instantiate the API client (facade for AI providers).
-        $this->api_client = new ApiClient();
+        $api_client = new ApiClient();
         // Instantiate the Settings manager (might be needed for model fetching/validation).
-        $this->settings = new Settings();
+        $settings = new Settings($providers);
         // Instantiate the MetaBox handler, passing necessary keys and nonce's.
-        $this->meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME);
+        $meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME, $providers);
         // Instantiate the Admin handler, passing Settings and MetaBox instances.
-        $this->admin = new Admin($this->settings, $this->meta_box);
+        $this->admin = new Admin($settings, $meta_box, $providers);
         // Instantiate the Frontend handler, passing the meta key.
         $this->frontend = new Frontend(self::META_KEY);
         // Instantiate the AJAX handler, passing the API client and nonce identifier.
-        $this->ajax = new Ajax($this->api_client, self::AJAX_NONCE_ACTION);
+        $this->ajax = new Ajax($api_client, self::AJAX_NONCE_ACTION, $registered_providers);
     }
 
     /**
@@ -209,29 +204,6 @@ final class MSO_AI_Meta_Description
     }
 
     /**
-     * Load the plugin's text domain for localization (translation).
-     * Allows the plugin's strings to be translated using .mo files.
-     */
-    public function load_plugin_text_domain(): void
-    {
-        load_plugin_textdomain(
-            self::TEXT_DOMAIN,
-            false,
-            dirname(plugin_basename(__FILE__)) . '/languages'
-        );
-    }
-
-    /**
-     * Static getter for the plugin's meta key.
-     * Provides a consistent way to access the meta key constant.
-     * @return string The meta key ('_mso_ai_meta_description').
-     */
-    public static function get_meta_key(): string
-    {
-        return self::META_KEY;
-    }
-
-    /**
      * Static getter for the plugin's option prefix.
      * Provides a consistent way to access the option prefix constant.
      * @return string The option prefix ('mso_ai_meta_description_').
@@ -242,21 +214,12 @@ final class MSO_AI_Meta_Description
     }
 
     /**
-     * Static getter for the plugin's text domain.
-     * Provides a consistent way to access the text domain constant.
-     * @return string The text domain ('mso-ai-meta-description').
+     * Load the plugin's text domain for localization (translation).
+     * Allows the plugin's strings to be translated using .mo files.
      */
-    public static function get_text_domain(): string
+    public function load_plugin_text_domain(): void
     {
-        return self::TEXT_DOMAIN;
-    }
-
-    /**
-     * Prevent cloning of the singleton instance.
-     */
-    private function __clone()
-    {
-        // Cloning is forbidden to maintain the singleton pattern.
+        load_plugin_textdomain(self::TEXT_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 
     /**
@@ -266,40 +229,15 @@ final class MSO_AI_Meta_Description
     {
         // Deserialization is forbidden to maintain the singleton pattern.
     }
-} // --- End of MSO_AI_Meta_Description Class ---
 
-
-// --- Dynamic Provider Loading Initialization ---
-
-/**
- * Initializes AI provider registration by scanning the 'Available' directory.
- *
- * This function is hooked into 'plugins_loaded' to ensure it runs after all plugins
- * are loaded (including this one and its autoloader) but before most other hooks,
- * guaranteeing that providers are ready when needed by other components.
- */
-function mso_ai_init_dynamic_providers(): void
-{
-    // Check if the ProviderManager class exists (it should have been automatically loaded).
-    if (! class_exists('\MSO_AI_Meta_Description\Providers\ProviderManager')) {
-        return;
+    /**
+     * Prevent cloning of the singleton instance.
+     */
+    private function __clone()
+    {
+        // Cloning is forbidden to maintain the singleton pattern.
     }
-
-    // Define the expected directory path for provider classes (for logging/checking).
-    $provider_scan_dir = plugin_dir_path(__FILE__) . 'includes/Providers/Available/';
-
-    // Check if the directory actually exists.
-    if (! is_dir($provider_scan_dir)) {
-        return;
-    }
-
-    // Call the static method on ProviderManager to scan the directory and register found providers.
-    ProviderManager::register_providers_from_directory();
 }
-
-// Hook the provider initialization function to the 'plugins_loaded' action.
-// Using priority 5 ensures it runs relatively early, before the default priority of 10.
-add_action('plugins_loaded', __NAMESPACE__ . '\mso_ai_init_dynamic_providers', 5);
 
 
 // --- Plugin Execution ---

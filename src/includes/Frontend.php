@@ -7,7 +7,7 @@
  * Determines the appropriate description based on the current page context (post, page, archive, front page, etc.).
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description;
@@ -87,11 +87,6 @@ class Frontend
         // Re-add the default WordPress canonical tag action.
         // This ensures that the canonical tag functionality is restored after our meta tag is output.
         add_action('wp_head', 'rel_canonical');
-
-        // Explicitly calling rel_canonical() here is usually unnecessary because wp_head
-        // continues processing actions after this one. However, uncommenting it would force
-        // the canonical tag to output immediately after the description if needed for specific reasons.
-        // rel_canonical();
     }
 
     /**
@@ -169,22 +164,7 @@ class Frontend
                     $description = get_bloginfo('description', 'display');
                 }
             }
-            // Note: If is_home() is true AND is_front_page() is also true (meaning 'show_on_front' is 'posts'),
-            // the 'is_front_page()' logic block above already handled retrieving the description.
         }
-
-        // --- Potential additional conditions to consider adding ---
-        /*
-        elseif (is_author()) {
-            // $description = get_the_author_meta('description', get_queried_object_id());
-        }
-        elseif (is_search()) {
-            // $description = sprintf(__('Search results for "%s"', 'mso-ai-meta-description'), get_search_query());
-        }
-        elseif (is_404()) {
-            // $description = __('Page not found.', 'mso-ai-meta-description');
-        }
-        */
 
         // Allow other plugins or themes to filter the final description before output.
         return apply_filters('mso_ai_meta_description_output', $description);

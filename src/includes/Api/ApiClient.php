@@ -8,27 +8,20 @@
  * and delegates API calls (like fetching models or generating summaries) to it.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description\Api;
 
-use MSO_AI_Meta_Description\Providers\ProviderInterface; // Interface for individual providers.
-use MSO_AI_Meta_Description\Providers\ProviderManager; // Manages provider instances.
-use WP_Error; // Used for returning standardized errors.
+use MSO_AI_Meta_Description\Providers\ProviderInterface;
+use MSO_AI_Meta_Description\Providers\ProviderManager;
+use WP_Error;
 
 /**
  * Client for interacting with AI APIs through registered providers.
  */
 class ApiClient
 {
-    /**
-     * Array defining the supported AI providers by their unique names.
-     * This should align with the names returned by ProviderInterface::get_name().
-     * @var string[]
-     */
-    public const array SUPPORTED_PROVIDERS = ['gemini', 'mistral', 'openai', 'anthropic'];
-
     /**
      * Fetches the list of available models for a specific provider.
      *

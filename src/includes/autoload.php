@@ -8,7 +8,7 @@
  * when they are first used, based on their namespace and class name.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 // Exit if accessed directly to prevent direct execution of the script.

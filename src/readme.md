@@ -1,6 +1,6 @@
 # MSO AI Meta Description
 
-**Easily add customizable meta descriptions to your WordPress site, with optional AI-powered suggestions from Gemini, Mistral, Anthropic, and OpenAI (ChatGPT).**
+**Easily add customizable meta descriptions to your WordPress site, with optional AI-powered suggestions.**
 
 ---
 
@@ -32,6 +32,7 @@
   - Mistral AI
   - OpenAI (ChatGPT)
   - Anthropic Claude
+  - Cohere
 - 🧩 **Character Counter** to stay within the optimal 120–160 character range.
 - ⚙️ **Homepage Description Support** whether you use a static page or latest posts.
 - 🪶 **Lightweight and Focused:** Does one thing well, without bloat.
@@ -43,7 +44,7 @@
 
 ### Minimum Requirements
 
-- WordPress 6.0+
+- WordPress 6.7+
 - PHP 8.1+
 
 ### Automatic Installation
@@ -106,6 +107,7 @@ The plugin dynamically fetches available models once a valid API key is entered.
 - `mistral-small-latest`
 - `gemini-2.0-flash`
 - `claude-3-sonnet-20240229`
+- `command-a-03-2025`
 
 ### Will this conflict with SEO plugins like Yoast or Rank Math?
 
@@ -120,7 +122,11 @@ Possibly. Both plugins may output a meta description. **Avoid duplication** by d
 
 ## 🧾 Changelog
 
-### 1.3.0 – *2025-04-14*
+### 1.4.0 – *2025-04-17*
+
+- ✨ Added support for **Cohere**
+
+### 1.3.0
 
 - ✨ Added support for **Anthropic**
 

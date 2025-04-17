@@ -7,7 +7,7 @@
  * It handles requests for generating AI summaries and fetching available AI models.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.3.0
+ * @since   1.4.0
  */
 
 namespace MSO_AI_Meta_Description;
@@ -37,17 +37,25 @@ class Ajax
     private string $nonce_action;
 
     /**
+     * The nonce action string used for verifying AJAX requests.
+     * @var array<string>
+     */
+    private array $registered_providers;
+
+    /**
      * Constructor.
      *
      * Injects the ApiClient dependency and the nonce action string.
      *
      * @param ApiClient $api_client   An instance of the ApiClient.
      * @param string    $nonce_action The nonce action name for security checks.
+     * @param array<string> $registered_providers List all provider.
      */
-    public function __construct(ApiClient $api_client, string $nonce_action)
+    public function __construct(ApiClient $api_client, string $nonce_action, array $registered_providers)
     {
         $this->api_client = $api_client;
         $this->nonce_action = $nonce_action;
+        $this->registered_providers = $registered_providers;
     }
 
     /**
@@ -93,8 +101,9 @@ class Ajax
         if (empty($content)) {
             wp_send_json_error(['message' => __('Content cannot be empty.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
+
         // Ensure a valid provider is specified using the constant from ApiClient.
-        if (empty($provider) || ! in_array($provider, ApiClient::SUPPORTED_PROVIDERS)) {
+        if (empty($provider) || ! in_array($provider, $this->registered_providers)) {
             wp_send_json_error(['message' => __('Invalid AI provider specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
@@ -149,7 +158,7 @@ class Ajax
 
         // 4. Validate the API type (provider).
         // Ensure a valid provider is specified using the constant from ApiClient.
-        if (empty($api_type) || ! in_array($api_type, ApiClient::SUPPORTED_PROVIDERS)) {
+        if (empty($api_type) || ! in_array($api_type, $this->registered_providers)) {
             wp_send_json_error(['message' => __('Invalid API type specified.', 'mso-ai-meta-description')], 400); // 400 Bad Request
         }
 
