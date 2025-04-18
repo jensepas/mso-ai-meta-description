@@ -77,13 +77,6 @@ final class MSO_AI_Meta_Description
     /** Maximum recommended length for a meta description. */
     public const int MAX_DESCRIPTION_LENGTH = 160;
 
-    /**
-     * The default prompt template used for generating summaries.
-     * Placeholders: %1$d (min length), %2$d (max length), %3$s (content).
-     * @var string
-     */
-    public const string DEFAULT_SUMMARY_PROMPT_TEMPLATE = 'Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s';
-
     /** Holds the single instance of this class (Singleton pattern). */
     private static ?MSO_AI_Meta_Description $instance = null;
 

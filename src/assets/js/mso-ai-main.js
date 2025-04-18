@@ -289,7 +289,7 @@
                 let modelToSelect = defaultModel;
 
                 models.forEach(model => {
-                    if (model && model.id) {
+                    if (model && model?.id) {
                         $select.append($('<option>', {
                             value: model.id,
                             text: model.displayName || model.id

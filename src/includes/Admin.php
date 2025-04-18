@@ -137,7 +137,7 @@ class Admin
             'saving_text' => __('Saving...', 'mso-ai-meta-description'),
             'saved_text' => __('Settings Saved', 'mso-ai-meta-description'),
             'error_text' => __('Error Saving Settings', 'mso-ai-meta-description'),
-            'i18n_show_prompt' => __('Show custom prompt', 'mso-ai-meta-description'),
+            'i18n_show_prompt' => __('Customize the prompt', 'mso-ai-meta-description'),
             'i18n_hide_prompt' => __('Hide custom prompt', 'mso-ai-meta-description'),
         ];
 

@@ -289,13 +289,12 @@ abstract class AbstractProvider implements ProviderInterface
     protected function build_summary_prompt(string $content): string
     {
         $prefix = MSO_AI_Meta_Description::get_option_prefix();
-        $custom_prompt_option_name = $prefix . $this->get_name() . '_custom_prompt';
+        $custom_prompt_option_name = $prefix . $this->get_name() . '_custom_summary_prompt';
         $custom_prompt_template = (string)get_option($custom_prompt_option_name, '');
-
         $prompt_template = ! empty($custom_prompt_template)
             ? $custom_prompt_template
             : /* translators: 1: Min length, 2: Max length, 3: Content */
-            __(MSO_AI_Meta_Description::DEFAULT_SUMMARY_PROMPT_TEMPLATE, 'mso-ai-meta-description');
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description');
 
         return sprintf(
             $prompt_template,

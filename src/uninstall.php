@@ -25,20 +25,14 @@ if (! defined('WP_UNINSTALL_PLUGIN')) {
  */
 function mso_ai_meta_description_uninstall_site(): void
 {
+    global $wpdb;
     $option_prefix = 'mso_ai_meta_description_';
     $meta_key = '_mso_ai_meta_description';
-    $options_to_delete = [
-        $option_prefix . 'mistral_api_key',
-        $option_prefix . 'gemini_api_key',
-        $option_prefix . 'openai_api_key',
-        $option_prefix . 'openai_api_key',
-        $option_prefix . 'anthropic_api_key',
-        $option_prefix . 'gemini_model',
-        $option_prefix . 'openai_model',
-        $option_prefix . 'anthropic_model',
-        $option_prefix . 'front_page',
-    ];
+
+    $options_to_delete = $wpdb->get_col("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '{$option_prefix}%';");
+
     foreach ($options_to_delete as $option_name) {
+
         delete_option($option_name);
     }
 

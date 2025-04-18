@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-18 15:23+0200\n"
+"POT-Creation-Date: 2025-04-18 16:37+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
@@ -49,11 +49,11 @@ msgstr ""
 msgid "Error Saving Settings"
 msgstr ""
 
-#: ../includes/Admin.php:140 ../includes/Settings.php:611
-msgid "Show custom prompt"
+#: ../includes/Admin.php:140 ../includes/Settings.php:609
+msgid "Customize the prompt"
 msgstr ""
 
-#: ../includes/Admin.php:141
+#: ../includes/Admin.php:141 ../includes/Settings.php:608
 msgid "Hide custom prompt"
 msgstr ""
 
@@ -162,7 +162,7 @@ msgstr ""
 msgid "API key for %s is not set."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:100
+#: ../includes/Providers/AbstractProvider.php:104
 msgid "Failed to encode request body."
 msgstr ""
 
@@ -177,6 +177,11 @@ msgstr ""
 
 #: ../includes/Providers/AbstractProvider.php:158
 msgid "Failed to decode API response."
+msgstr ""
+
+#: ../includes/Providers/AbstractProvider.php:298 ../includes/Settings.php:588
+#, php-format
+msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
 msgstr ""
 
 #: ../includes/Providers/Available/AnthropicProvider.php:120
@@ -303,36 +308,26 @@ msgstr ""
 msgid "Show the \"Generate with %1$s\" button in the WordPress Editor."
 msgstr ""
 
-#: ../includes/Settings.php:590
-#, php-format
-msgid "%s :"
-msgstr ""
-
-#: ../includes/Settings.php:619
+#: ../includes/Settings.php:622
 msgid "Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt."
 msgstr ""
 
-#: ../includes/Settings.php:620
+#: ../includes/Settings.php:623
 msgid "Available placeholders:"
 msgstr ""
 
-#: ../includes/Settings.php:620
+#: ../includes/Settings.php:623
 msgid "min length 120 characters"
 msgstr ""
 
-#: ../includes/Settings.php:620
+#: ../includes/Settings.php:623
 msgid "max length 160 characters"
 msgstr ""
 
-#: ../includes/Settings.php:620
+#: ../includes/Settings.php:623
 msgid "content"
 msgstr ""
 
-#: ../includes/Settings.php:621
+#: ../includes/Settings.php:624
 msgid "Default prompt:"
-msgstr ""
-
-#: ../mso-ai-wp-meta-description.php:85
-#, php-format
-msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
 msgstr ""

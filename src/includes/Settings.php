@@ -138,8 +138,8 @@ class Settings
 
                                                 $tab_url = wp_nonce_url($tab_url, 'action');
                                                 $active_class = ($active_tab === $tab_slug) ? ' nav-tab-active' : '';
-
-                                                printf('<a href="%s" class="nav-tab%s">%s</a>', esc_url($tab_url), esc_attr($active_class), esc_html($tab_label));
+                                                $provider_enabled = self::OPTIONS === $tab_slug || (get_option(MSO_AI_Meta_Description::get_option_prefix() . $tab_slug . '_api_key') && get_option(MSO_AI_Meta_Description::get_option_prefix() . $tab_slug . '_model'));
+                                                printf('<a href="%s" class="nav-tab%s">%s %s</a>', esc_url($tab_url), esc_attr($active_class), esc_html($tab_label), $provider_enabled ? '' : '<span class="dashicons dashicons-warning"></span>');
                                             }
             ?>
                                     </h2>
@@ -187,21 +187,20 @@ class Settings
      */
     private function get_tabs(): array
     {
-        $tabs = [];
+        $tabs[self::OPTIONS] = esc_html__('Advanced Settings', 'mso-ai-meta-description');
+
         $prefix = MSO_AI_Meta_Description::get_option_prefix();
 
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $provider_title = $provider->get_title();
-            $enable_option_name = $prefix . 'provider_enabled_' . $provider_name;
+            $enable_option_name = $prefix . $provider_name . '_provider_enabled';
 
             if (get_option($enable_option_name, false)) {
                 /* translators: %s: Provider name (e.g., Mistral) */
                 $tabs[$provider_name] = sprintf(esc_html__('%s Settings', 'mso-ai-meta-description'), $provider_title);
             }
         }
-
-        $tabs[self::OPTIONS] = esc_html__('Advanced Settings', 'mso-ai-meta-description');
 
         return $tabs;
     }
@@ -261,6 +260,19 @@ class Settings
                 $section_id,
                 ['provider' => $provider_name]
             );
+
+            $custom_prompt_option_name = $prefix . 'custom_summary_prompt';
+            register_setting($option_group, $custom_prompt_option_name, Settings::SANITIZE_TEXTAREA_FIELD);
+
+            add_settings_field(
+                $custom_prompt_option_name . $provider_name,
+                esc_html__('Custom Prompt', 'mso-ai-meta-description'),
+                [$this, 'render_custom_prompt_field'],
+                $section_id,
+                $section_id,
+                ['label_for' => $custom_prompt_option_name . '_id', 'provider_name' => $provider_name]
+            );
+
         }
 
         $advanced_section_id = self::OPTIONS_GROUP . '_advanced_section';
@@ -275,13 +287,13 @@ class Settings
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $provider_title = $provider->get_title();
-            $enable_option_name = $prefix . 'provider_enabled_' . $provider_name;
+            $enable_option_name = $prefix . $provider_name . '=provider_enabled';
 
             register_setting($option_group, $enable_option_name, Settings::SANITIZE_TEXT_FIELD);
 
             add_settings_field(
                 $enable_option_name,
-                sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Enable %s', 'mso-ai-meta-description'), $provider_title),
+                esc_html($provider_title),
                 [$this, 'render_provider_enable_field'],
                 $advanced_section_id,
                 $advanced_section_id,
@@ -291,19 +303,6 @@ class Settings
                     'provider_title' => $provider_title,
                 ]
             );
-
-            $custom_prompt_option_name = $prefix . 'custom_summary_prompt';
-            register_setting($option_group, $custom_prompt_option_name, Settings::SANITIZE_TEXTAREA_FIELD);
-
-            add_settings_field(
-                $custom_prompt_option_name . $provider_name,
-                esc_html__('Custom Prompt', 'mso-ai-meta-description'),
-                [$this, 'render_custom_prompt_field'],
-                $advanced_section_id,
-                $advanced_section_id,
-                ['label_for' => $custom_prompt_option_name . '_id', 'provider_name' => $provider_name]
-            );
-
         }
         $debug_option_name = $prefix . 'advanced_options';
         register_setting($option_group, $debug_option_name, Settings::SANITIZE_TEXT_FIELD);
@@ -353,19 +352,10 @@ class Settings
         if ($active_tab === self::OPTIONS) {
             foreach ($this->providers as $provider) {
                 $provider_name = $provider->get_name();
-                $enable_option_name = $option_prefix . 'provider_enabled_' . $provider_name;
+                $enable_option_name = $option_prefix . $provider_name . '_provider_enabled';
                 $is_enabled = isset($_POST[$enable_option_name]) && rest_sanitize_boolean(sanitize_key($_POST[$enable_option_name]));
                 update_option($enable_option_name, $is_enabled);
                 $saved_data[$enable_option_name] = $is_enabled;
-                $custom_prompt_option_name = $option_prefix . 'custom_summary_prompt_' . $provider_name;
-                if (isset($_POST[$custom_prompt_option_name])) {
-                    $sanitized_prompt = sanitize_textarea_field(wp_unslash($_POST[$custom_prompt_option_name]));
-                    update_option($custom_prompt_option_name, $sanitized_prompt);
-                    $saved_data[$custom_prompt_option_name] = $sanitized_prompt;
-                } else {
-                    update_option($custom_prompt_option_name, '');
-                    $saved_data[$custom_prompt_option_name] = '';
-                }
             }
 
         } else {
@@ -406,6 +396,17 @@ class Settings
                 update_option($model_option, '');
                 $saved_data[$model_option] = '';
             }
+
+            $custom_prompt_option_name = $option_prefix . $active_tab . '_custom_summary_prompt';
+            if (isset($_POST[$custom_prompt_option_name])) {
+                $sanitized_prompt = sanitize_textarea_field(wp_unslash($_POST[$custom_prompt_option_name]));
+                update_option($custom_prompt_option_name, $sanitized_prompt);
+                $saved_data[$custom_prompt_option_name] = $sanitized_prompt;
+            } else {
+                update_option($custom_prompt_option_name, '');
+                $saved_data[$custom_prompt_option_name] = '';
+            }
+
         }
 
         wp_send_json_success(['message' => esc_html__('Settings saved successfully.', 'mso-ai-meta-description'), 'saved_data' => $saved_data,
@@ -487,7 +488,7 @@ class Settings
         $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page';
         $value = (string)get_option($option_name, '');
         $field_id = esc_attr($args['label_for']);
-        ?><label>
+        ?><label for="<?php echo esc_attr($field_id); ?>">
         <input
                 type="text"
                 name="<?php echo esc_attr($option_name); ?>"
@@ -565,14 +566,17 @@ class Settings
             return;
         }
 
-        $option_name = MSO_AI_Meta_Description::get_option_prefix() . 'provider_enabled_' . $provider_name;
+        $option_name = MSO_AI_Meta_Description::get_option_prefix() . $provider_name . '_provider_enabled';
         $value = get_option($option_name, false);
         $field_id = esc_attr($args['label_for']);
 
         echo '<label for="' . esc_attr($field_id) . '">';
         echo '<input type="checkbox" name="' . esc_attr($option_name) . '" id="' . esc_attr($field_id) . '" value="1" ' . checked(1, $value, false) . '>';
         /* translators: 1: Provider name (e.g., Mistral) */
-        echo ' ' . sprintf(esc_html__('Show the "Generate with %1$s" button in the WordPress Editor.', 'mso-ai-meta-description'), esc_html($provider_title));
+        echo sprintf(esc_html__('Enable %s', 'mso-ai-meta-description'), esc_html($provider_title));
+        echo '<br>';
+        /* translators: 1: Provider name (e.g., Mistral) */
+        echo sprintf(esc_html__('Show the "Generate with %1$s" button in the WordPress Editor.', 'mso-ai-meta-description'), esc_html($provider_title));
         echo '</label>';
     }
 
@@ -585,11 +589,8 @@ class Settings
     private function get_default_summary_prompt_template(): string
     {
         return
-         sprintf(
-             /* translators: 1: Minimum length */
-             esc_html__('%s :', 'mso-ai-meta-description'),
-             esc_html(MSO_AI_Meta_Description::DEFAULT_SUMMARY_PROMPT_TEMPLATE)
-         );
+        /* translators: 1: min length, 2: max length, 3: content */
+        __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description');
     }
 
     /**
@@ -599,7 +600,7 @@ class Settings
      */
     public function render_custom_prompt_field(array $args): void
     {
-        $option_name = MSO_AI_Meta_Description::get_option_prefix() . 'custom_summary_prompt_' . $args['provider_name'];
+        $option_name = MSO_AI_Meta_Description::get_option_prefix() . $args['provider_name'] . '_custom_summary_prompt';
         $value = (string)get_option($option_name, '');
         $field_id = esc_attr($args['label_for']);
         $details_container_id = esc_attr($option_name . '_details');
@@ -610,7 +611,7 @@ class Settings
         $initial_aria_expanded = $is_initially_visible ? 'true' : 'false';
         $initial_link_text = $is_initially_visible
             ? esc_html__('Hide custom prompt', 'mso-ai-meta-description')
-            : esc_html__('Show custom prompt', 'mso-ai-meta-description');
+            : esc_html__('Customize the prompt', 'mso-ai-meta-description');
 
         printf(
             '<a href="#" class="mso-ai-toggle-prompt" role="button" aria-expanded="%s" aria-controls="%s">%s</a>',
@@ -621,12 +622,12 @@ class Settings
 
         echo '<div id="' . esc_attr($details_container_id) . '" class="mso-ai-prompt-details"  style="' . esc_attr($initial_display_style) . '">';
 
-            echo '<textarea name="' . esc_attr($option_name) . '" id="' . esc_attr($field_id) . '" class="large-text" rows="8" placeholder="' . esc_attr($default_prompt) . '">' . esc_textarea($value) . '</textarea>';
-            echo '<p class="description">' .
-                 esc_html__('Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt.', 'mso-ai-meta-description') . '<br>' .
-                 esc_html__('Available placeholders:', 'mso-ai-meta-description') . ' <code>%1$d</code> (' . esc_html__('min length 120 characters', 'mso-ai-meta-description') . '), <code>%2$d</code> (' . esc_html__('max length 160 characters', 'mso-ai-meta-description') . '), <code>%3$s</code> (' . esc_html__('content', 'mso-ai-meta-description') . ').<br>' .
-                 '<strong>' . esc_html__('Default prompt:', 'mso-ai-meta-description') . '</strong><br><em>' . esc_html($default_prompt) . '</em>' .
-                 '</p>';
+        echo '<textarea name="' . esc_attr($option_name) . '" id="' . esc_attr($field_id) . '" class="large-text" rows="8" placeholder="' . esc_attr($default_prompt) . '">' . esc_textarea($value) . '</textarea>';
+        echo '<p class="description">' .
+             esc_html__('Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt.', 'mso-ai-meta-description') . '<br>' .
+             esc_html__('Available placeholders:', 'mso-ai-meta-description') . ' <code>%1$d</code> (' . esc_html__('min length 120 characters', 'mso-ai-meta-description') . '), <code>%2$d</code> (' . esc_html__('max length 160 characters', 'mso-ai-meta-description') . '), <code>%3$s</code> (' . esc_html__('content', 'mso-ai-meta-description') . ').<br>' .
+             '<strong>' . esc_html__('Default prompt:', 'mso-ai-meta-description') . '</strong><br><em>' . esc_html($default_prompt) . '</em>' .
+             '</p>';
 
         echo '</div>';
     }

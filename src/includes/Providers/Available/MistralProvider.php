@@ -28,7 +28,7 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     /**
      * Returns the unique identifier for this provider.
      *
-     * @return string The provider name ('openai').
+     * @return string The provider name ('mistral').
      */
     public function get_name(): string
     {
@@ -103,9 +103,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
 
     /**
      * Parses the list of available models from the Mistral API response.
-     *
-     * Filters the models to include only 'gpt-3.5' and 'gpt-4' variants
-     * and formats them into a standardized array structure.
      *
      * @param array<string, mixed> $data The decoded JSON response data from the models endpoint.
      * @return array<int, array<string, string>>|WP_Error An array of models (each with 'id' and 'displayName')

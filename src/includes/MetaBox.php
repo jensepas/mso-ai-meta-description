@@ -138,7 +138,7 @@ class MetaBox
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $api_key_option = $option_prefix . $provider_name . '_api_key';
-            $enable_option_name = $option_prefix . 'provider_enabled_' . $provider_name;
+            $enable_option_name = $option_prefix . $provider_name . '_provider_enabled';
             if (! empty(get_option($api_key_option)) && get_option($enable_option_name, false)) {
                 $configured_providers[$provider_name] = $provider;
             }
