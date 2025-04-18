@@ -86,6 +86,10 @@ abstract class AbstractProvider implements ProviderInterface
 
         $headers = $this->prepare_headers($default_headers);
 
+        if (! isset($headers['Authorization'])) {
+            $url = add_query_arg('key', $this->api_key, $url);
+        }
+
         $default_args = [
             'timeout' => 15,
             'headers' => $headers,
@@ -99,10 +103,6 @@ abstract class AbstractProvider implements ProviderInterface
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return new WP_Error('json_encode_error', __('Failed to encode request body.', 'mso-ai-meta-description'), ['error' => json_last_error_msg()]);
             }
-        }
-
-        if ($this->get_name() === 'gemini') {
-            $url = add_query_arg('key', $this->api_key, $url);
         }
 
         if (strtoupper($method) === 'POST') {
@@ -171,23 +171,6 @@ abstract class AbstractProvider implements ProviderInterface
     }
 
     /**
-     * Builds the standard prompt for summary generation.
-     *
-     * @param string $content The content to summarize.
-     * @return string The formatted prompt.
-     */
-    protected function build_summary_prompt(string $content): string
-    {
-        return sprintf(
-            /* translators: 1: Minimum length, 2: Maximum length, 3: The content to summarize */
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description'),
-            MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH,
-            MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
-            $content
-        );
-    }
-
-    /**
      * Allows providers to modify headers if needed (e.g., Gemini uses API key in URL for GET).
      *
      * @param array<string, string> $headers Default headers from AbstractProvider.
@@ -195,10 +178,6 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected function prepare_headers(array $headers): array
     {
-        if ($this->get_name() === 'gemini') {
-            unset($headers['Authorization']);
-        }
-
         return $headers;
     }
 
@@ -300,4 +279,29 @@ abstract class AbstractProvider implements ProviderInterface
      *
      */
     abstract protected function get_summary_endpoint(): string;
+
+    /**
+     * Builds the summary prompt, using a custom one from settings if available.
+     *
+     * @param string $content The content to summarize.
+     * @return string The formatted prompt.
+     */
+    protected function build_summary_prompt(string $content): string
+    {
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
+        $custom_prompt_option_name = $prefix . $this->get_name() . '_custom_prompt';
+        $custom_prompt_template = (string)get_option($custom_prompt_option_name, '');
+
+        $prompt_template = ! empty($custom_prompt_template)
+            ? $custom_prompt_template
+            : /* translators: 1: Min length, 2: Max length, 3: Content */
+            __(MSO_AI_Meta_Description::DEFAULT_SUMMARY_PROMPT_TEMPLATE, 'mso-ai-meta-description');
+
+        return sprintf(
+            $prompt_template,
+            MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH,
+            MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
+            $content
+        );
+    }
 }

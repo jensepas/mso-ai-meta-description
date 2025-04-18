@@ -41,13 +41,26 @@ class Settings
      * Constant register_setting.
      * @var array<string, string|null>
      */
-    public const array MY_ARRAY = ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => null,];
+    public const array SANITIZE_TEXT_FIELD = ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => null,];
+
+
+    /**
+     * Constant register_setting.
+     * @var array<string, string|null>
+     */
+    public const array SANITIZE_TEXTAREA_FIELD = ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => null,];
 
     /**
      * Menu icon.
      * @var string
      */
     public const string ICON_BASE64_SVG = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjgwMHB4IiB3aWR0aD0iODAwcHgiIHZlcnNpb249IjEuMSIgaWQ9IkNhcGFfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgDQoJIHZpZXdCb3g9IjAgMCA0OTAgNDkwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDE2LDBINzRDMzMuMywwLDAsMzMuNCwwLDc0djM0MmMwLDQwLjcsMzMuNCw3NCw3NCw3NGgzNDJjNDAuNywwLDc0LTMzLjQsNzQtNzRWNzRDNDkwLDMzLjQsNDU2LjYsMCw0MTYsMHogTTQ0OS4zLDQxNg0KCQkJYzAsMTguOC0xNC42LDMzLjQtMzMuNCwzMy40SDc0Yy0xOC44LDAtMzMuNC0xNC42LTMzLjQtMzMuNFY3NGMwLTE4LjgsMTQuNi0zMy40LDMzLjQtMzMuNGgzNDJjMTguOCwwLDMzLjQsMTQuNiwzMy40LDMzLjR2MzQyDQoJCQlINDQ5LjN6Ii8+DQoJCTxnPg0KCQkJPHBhdGggZD0iTTIzNC44LDE2OS44Yy0yLjQtNS41LTcuOC05LTEzLjgtOXMtMTEuNCwzLjUtMTMuOCw5TDE0NywzMDguM2MtMy4zLDcuNiwwLjIsMTYuNCw3LjgsMTkuN2MyLDAuOSw0LDEuMyw2LDEuMw0KCQkJCWM1LjgsMCwxMS4zLTMuNCwxMy44LTlsMTMuMi0zMC4yaDY2LjlsMTMuMiwzMC4yYzMuMyw3LjYsMTIuMSwxMS4xLDE5LjcsNy44YzcuNi0zLjMsMTEuMS0xMi4yLDcuOC0xOS43TDIzNC44LDE2OS44eg0KCQkJCSBNMjAwLjcsMjYwbDIwLjQtNDYuOGwyMC40LDQ2LjhIMjAwLjd6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMjE3LjljLTguMywwLTE1LDYuNy0xNSwxNXY4MS40YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTgxLjRDMzQ0LjMsMjI0LjYsMzM3LjYsMjE3LjksMzI5LjMsMjE3Ljl6Ii8+DQoJCQk8cGF0aCBkPSJNMzI5LjMsMTY2LjRjLTguMywwLTE1LDYuNy0xNSwxNXY0YzAsOC4zLDYuNywxNSwxNSwxNXMxNS02LjcsMTUtMTV2LTRDMzQ0LjMsMTczLjEsMzM3LjYsMTY2LjQsMzI5LjMsMTY2LjR6Ii8+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8L3N2Zz4=';
+
+    /**
+     * Menu icon.
+     * @var string
+     */
+    const string OPTIONS = 'options';
 
     /**
      * Providers.
@@ -106,47 +119,61 @@ class Settings
         if (! isset($_GET['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_GET['_wpnonce']))) {
             $active_tab = isset($_GET['tab']) && array_key_exists(sanitize_text_field(wp_unslash($_GET['tab'])), $tabs) ? sanitize_text_field(wp_unslash($_GET['tab'])) : array_key_first($tabs);
             ?>
-            <div class="wrap"> <!-- Standard WordPress admin page wrapper -->
+            <div class="wrap">
                 <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+                <div id="poststuff">
+                    <div id="post-body" class="metabox-holder">
+                        <div id="post-body-content">
+                            <div class="postbox">
+                                <div class="inside">
+                                    <div id="mso-ai-settings-messages" class="mso-ai-settings-messages"></div>
 
-                <!-- Placeholder for AJAX success/error messages -->
-                <div id="mso-ai-settings-messages" class="mso-ai-settings-messages"></div>
+                                    <h2 class="nav-tab-wrapper">
+                                        <?php
+                                            foreach ($tabs as $tab_slug => $tab_label) {
+                                                $tab_url = add_query_arg(
+                                                    ['page' => self::PAGE_SLUG, 'tab' => $tab_slug],
+                                                    admin_url('admin.php')
+                                                );
 
-                <!-- Navigation tabs -->
-                <h2 class="nav-tab-wrapper">
-                    <?php
-                    foreach ($tabs as $tab_slug => $tab_label) {
-                        $tab_url = add_query_arg(
-                            ['page' => self::PAGE_SLUG, 'tab' => $tab_slug],
-                            admin_url('admin.php')
-                        );
+                                                $tab_url = wp_nonce_url($tab_url, 'action');
+                                                $active_class = ($active_tab === $tab_slug) ? ' nav-tab-active' : '';
 
-                        $tab_url = wp_nonce_url($tab_url, 'action');
-                        $active_class = ($active_tab === $tab_slug) ? ' nav-tab-active' : '';
-
-                        printf('<a href="%s" class="nav-tab%s">%s</a>', esc_url($tab_url), esc_attr($active_class), esc_html($tab_label));
-                    }
+                                                printf('<a href="%s" class="nav-tab%s">%s</a>', esc_url($tab_url), esc_attr($active_class), esc_html($tab_label));
+                                            }
             ?>
-                </h2>
+                                    </h2>
 
-                <!-- Settings form - Submission is handled via AJAX, so 'action' is empty -->
-                <form method="post" action="" id="mso-ai-settings-form">
-                    <?php
+                                    <form method="post" action="" id="mso-ai-settings-form">
+                                        <?php
             settings_fields(self::OPTIONS_GROUP);
 
-            $section_id = self::get_section_id_for_provider($active_tab);
-            do_settings_sections($section_id);
+            $advanced_section_id = self::OPTIONS_GROUP . '_advanced_section';
+
+            if ($active_tab === self::OPTIONS) {
+                do_settings_sections($advanced_section_id);
+            } elseif (array_key_exists($active_tab, $tabs)) {
+                $section_id = self::get_section_id_for_provider($active_tab);
+                do_settings_sections($section_id);
+            } else {
+                echo '<p>' . esc_html__('Please select a valid settings tab.', 'mso-ai-meta-description') . '</p>';
+            }
 
             submit_button(
                 esc_html__('Save Changes', 'mso-ai-meta-description'),
                 'primary',
                 'mso-ai-save-settings-button',
                 true,
-                ['id' => 'mso-ai-submit-button']
+                ['id' => 'mso-ai-submit-button-' . esc_attr($active_tab)]
             );
             ?><span class="spinner mso-ai-spinner"></span>
-                </form>
-            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <?php
         } else {
             wp_die(esc_html__('Invalid nonce specified.', 'mso-ai-meta-description'), esc_html__('Error', 'mso-ai-meta-description'), ['response' => 403, 'back_link' => true,]);
@@ -161,11 +188,20 @@ class Settings
     private function get_tabs(): array
     {
         $tabs = [];
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
 
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
-            $tabs[$provider_name] = sprintf(/* translators: 1: label */ esc_html__('%s Settings', 'mso-ai-meta-description'), ucfirst($provider_name));
+            $provider_title = $provider->get_title();
+            $enable_option_name = $prefix . 'provider_enabled_' . $provider_name;
+
+            if (get_option($enable_option_name, false)) {
+                /* translators: %s: Provider name (e.g., Mistral) */
+                $tabs[$provider_name] = sprintf(esc_html__('%s Settings', 'mso-ai-meta-description'), $provider_title);
+            }
         }
+
+        $tabs[self::OPTIONS] = esc_html__('Advanced Settings', 'mso-ai-meta-description');
 
         return $tabs;
     }
@@ -198,8 +234,8 @@ class Settings
             $model_option = $prefix . $provider_name . '_model';
             $section_id = self::get_section_id_for_provider($provider_name);
 
-            register_setting($option_group, $api_key_option, Settings::MY_ARRAY);
-            register_setting($option_group, $model_option, Settings::MY_ARRAY);
+            register_setting($option_group, $api_key_option, Settings::SANITIZE_TEXT_FIELD);
+            register_setting($option_group, $model_option, Settings::SANITIZE_TEXT_FIELD);
 
             add_settings_section(
                 $section_id,
@@ -227,6 +263,57 @@ class Settings
             );
         }
 
+        $advanced_section_id = self::OPTIONS_GROUP . '_advanced_section';
+
+        add_settings_section(
+            $advanced_section_id,
+            '',
+            [$this, 'render_advanced_section_callback'],
+            $advanced_section_id
+        );
+
+        foreach ($this->providers as $provider) {
+            $provider_name = $provider->get_name();
+            $provider_title = $provider->get_title();
+            $enable_option_name = $prefix . 'provider_enabled_' . $provider_name;
+
+            register_setting($option_group, $enable_option_name, Settings::SANITIZE_TEXT_FIELD);
+
+            add_settings_field(
+                $enable_option_name,
+                sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Enable %s', 'mso-ai-meta-description'), $provider_title),
+                [$this, 'render_provider_enable_field'],
+                $advanced_section_id,
+                $advanced_section_id,
+                [
+                    'label_for' => $enable_option_name . '_id',
+                    'provider_name' => $provider_name,
+                    'provider_title' => $provider_title,
+                ]
+            );
+
+            $custom_prompt_option_name = $prefix . 'custom_summary_prompt';
+            register_setting($option_group, $custom_prompt_option_name, Settings::SANITIZE_TEXTAREA_FIELD);
+
+            add_settings_field(
+                $custom_prompt_option_name . $provider_name,
+                esc_html__('Custom Prompt', 'mso-ai-meta-description'),
+                [$this, 'render_custom_prompt_field'],
+                $advanced_section_id,
+                $advanced_section_id,
+                ['label_for' => $custom_prompt_option_name . '_id', 'provider_name' => $provider_name]
+            );
+
+        }
+        $debug_option_name = $prefix . 'advanced_options';
+        register_setting($option_group, $debug_option_name, Settings::SANITIZE_TEXT_FIELD);
+        add_settings_section(
+            $advanced_section_id,
+            '',
+            [$this, 'render_advanced_section_callback'],
+            $advanced_section_id
+        );
+
         if ('posts' === get_option('show_on_front')) {
             $this->register_front_page_setting();
         }
@@ -239,7 +326,7 @@ class Settings
     public function register_front_page_setting(): void
     {
         $option_name = MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page';
-        register_setting('reading', $option_name, Settings::MY_ARRAY);
+        register_setting('reading', $option_name, Settings::SANITIZE_TEXT_FIELD);
         add_settings_field('mso_ai_front_page_description_field', esc_html__('Front page meta description', 'mso-ai-meta-description'), [$this, 'render_front_page_description_input'], 'reading', 'default', ['label_for' => $option_name]);
     }
 
@@ -260,44 +347,65 @@ class Settings
             wp_send_json_error(['message' => esc_html__('Missing active tab identifier.', 'mso-ai-meta-description')], 400);
         }
 
-        $provider_instance = ProviderManager::get_provider($active_tab);
-        if (! $provider_instance) {
-            wp_send_json_error(['message' => sprintf(/* translators: %s: Settings tab name */ esc_html__('Unknown settings tab: %s', 'mso-ai-meta-description'), esc_html($active_tab))], 400);
-        }
-
         $option_prefix = MSO_AI_Meta_Description::OPTION_PREFIX;
-        $api_key_option = $option_prefix . $active_tab . '_api_key';
-        $model_option = $option_prefix . $active_tab . '_model';
         $saved_data = [];
 
-        if (isset($_POST[$api_key_option])) {
-            $sanitized_api_key = sanitize_text_field(wp_unslash($_POST[$api_key_option]));
-            update_option($api_key_option, $sanitized_api_key);
-            $saved_data[$api_key_option] = $sanitized_api_key;
-            $new_api_key_value = $sanitized_api_key;
+        if ($active_tab === self::OPTIONS) {
+            foreach ($this->providers as $provider) {
+                $provider_name = $provider->get_name();
+                $enable_option_name = $option_prefix . 'provider_enabled_' . $provider_name;
+                $is_enabled = isset($_POST[$enable_option_name]) && rest_sanitize_boolean(sanitize_key($_POST[$enable_option_name]));
+                update_option($enable_option_name, $is_enabled);
+                $saved_data[$enable_option_name] = $is_enabled;
+                $custom_prompt_option_name = $option_prefix . 'custom_summary_prompt_' . $provider_name;
+                if (isset($_POST[$custom_prompt_option_name])) {
+                    $sanitized_prompt = sanitize_textarea_field(wp_unslash($_POST[$custom_prompt_option_name]));
+                    update_option($custom_prompt_option_name, $sanitized_prompt);
+                    $saved_data[$custom_prompt_option_name] = $sanitized_prompt;
+                } else {
+                    update_option($custom_prompt_option_name, '');
+                    $saved_data[$custom_prompt_option_name] = '';
+                }
+            }
+
         } else {
-            update_option($api_key_option, '');
-            $saved_data[$api_key_option] = '';
-            $new_api_key_value = '';
-        }
+            $provider_instance = ProviderManager::get_provider($active_tab);
+            if (! $provider_instance) {
+                wp_send_json_error(['message' => sprintf(/* translators: %s: Settings tab name */ esc_html__('Unknown settings tab: %s', 'mso-ai-meta-description'), esc_html($active_tab))], 400);
+            }
 
-        $submitted_model = isset($_POST[$model_option]) ? sanitize_text_field(wp_unslash($_POST[$model_option])) : null;
+            $api_key_option = $option_prefix . $active_tab . '_api_key';
+            $model_option = $option_prefix . $active_tab . '_model';
 
-        if (! empty($new_api_key_value) && empty($submitted_model)) {
-            if (method_exists($provider_instance, 'get_default_model')) {
-                $default_model = $provider_instance->get_default_model();
-                update_option($model_option, $default_model);
-                $saved_data[$model_option] = $default_model;
+            if (isset($_POST[$api_key_option])) {
+                $sanitized_api_key = sanitize_text_field(wp_unslash($_POST[$api_key_option]));
+                update_option($api_key_option, $sanitized_api_key);
+                $saved_data[$api_key_option] = $sanitized_api_key;
+                $new_api_key_value = $sanitized_api_key;
+            } else {
+                update_option($api_key_option, '');
+                $saved_data[$api_key_option] = '';
+                $new_api_key_value = '';
+            }
+
+            $submitted_model = isset($_POST[$model_option]) ? sanitize_text_field(wp_unslash($_POST[$model_option])) : null;
+
+            if (! empty($new_api_key_value) && empty($submitted_model)) {
+                if (method_exists($provider_instance, 'get_default_model')) {
+                    $default_model = $provider_instance->get_default_model();
+                    update_option($model_option, $default_model);
+                    $saved_data[$model_option] = $default_model;
+                } else {
+                    update_option($model_option, '');
+                    $saved_data[$model_option] = '';
+                }
+            } elseif (isset($submitted_model)) {
+                update_option($model_option, $submitted_model);
+                $saved_data[$model_option] = $submitted_model;
             } else {
                 update_option($model_option, '');
                 $saved_data[$model_option] = '';
             }
-        } elseif (isset($submitted_model)) {
-            update_option($model_option, $submitted_model);
-            $saved_data[$model_option] = $submitted_model;
-        } else {
-            update_option($model_option, '');
-            $saved_data[$model_option] = '';
         }
 
         wp_send_json_success(['message' => esc_html__('Settings saved successfully.', 'mso-ai-meta-description'), 'saved_data' => $saved_data,
@@ -317,7 +425,7 @@ class Settings
         $provider_name = substr($section_id, $prefix_length, -$suffix_length);
 
         if ($provider_name) {
-            echo '<p>' . sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Configure the settings for using the %s API.', 'mso-ai-meta-description'), esc_html(ucfirst($provider_name))) . '</p>';
+            echo '<h2>' . sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Configure the settings for using the %s API.', 'mso-ai-meta-description'), esc_html(ucfirst($provider_name))) . '</h2>';
         }
     }
 
@@ -433,5 +541,93 @@ class Settings
             }
         </script>
         <?php
+    }
+
+    /**
+     * Renders descriptive text for the advanced settings section.
+     */
+    public function render_advanced_section_callback(): void
+    {
+        echo '<h2>' . esc_html__('Configure advanced options.', 'mso-ai-meta-description') . '</h2>';
+    }
+
+    /**
+     * Renders the HTML for the provider enable/disable checkbox field.
+     *
+     * @param array<string, string> $args Arguments passed from add_settings_field.
+     *                                    Should contain 'provider_name' and 'provider_title'.
+     */
+    public function render_provider_enable_field(array $args): void
+    {
+        $provider_name = $args['provider_name'];
+        $provider_title = $args['provider_title'];
+        if (empty($provider_name)) {
+            return;
+        }
+
+        $option_name = MSO_AI_Meta_Description::get_option_prefix() . 'provider_enabled_' . $provider_name;
+        $value = get_option($option_name, false);
+        $field_id = esc_attr($args['label_for']);
+
+        echo '<label for="' . esc_attr($field_id) . '">';
+        echo '<input type="checkbox" name="' . esc_attr($option_name) . '" id="' . esc_attr($field_id) . '" value="1" ' . checked(1, $value, false) . '>';
+        /* translators: 1: Provider name (e.g., Mistral) */
+        echo ' ' . sprintf(esc_html__('Show the "Generate with %1$s" button in the WordPress Editor.', 'mso-ai-meta-description'), esc_html($provider_title));
+        echo '</label>';
+    }
+
+    /**
+     * Helper function to get the default prompt text template.
+     * Avoids duplication with AbstractProvider.
+     *
+     * @return string The default prompt template.
+     */
+    private function get_default_summary_prompt_template(): string
+    {
+        return
+         sprintf(
+             /* translators: 1: Minimum length */
+             esc_html__('%s :', 'mso-ai-meta-description'),
+             esc_html(MSO_AI_Meta_Description::DEFAULT_SUMMARY_PROMPT_TEMPLATE)
+         );
+    }
+
+    /**
+     * Renders the HTML for the custom summary prompt textarea field.
+     *
+     * @param array<string, string> $args Arguments passed from add_settings_field.
+     */
+    public function render_custom_prompt_field(array $args): void
+    {
+        $option_name = MSO_AI_Meta_Description::get_option_prefix() . 'custom_summary_prompt_' . $args['provider_name'];
+        $value = (string)get_option($option_name, '');
+        $field_id = esc_attr($args['label_for']);
+        $details_container_id = esc_attr($option_name . '_details');
+        $default_prompt = $this->get_default_summary_prompt_template();
+
+        $is_initially_visible = ! empty($value);
+        $initial_display_style = $is_initially_visible ? '' : 'display: none;';
+        $initial_aria_expanded = $is_initially_visible ? 'true' : 'false';
+        $initial_link_text = $is_initially_visible
+            ? esc_html__('Hide custom prompt', 'mso-ai-meta-description')
+            : esc_html__('Show custom prompt', 'mso-ai-meta-description');
+
+        printf(
+            '<a href="#" class="mso-ai-toggle-prompt" role="button" aria-expanded="%s" aria-controls="%s">%s</a>',
+            esc_attr($initial_aria_expanded),
+            esc_attr($details_container_id),
+            esc_html($initial_link_text)
+        );
+
+        echo '<div id="' . esc_attr($details_container_id) . '" class="mso-ai-prompt-details"  style="' . esc_attr($initial_display_style) . '">';
+
+            echo '<textarea name="' . esc_attr($option_name) . '" id="' . esc_attr($field_id) . '" class="large-text" rows="8" placeholder="' . esc_attr($default_prompt) . '">' . esc_textarea($value) . '</textarea>';
+            echo '<p class="description">' .
+                 esc_html__('Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt.', 'mso-ai-meta-description') . '<br>' .
+                 esc_html__('Available placeholders:', 'mso-ai-meta-description') . ' <code>%1$d</code> (' . esc_html__('min length 120 characters', 'mso-ai-meta-description') . '), <code>%2$d</code> (' . esc_html__('max length 160 characters', 'mso-ai-meta-description') . '), <code>%3$s</code> (' . esc_html__('content', 'mso-ai-meta-description') . ').<br>' .
+                 '<strong>' . esc_html__('Default prompt:', 'mso-ai-meta-description') . '</strong><br><em>' . esc_html($default_prompt) . '</em>' .
+                 '</p>';
+
+        echo '</div>';
     }
 }

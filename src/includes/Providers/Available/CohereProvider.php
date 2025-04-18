@@ -169,7 +169,8 @@ class CohereProvider extends AbstractProvider implements ProviderInterface
      */
     protected function prepare_headers(array $headers): array
     {
-        $headers += ['Cohere-Version' => '2022-12-06', 'accept' => 'application/json',];
+        $headers['Cohere-Version'] = '2022-12-06';
+        $headers['accept'] = 'application/json';
 
         return $headers;
     }

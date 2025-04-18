@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 18:42+0200\n"
+"POT-Creation-Date: 2025-04-18 15:23+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
@@ -17,64 +17,116 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/Admin.php:141 ../includes/Settings.php:543
+#: ../includes/Admin.php:124 ../includes/Settings.php:518
 msgid "(Too short)"
 msgstr ""
 
-#: ../includes/Admin.php:142 ../includes/Settings.php:544
+#: ../includes/Admin.php:125 ../includes/Settings.php:519
 msgid "(Too long)"
 msgstr ""
 
-#: ../includes/Admin.php:143 ../includes/Settings.php:545
+#: ../includes/Admin.php:126 ../includes/Settings.php:520
 msgid "(Good)"
 msgstr ""
 
-#: ../includes/Admin.php:148
+#: ../includes/Admin.php:129
 msgid "-- Select a Model --"
 msgstr ""
 
-#: ../includes/Admin.php:150
+#: ../includes/Admin.php:130
 msgid "Error loading models."
 msgstr ""
 
-#: ../includes/Admin.php:160
+#: ../includes/Admin.php:137
 msgid "Saving..."
 msgstr ""
 
-#: ../includes/Admin.php:161
+#: ../includes/Admin.php:138
 msgid "Settings Saved"
 msgstr ""
 
-#: ../includes/Admin.php:162
+#: ../includes/Admin.php:139
 msgid "Error Saving Settings"
 msgstr ""
 
-#: ../includes/Admin.php:185
+#: ../includes/Admin.php:140 ../includes/Settings.php:611
+msgid "Show custom prompt"
+msgstr ""
+
+#: ../includes/Admin.php:141
+msgid "Hide custom prompt"
+msgstr ""
+
+#: ../includes/Admin.php:160
 msgid "Settings"
 msgstr ""
 
-#: ../includes/Ajax.php:78 ../includes/Ajax.php:139
+#: ../includes/Admin.php:183
+msgid "Overview"
+msgstr ""
+
+#: ../includes/Admin.php:184
+msgid "This page allows you to configure the API keys and select models for the different AI providers used by MSO AI Meta Description."
+msgstr ""
+
+#: ../includes/Admin.php:185
+msgid "Navigate through the tabs (Mistral, Gemini, etc.) to enter your credentials for each service you want to use."
+msgstr ""
+
+#: ../includes/Admin.php:186
+msgid "Once an API key is saved and valid, the available models for that provider will be loaded automatically in the dropdown."
+msgstr ""
+
+#: ../includes/Admin.php:191
+msgid "API Keys"
+msgstr ""
+
+#: ../includes/Admin.php:192
+msgid "You need to obtain an API key from each AI provider you wish to use (OpenAI, Mistral, Gemini, Anthropic, Cohere)."
+msgstr ""
+
+#: ../includes/Admin.php:193
+msgid "Enter the corresponding API key in the input field for each provider and click \"Save Changes\"."
+msgstr ""
+
+#: ../includes/Admin.php:194
+msgid "Make sure your keys have the necessary permissions to list models and generate text."
+msgstr ""
+
+#: ../includes/Admin.php:198
+msgid "For more information:"
+msgstr ""
+
+#: ../includes/Admin.php:199
+msgid "Plugin Website"
+msgstr ""
+
+#: ../includes/Admin.php:200
+msgid "Support Forum"
+msgstr ""
+
+#: ../includes/Ajax.php:78 ../includes/Ajax.php:127
 msgid "Invalid nonce."
 msgstr ""
 
-#: ../includes/Ajax.php:84 ../includes/Ajax.php:144
-#: ../includes/Settings.php:300
+#: ../includes/Ajax.php:82 ../includes/Ajax.php:131
+#: ../includes/Settings.php:342
 msgid "Permission denied."
 msgstr ""
 
-#: ../includes/Ajax.php:94
+#: ../includes/Ajax.php:89
 msgid "Content cannot be empty."
 msgstr ""
 
-#: ../includes/Ajax.php:98
+#: ../includes/Ajax.php:93
 msgid "Invalid AI provider specified."
 msgstr ""
 
-#: ../includes/Ajax.php:153
+#: ../includes/Ajax.php:137
 msgid "Invalid API type specified."
 msgstr ""
 
-#: ../includes/Api/ApiClient.php:52 ../includes/Api/ApiClient.php:83
+#: ../includes/Api/ApiClient.php:45 ../includes/Api/ApiClient.php:76
 #, php-format
 msgid "AI provider \"%s\" is not registered or supported."
 msgstr ""
@@ -83,147 +135,204 @@ msgstr ""
 msgid "MSO AI Meta Description"
 msgstr ""
 
-#: ../includes/MetaBox.php:116 ../includes/Settings.php:66
+#: ../includes/MetaBox.php:112 ../includes/Settings.php:91
 msgid "Meta Description"
 msgstr ""
 
-#: ../includes/MetaBox.php:134
+#: ../includes/MetaBox.php:127
 #, php-format
 msgid "Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../includes/MetaBox.php:139
+#: ../includes/MetaBox.php:132
 msgid "Current count:"
 msgstr ""
 
-#: ../includes/MetaBox.php:163
+#: ../includes/MetaBox.php:150
 msgid "Generate with AI:"
 msgstr ""
 
-#: ../includes/MetaBox.php:172
+#: ../includes/MetaBox.php:156
 #, php-format
 msgid "Generate with %s"
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:57
+#: ../includes/Providers/AbstractProvider.php:55
 #, php-format
 msgid "API key for %s is not set."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:105
+#: ../includes/Providers/AbstractProvider.php:100
 msgid "Failed to encode request body."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:138
+#: ../includes/Providers/AbstractProvider.php:127
 msgid "Unknown API error occurred."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:155
+#: ../includes/Providers/AbstractProvider.php:143
 #, php-format
 msgid "%1$s API Error (%2$d): %3$s"
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:173
+#: ../includes/Providers/AbstractProvider.php:158
 msgid "Failed to decode API response."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:202
-#, php-format
-msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
-msgstr ""
-
-#: ../includes/Providers/Available/AnthropicProvider.php:117
-#: ../includes/Providers/Available/GeminiProvider.php:111
-#: ../includes/Providers/Available/MistralProvider.php:117
-#: ../includes/Providers/Available/OpenAIProvider.php:118
+#: ../includes/Providers/Available/AnthropicProvider.php:120
+#: ../includes/Providers/Available/CohereProvider.php:107
+#: ../includes/Providers/Available/GeminiProvider.php:118
+#: ../includes/Providers/Available/MistralProvider.php:123
+#: ../includes/Providers/Available/OpenAIProvider.php:123
 #, php-format
 msgid "Unable to parse model list from %1$d: \"models\" array missing."
 msgstr ""
 
-#: ../includes/Providers/Available/AnthropicProvider.php:177
-#: ../includes/Providers/Available/GeminiProvider.php:183
-#: ../includes/Providers/Available/MistralProvider.php:170
-#: ../includes/Providers/Available/OpenAIProvider.php:190
+#: ../includes/Providers/Available/AnthropicProvider.php:175
+#: ../includes/Providers/Available/CohereProvider.php:158
+#: ../includes/Providers/Available/GeminiProvider.php:186
+#: ../includes/Providers/Available/MistralProvider.php:175
+#: ../includes/Providers/Available/OpenAIProvider.php:184
 #, php-format
 msgid "%1$d response missing expected summary data or invalid format."
 msgstr ""
 
-#: ../includes/Settings.php:65
+#: ../includes/Settings.php:90
 msgid "MSO AI Meta Description Settings"
 msgstr ""
 
-#: ../includes/Settings.php:90
+#: ../includes/Settings.php:112
 msgid "No AI providers found or loaded."
 msgstr ""
 
-#: ../includes/Settings.php:152
+#: ../includes/Settings.php:159
+msgid "Please select a valid settings tab."
+msgstr ""
+
+#: ../includes/Settings.php:163
 msgid "Save Changes"
 msgstr ""
 
-#: ../includes/Settings.php:164
+#: ../includes/Settings.php:179
 msgid "Invalid nonce specified."
 msgstr ""
 
-#: ../includes/Settings.php:164
+#: ../includes/Settings.php:179
 msgid "Error"
 msgstr ""
 
-#: ../includes/Settings.php:186
+#: ../includes/Settings.php:200
 #, php-format
 msgid "%s Settings"
 msgstr ""
 
-#: ../includes/Settings.php:244
+#: ../includes/Settings.php:204
+msgid "Advanced Settings"
+msgstr ""
+
+#: ../includes/Settings.php:249
 #, php-format
 msgid "%s API Key"
 msgstr ""
 
-#: ../includes/Settings.php:256
+#: ../includes/Settings.php:258
 #, php-format
 msgid "%s Model"
 msgstr ""
 
-#: ../includes/Settings.php:281
+#: ../includes/Settings.php:284
+#, php-format
+msgid "Enable %s"
+msgstr ""
+
+#: ../includes/Settings.php:300
+msgid "Custom Prompt"
+msgstr ""
+
+#: ../includes/Settings.php:330
 msgid "Front page meta description"
 msgstr ""
 
-#: ../includes/Settings.php:306
+#: ../includes/Settings.php:347
 msgid "Missing active tab identifier."
 msgstr ""
 
-#: ../includes/Settings.php:318
+#: ../includes/Settings.php:374
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr ""
 
-#: ../includes/Settings.php:373
+#: ../includes/Settings.php:411
 msgid "Settings saved successfully."
 msgstr ""
 
-#: ../includes/Settings.php:395
+#: ../includes/Settings.php:428
 #, php-format
 msgid "Configure the settings for using the %s API."
 msgstr ""
 
-#: ../includes/Settings.php:451
+#: ../includes/Settings.php:452
 #, php-format
 msgid "Get your %s API key"
 msgstr ""
 
-#: ../includes/Settings.php:477
+#: ../includes/Settings.php:468
 msgid "Loading models..."
 msgstr ""
 
-#: ../includes/Settings.php:492
+#: ../includes/Settings.php:475
 #, php-format
 msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
 msgstr ""
 
-#: ../includes/Settings.php:522
+#: ../includes/Settings.php:501
 #, php-format
 msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../includes/Settings.php:526
+#: ../includes/Settings.php:502
 msgid "Character count:"
+msgstr ""
+
+#: ../includes/Settings.php:551
+msgid "Configure advanced options."
+msgstr ""
+
+#: ../includes/Settings.php:575
+#, php-format
+msgid "Show the \"Generate with %1$s\" button in the WordPress Editor."
+msgstr ""
+
+#: ../includes/Settings.php:590
+#, php-format
+msgid "%s :"
+msgstr ""
+
+#: ../includes/Settings.php:619
+msgid "Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt."
+msgstr ""
+
+#: ../includes/Settings.php:620
+msgid "Available placeholders:"
+msgstr ""
+
+#: ../includes/Settings.php:620
+msgid "min length 120 characters"
+msgstr ""
+
+#: ../includes/Settings.php:620
+msgid "max length 160 characters"
+msgstr ""
+
+#: ../includes/Settings.php:620
+msgid "content"
+msgstr ""
+
+#: ../includes/Settings.php:621
+msgid "Default prompt:"
+msgstr ""
+
+#: ../mso-ai-wp-meta-description.php:85
+#, php-format
+msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
 msgstr ""

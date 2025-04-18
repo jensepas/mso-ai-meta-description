@@ -121,25 +121,25 @@ class MetaBox
                     aria-describedby="mso-ai-description-hint"
             ><?php echo esc_textarea($value); ?></textarea>
             <p class="description" id="mso-ai_description-hint"> <?php
-        ?>
-                <?php
-        printf(
-            /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
-            esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
-            esc_html($min_length),
-            esc_html($max_length)
-        );
-        ?>
-                <?php esc_html_e('Current count:', 'mso-ai-meta-description'); ?>
+
+                printf(
+                    /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
+                    esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
+                    esc_html($min_length),
+                    esc_html($max_length)
+                );
+        echo ' ';
+        esc_html_e('Current count:', 'mso-ai-meta-description'); ?>
                 <span class="mso-ai-char-count">0</span>
                 <span class="mso-ai-length-indicator"></span>
             </p>
             <?php
-            $configured_providers = [];
+        $configured_providers = [];
         foreach ($this->providers as $provider) {
             $provider_name = $provider->get_name();
             $api_key_option = $option_prefix . $provider_name . '_api_key';
-            if (! empty(get_option($api_key_option))) {
+            $enable_option_name = $option_prefix . 'provider_enabled_' . $provider_name;
+            if (! empty(get_option($api_key_option)) && get_option($enable_option_name, false)) {
                 $configured_providers[$provider_name] = $provider;
             }
         }
@@ -149,14 +149,14 @@ class MetaBox
                 <div class="mso-ai-generator">
                     <p><strong><?php esc_html_e('Generate with AI:', 'mso-ai-meta-description'); ?></strong></p>
                     <?php
-                foreach ($configured_providers as $provider_name => $provider) :
-                    $provider_title = $provider->get_title();
-                    $button_label = sprintf(
-                        /* translators: %s: Provider title  */
-                        __('Generate with %s', 'mso-ai-meta-description'),
-                        ucfirst($provider_title)
-                    );
-                    ?>
+                    foreach ($configured_providers as $provider_name => $provider) :
+                        $provider_title = $provider->get_title();
+                        $button_label = sprintf(
+                            /* translators: %s: Provider title  */
+                            __('Generate with %s', 'mso-ai-meta-description'),
+                            ucfirst($provider_title)
+                        );
+                        ?>
                         <button type="button" id="summarize-<?php echo esc_attr($provider_name); ?>"
                                 class="button mso-ai-generate-button"
                                 data-provider="<?php echo esc_attr($provider_name); ?>">

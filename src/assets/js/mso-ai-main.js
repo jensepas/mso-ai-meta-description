@@ -63,6 +63,7 @@
                 $messagesDiv: $('#mso-ai-settings-messages'),
                 $navTabs: $('.nav-tab-wrapper a.nav-tab'),
                 $passwordToggleButtons: $('.wp-hide-pw'),
+                $togglePromptLinks: $('.mso-ai-toggle-prompt'),
                 $modelSelects: $('.mso-model-select')
             };
         },
@@ -80,6 +81,29 @@
                 this.elements.$passwordToggleButtons.on('click', this.handlePasswordToggleClick.bind(this));
                 this.elements.$settingsForm.on('submit', this.handleSettingsSubmit.bind(this));
                 this.elements.$messagesDiv.on('click', '.notice-dismiss', this.handleDismissNoticeClick.bind(this));
+            }
+
+            if (this.elements.$settingsForm.length) {
+                this.elements.$settingsForm.on('click', '.mso-ai-toggle-prompt', this.handleTogglePromptClick.bind(this));
+            }
+        },
+
+        /**
+         * Handles click events on the show/hide toggle links for custom prompts.
+         * @param {Event} e - The click event object.
+         */
+        handleTogglePromptClick(e) {
+            e.preventDefault();
+            const $link = $(e.currentTarget);
+            const targetId = $link.attr('aria-controls');
+            const $targetDiv = $('#' + targetId);
+
+            if ($targetDiv.length) {
+                $targetDiv.slideToggle('fast', () => {
+                    const isVisible = $targetDiv.is(':visible');
+                    $link.attr('aria-expanded', isVisible);
+                    $link.text(isVisible ? this.config.i18n_hide_prompt : this.config.i18n_show_prompt);
+                });
             }
         },
 
@@ -312,6 +336,13 @@
             this.ajaxRequest({ active_tab: activeTabSlug }, formData)
                 .then(response => {
                     this.displayMessage('success', response.message);
+
+                    if (activeTabSlug === 'options') {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                        return;
+                    }
 
                     const $selectToRefresh = $(`#mso_ai_meta_description_${activeTabSlug}_model_id`);
                     if ($selectToRefresh.length) {

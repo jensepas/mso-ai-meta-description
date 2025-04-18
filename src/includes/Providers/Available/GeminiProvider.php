@@ -158,7 +158,7 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
                 ],
             ],
             'generationConfig' => [
-                'maxOutputTokens' => 90,
+                'maxOutputTokens' => 40,
                 'temperature' => 0.6,
             ],
         ];
