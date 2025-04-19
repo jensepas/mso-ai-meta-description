@@ -25,7 +25,7 @@ jobs:
 
       # Étape 3 : Exécuter le build Gulp
       - name: Run Gulp Build
-        run: npx gulp
+        run: npx gulp --gulpfile gulpfile.cjs
 
       # Étape 4 : Copier les fichiers générés par Gulp dans `src/assets`
       - name: Copy Gulp Build to src/assets
