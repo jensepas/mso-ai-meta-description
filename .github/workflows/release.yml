@@ -23,11 +23,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Étape 3 : Exécuter Gulp pour générer les fichiers
+      # Étape 3 : Exécuter le build Gulp
       - name: Run Gulp Build
         run: npx gulp
 
-      # Étape 4 : Créez une release
+      # Étape 4 : Copier les fichiers générés par Gulp dans `src/assets`
+      - name: Copy Gulp Build to src/assets
+        run: |
+          # Crée les répertoires si nécessaire
+          mkdir -p src/assets/css src/assets/js
+
+          # Copier les fichiers CSS dans src/assets/css
+          cp dist/css/*.css src/assets/css/ || echo "No CSS files to copy"
+
+          # Copier les fichiers JS dans src/assets/js
+          cp dist/js/*.js src/assets/js/ || echo "No JS files to copy"
+
+      # Étape 5 : Créez une release
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,26 +49,15 @@ jobs:
           tag_name: ${{ github.ref_name }} # Utilise le tag qui a déclenché le workflow
           release_name: Release ${{ github.ref_name }}
           body: |
-            Cette release contient les fichiers générés par Gulp et le contenu de `src`.
+            Cette release contient les fichiers du dossier `src`, avec les fichiers générés par Gulp copiés dans `src/assets`.
           draft: false
           prerelease: false
 
-      # Étape 5 : Ajouter tous les fichiers générés (dist/)
-      - name: Upload Gulp Build Files
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist # Répertoire contenant les fichiers générés par Gulp
-          asset_name: dist-files.zip
-          asset_content_type: application/zip
+      # Étape 6 : Ajouter tous les fichiers du répertoire src dans la release
+      - name: Zip Source Files (src/)
+        run: zip -r src-files.zip ./src
 
-      # Étape 6 : Ajouter tous les fichiers de src/
-      - name: Upload Source Files
-        run: |
-          zip -r src-files.zip ./src
-      - name: Attach Source Files
+      - name: Attach Source Files to Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
