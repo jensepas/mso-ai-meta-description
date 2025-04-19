@@ -34,10 +34,10 @@ jobs:
           mkdir -p src/assets/css src/assets/js
 
           # Copier les fichiers CSS dans src/assets/css
-          cp dist/css/*.css src/assets/css/ || echo "No CSS files to copy"
+          cp src/assets/css/*.css src/assets/css/ || echo "No CSS files to copy"
 
           # Copier les fichiers JS dans src/assets/js
-          cp dist/js/*.js src/assets/js/ || echo "No JS files to copy"
+          cp src/assets/js/*.js src/assets/js/ || echo "No JS files to copy"
 
       # Étape 5 : Créez une release
       - name: Create GitHub Release
