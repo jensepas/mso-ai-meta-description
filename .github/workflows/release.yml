@@ -1,0 +1,67 @@
+name: Build and Create Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Déclenche uniquement sur les tags commençant par "v"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Vérifiez le code source
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Installez Node.js et les dépendances
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Remplacez par la version de Node.js utilisée dans votre projet
+
+      - name: Install dependencies
+        run: npm install
+
+      # Étape 3 : Exécuter Gulp pour générer les fichiers
+      - name: Run Gulp Build
+        run: npx gulp
+
+      # Étape 4 : Créez une release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }} # Utilise le tag qui a déclenché le workflow
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            Cette release contient les fichiers générés par Gulp et le contenu de `src`.
+          draft: false
+          prerelease: false
+
+      # Étape 5 : Ajouter tous les fichiers générés (dist/)
+      - name: Upload Gulp Build Files
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist # Répertoire contenant les fichiers générés par Gulp
+          asset_name: dist-files.zip
+          asset_content_type: application/zip
+
+      # Étape 6 : Ajouter tous les fichiers de src/
+      - name: Upload Source Files
+        run: |
+          zip -r src-files.zip ./src
+      - name: Attach Source Files
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./src-files.zip
+          asset_name: src-files.zip
+          asset_content_type: application/zip
