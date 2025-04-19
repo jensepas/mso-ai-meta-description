@@ -374,7 +374,7 @@
                 try {
                     const url = new URL($activeTabLink.attr('href'), window.location.origin);
                     return url.searchParams.get('tab') || '';
-                } catch (e) {
+                } catch {
                     const href = $activeTabLink.attr('href');
                     const tabMatch = href ? href.match(/tab=([^&]*)/) : null;
                     return tabMatch ? tabMatch[1] : '';
@@ -387,7 +387,7 @@
                 try {
                     const url = new URL(this.elements.$navTabs.first().attr('href'), window.location.origin);
                     return url.searchParams.get('tab') || '';
-                } catch (e) {
+                } catch {
                     const href = this.elements.$navTabs.first().attr('href');
                     const tabMatch = href ? href.match(/tab=([^&]*)/) : null;
                     return tabMatch ? tabMatch[1] : '';
@@ -454,7 +454,7 @@
                     let errorData = null;
                     try {
                         errorData = await response.json();
-                    } catch (e) { }
+                    } catch { }
                     const displayError = this.parseApiError(errorData?.data?.message || this.config.error_text, this.config.error_text);
 
                     throw new Error(displayError || `HTTP error ${response.status}`);

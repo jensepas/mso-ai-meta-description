@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-18 16:37+0200\n"
+"POT-Creation-Date: 2025-04-19 12:41+0200\n"
 "PO-Revision-Date: 2015-07-09 16:19+0100\n"
 "Last-Translator: MS-ONLY <hello@ms-only.fr>\n"
 "Language-Team: \n"
@@ -17,15 +17,15 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/Admin.php:124 ../includes/Settings.php:518
+#: ../includes/Admin.php:124 ../includes/Settings.php:519
 msgid "(Too short)"
 msgstr ""
 
-#: ../includes/Admin.php:125 ../includes/Settings.php:519
+#: ../includes/Admin.php:125 ../includes/Settings.php:520
 msgid "(Too long)"
 msgstr ""
 
-#: ../includes/Admin.php:126 ../includes/Settings.php:520
+#: ../includes/Admin.php:126 ../includes/Settings.php:521
 msgid "(Good)"
 msgstr ""
 
@@ -49,11 +49,11 @@ msgstr ""
 msgid "Error Saving Settings"
 msgstr ""
 
-#: ../includes/Admin.php:140 ../includes/Settings.php:609
+#: ../includes/Admin.php:140 ../includes/Settings.php:614
 msgid "Customize the prompt"
 msgstr ""
 
-#: ../includes/Admin.php:141 ../includes/Settings.php:608
+#: ../includes/Admin.php:141 ../includes/Settings.php:613
 msgid "Hide custom prompt"
 msgstr ""
 
@@ -110,7 +110,7 @@ msgid "Invalid nonce."
 msgstr ""
 
 #: ../includes/Ajax.php:82 ../includes/Ajax.php:131
-#: ../includes/Settings.php:342
+#: ../includes/Settings.php:341
 msgid "Permission denied."
 msgstr ""
 
@@ -179,15 +179,15 @@ msgstr ""
 msgid "Failed to decode API response."
 msgstr ""
 
-#: ../includes/Providers/AbstractProvider.php:298 ../includes/Settings.php:588
+#: ../includes/Providers/AbstractProvider.php:297 ../includes/Settings.php:593
 #, php-format
-msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like \"Here is the summary:\": %3$s"
+msgid "Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s"
 msgstr ""
 
 #: ../includes/Providers/Available/AnthropicProvider.php:120
 #: ../includes/Providers/Available/CohereProvider.php:107
 #: ../includes/Providers/Available/GeminiProvider.php:118
-#: ../includes/Providers/Available/MistralProvider.php:123
+#: ../includes/Providers/Available/MistralProvider.php:120
 #: ../includes/Providers/Available/OpenAIProvider.php:123
 #, php-format
 msgid "Unable to parse model list from %1$d: \"models\" array missing."
@@ -196,7 +196,7 @@ msgstr ""
 #: ../includes/Providers/Available/AnthropicProvider.php:175
 #: ../includes/Providers/Available/CohereProvider.php:158
 #: ../includes/Providers/Available/GeminiProvider.php:186
-#: ../includes/Providers/Available/MistralProvider.php:175
+#: ../includes/Providers/Available/MistralProvider.php:172
 #: ../includes/Providers/Available/OpenAIProvider.php:184
 #, php-format
 msgid "%1$d response missing expected summary data or invalid format."
@@ -226,108 +226,108 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: ../includes/Settings.php:200
+#: ../includes/Settings.php:190
+msgid "Advanced Settings"
+msgstr ""
+
+#: ../includes/Settings.php:201
 #, php-format
 msgid "%s Settings"
 msgstr ""
 
-#: ../includes/Settings.php:204
-msgid "Advanced Settings"
-msgstr ""
-
-#: ../includes/Settings.php:249
+#: ../includes/Settings.php:248
 #, php-format
 msgid "%s API Key"
 msgstr ""
 
-#: ../includes/Settings.php:258
+#: ../includes/Settings.php:257
 #, php-format
 msgid "%s Model"
 msgstr ""
 
-#: ../includes/Settings.php:284
-#, php-format
-msgid "Enable %s"
-msgstr ""
-
-#: ../includes/Settings.php:300
+#: ../includes/Settings.php:269
 msgid "Custom Prompt"
 msgstr ""
 
-#: ../includes/Settings.php:330
+#: ../includes/Settings.php:329
 msgid "Front page meta description"
 msgstr ""
 
-#: ../includes/Settings.php:347
+#: ../includes/Settings.php:346
 msgid "Missing active tab identifier."
 msgstr ""
 
-#: ../includes/Settings.php:374
+#: ../includes/Settings.php:364
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr ""
 
-#: ../includes/Settings.php:411
+#: ../includes/Settings.php:412
 msgid "Settings saved successfully."
 msgstr ""
 
-#: ../includes/Settings.php:428
+#: ../includes/Settings.php:429
 #, php-format
 msgid "Configure the settings for using the %s API."
 msgstr ""
 
-#: ../includes/Settings.php:452
+#: ../includes/Settings.php:453
 #, php-format
 msgid "Get your %s API key"
 msgstr ""
 
-#: ../includes/Settings.php:468
+#: ../includes/Settings.php:469
 msgid "Loading models..."
 msgstr ""
 
-#: ../includes/Settings.php:475
+#: ../includes/Settings.php:476
 #, php-format
 msgid "Select the %s model to use. Models loaded dynamically if API key is valid."
 msgstr ""
 
-#: ../includes/Settings.php:501
+#: ../includes/Settings.php:502
 #, php-format
 msgid "Enter the meta description for the site's front page when it displays the latest posts. Recommended length: %1$d-%2$d characters."
 msgstr ""
 
-#: ../includes/Settings.php:502
+#: ../includes/Settings.php:503
 msgid "Character count:"
 msgstr ""
 
-#: ../includes/Settings.php:551
+#: ../includes/Settings.php:552
 msgid "Configure advanced options."
 msgstr ""
 
-#: ../includes/Settings.php:575
+#: ../includes/Settings.php:576
+#, php-format
+msgid "Enable %s"
+msgstr ""
+
+#: ../includes/Settings.php:579
 #, php-format
 msgid "Show the \"Generate with %1$s\" button in the WordPress Editor."
 msgstr ""
 
-#: ../includes/Settings.php:622
+#: ../includes/Settings.php:627
 msgid "Customize the prompt sent to the AI for generating meta descriptions. Leave empty to use the default prompt."
 msgstr ""
 
-#: ../includes/Settings.php:623
+#: ../includes/Settings.php:628
 msgid "Available placeholders:"
 msgstr ""
 
-#: ../includes/Settings.php:623
+#: ../includes/Settings.php:628
 msgid "min length 120 characters"
 msgstr ""
 
-#: ../includes/Settings.php:623
+#: ../includes/Settings.php:628
 msgid "max length 160 characters"
 msgstr ""
 
-#: ../includes/Settings.php:623
+#: ../includes/Settings.php:628
 msgid "content"
 msgstr ""
 
-#: ../includes/Settings.php:624
+#: ../includes/Settings.php:629
 msgid "Default prompt:"
 msgstr ""

@@ -294,7 +294,7 @@ abstract class AbstractProvider implements ProviderInterface
         $prompt_template = ! empty($custom_prompt_template)
             ? $custom_prompt_template
             : /* translators: 1: Min length, 2: Max length, 3: Content */
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description');
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
 
         return sprintf(
             $prompt_template,

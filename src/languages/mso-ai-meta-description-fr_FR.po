@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-18 19:36+0200\n"
-"PO-Revision-Date: 2025-04-18 19:37+0200\n"
+"POT-Creation-Date: 2025-04-19 12:40+0200\n"
+"PO-Revision-Date: 2025-04-19 12:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -50,11 +50,11 @@ msgstr "Paramètres enregistrés"
 msgid "Error Saving Settings"
 msgstr "Erreur lors de l'enregistrement des paramètres"
 
-#: ../includes/Admin.php:140 ../includes/Settings.php:615
+#: ../includes/Admin.php:140 ../includes/Settings.php:614
 msgid "Customize the prompt"
 msgstr "Personnaliser le prompt"
 
-#: ../includes/Admin.php:141 ../includes/Settings.php:614
+#: ../includes/Admin.php:141 ../includes/Settings.php:613
 msgid "Hide custom prompt"
 msgstr "Masquer le prompt personnalisé"
 
@@ -210,15 +210,15 @@ msgstr "Échec du décodage de la réponse de l'API."
 msgid ""
 "Summarize the following text into a concise meta description between %1$d "
 "and %2$d characters long. Focus on the main topic and keywords. Ensure the "
-"description flows naturally and avoid cutting words mid-sentence. Output "
-"only the description text itself, without any introductory phrases like "
-"\"Here is the summary:\": %3$s"
+"description flows naturally and avoid cutting words mid-sentence. Maintain "
+"the language of the original text. Output only the description text itself: "
+"%3$s"
 msgstr ""
 "Résumez le texte suivant dans une méta-description concise de %1$d à %2$d "
 "caractères. Concentrez-vous sur le sujet principal et les mots-clés. Assurez-"
-"vous que la description soit fluide et évitez de couper des mots en milieu "
-"de phrase. N'affichez que le texte de description, sans phrases "
-"d'introduction telles que \"Voici le résumé :\" : %3$s"
+"vous que la description soit fluide et évitez les coupures en milieu de "
+"phrase. Conservez la langue d'origine. N'affichez que le texte de "
+"description lui-même : %3$s"
 
 #: ../includes/Providers/Available/AnthropicProvider.php:120
 #: ../includes/Providers/Available/CohereProvider.php:107
@@ -355,7 +355,7 @@ msgstr "Activer %s"
 msgid "Show the \"Generate with %1$s\" button in the WordPress Editor."
 msgstr "Afficher le bouton \"Générer avec %s\" dans l'éditeur WordPress."
 
-#: ../includes/Settings.php:628
+#: ../includes/Settings.php:627
 msgid ""
 "Customize the prompt sent to the AI for generating meta descriptions. Leave "
 "empty to use the default prompt."
@@ -363,22 +363,63 @@ msgstr ""
 "Personnalisez le prompt envoyée à l'IA pour générer des méta-descriptions. "
 "Laissez ce champ vide pour utiliser le prompt par défaut."
 
-#: ../includes/Settings.php:629
+#: ../includes/Settings.php:628
 msgid "Available placeholders:"
 msgstr "Espaces réservés disponibles :"
 
-#: ../includes/Settings.php:629
+#: ../includes/Settings.php:628
 msgid "min length 120 characters"
 msgstr "longueur minimale 120 caractères"
 
-#: ../includes/Settings.php:629
+#: ../includes/Settings.php:628
 msgid "max length 160 characters"
 msgstr "longueur maximale 160 caractères"
 
-#: ../includes/Settings.php:629
+#: ../includes/Settings.php:628
 msgid "content"
 msgstr "contenu"
 
-#: ../includes/Settings.php:630
+#: ../includes/Settings.php:629
 msgid "Default prompt:"
 msgstr "Prompt par défaut :"
+
+#, fuzzy
+#~| msgid ""
+#~| "Summarize the following text in a concise meta description of %1$d to "
+#~| "%2$d characters.\n"
+#~| "Focus on the main topic and keywords.\n"
+#~| "Make sure the description flows well and avoid hyphenating words mid-"
+#~| "sentence.\n"
+#~| "Maintain the language of the original text.\n"
+#~| "Display only the description text, without introductory sentences such "
+#~| "as \"Here's the summary:\": %3$s"
+#~ msgid ""
+#~ "Summarize the following text in a concise meta description of %1$d to "
+#~ "%2$d characters. Focus on the main topic and keywords. Make sure the "
+#~ "description flows well and avoid hyphenating words mid-sentence. Maintain "
+#~ "the language of the original text. Display only the description text, "
+#~ "without introductory sentences such as \"Here's the summary:\": %3\\$s"
+#~ msgstr ""
+#~ "Résumez le texte suivant dans une méta-description concise de %1$d à %2$d "
+#~ "caractères.\n"
+#~ "Concentrez-vous sur le sujet principal et les mots-clés.\n"
+#~ "Assurez-vous que la description est fluide et évitez de couper les mots "
+#~ "en milieu de phrase.\n"
+#~ "Conservez la langue du texte original.\n"
+#~ "Affichez uniquement le texte de description, sans phrases d'introduction "
+#~ "telles que \"Voici le résumé : \" : %3$s"
+
+#~ msgid ""
+#~ "Summarize the following text in a concise meta description of %1$d to "
+#~ "%2$d characters.\\nFocus on the main topic and keywords.\\nMake sure the "
+#~ "description flows well and avoid hyphenating words mid-sentence."
+#~ "\\nMaintain the language of the original text.\\nDisplay only the "
+#~ "description text, without introductory sentences such as \"Here's the "
+#~ "summary:\": %3\\$s"
+#~ msgstr ""
+#~ "Résumez le texte suivant dans une méta-description concise de %1$d à %2$d "
+#~ "caractères.\\nConcentrez-vous sur le sujet principal et les mots-clés."
+#~ "\\nAssurez-vous que la description est fluide et évitez de couper les "
+#~ "mots en milieu de phrase.\\nConservez la langue du texte original."
+#~ "\\nAffichez uniquement le texte de description, sans phrases "
+#~ "d'introduction telles que « Voici le résumé : » : %3$s"

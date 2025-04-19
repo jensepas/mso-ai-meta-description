@@ -495,7 +495,7 @@ class Settings
                 id="<?php echo esc_attr($field_id); ?>"
                 class="regular-text"
                 value="<?php echo esc_attr($value); ?>"
-                maxlength="<?php echo esc_attr((string)(MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH + 20)); ?>"
+                maxlength="<?php echo esc_attr((string)(MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH + 50)); ?>"
                 aria-describedby="front-page-meta-description-hint"
         ></label>
         <p class="description" id="front-page-meta-description-hint">
@@ -590,7 +590,7 @@ class Settings
     {
         return
         /* translators: 1: min length, 2: max length, 3: content */
-        __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Output only the description text itself, without any introductory phrases like "Here is the summary:": %3$s', 'mso-ai-meta-description');
+        __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
     }
 
     /**

@@ -102,8 +102,8 @@ class MetaBox
 
         $value = (string)get_post_meta($post->ID, $this->meta_key, true);
         $field_name = 'mso_ai_add_description';
-        $min_length = (string)MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH;
-        $max_length = (string)MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH;
+        $min_length = MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH;
+        $max_length = MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH;
         $option_prefix = MSO_AI_Meta_Description::get_option_prefix();
         ?>
         <div class="mso-ai-meta-box-wrapper">
@@ -117,7 +117,7 @@ class MetaBox
                     name="<?php echo esc_attr($field_name); ?>"
                     rows="4"
                     class="large-text"
-                    maxlength="<?php echo esc_attr($max_length); ?>"
+                    maxlength="<?php echo esc_attr((string)($max_length + 50)); ?>"
                     aria-describedby="mso-ai-description-hint"
             ><?php echo esc_textarea($value); ?></textarea>
             <p class="description" id="mso-ai_description-hint"> <?php
@@ -125,8 +125,8 @@ class MetaBox
                 printf(
                     /* Translators: 1: Minimum recommended characters, 2: Maximum recommended characters */
                     esc_html__('Recommended length: %1$d-%2$d characters.', 'mso-ai-meta-description'),
-                    esc_html($min_length),
-                    esc_html($max_length)
+                    esc_html((string)$min_length),
+                    esc_html((string)$max_length)
                 );
         echo ' ';
         esc_html_e('Current count:', 'mso-ai-meta-description'); ?>

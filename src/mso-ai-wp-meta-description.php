@@ -25,17 +25,31 @@ if (! defined('ABSPATH')) {
 use MSO_AI_Meta_Description\Api\ApiClient;
 use MSO_AI_Meta_Description\Providers\ProviderManager;
 
-$autoloader = plugin_dir_path(__FILE__) . 'includes/autoload.php';
-if (! file_exists($autoloader)) {
-    return;
-}
+/**
+ * Autoload function registered with spl_autoload_register.
+ *
+ * This function is called by PHP whenever a class or interface from the
+ * MSO_AI_Meta_Description namespace is used for the first time and hasn't
+ * been loaded yet. It maps the namespace structure to the directory structure
+ * within the 'includes' folder.
+ *
+ * @param string $class The fully qualified class name.
+ */
+spl_autoload_register(function ($class) {
+    $prefix = 'MSO_AI_Meta_Description\\';
 
-require_once $autoloader;
+    if (! str_starts_with($class, $prefix)) {
+        return;
+    }
 
-$provider_interface = plugin_dir_path(__FILE__) . 'includes/Providers/ProviderInterface.php';
-if (file_exists($provider_interface)) {
-    require_once $provider_interface;
-}
+    $relative_class = substr($class, strlen($prefix));
+    $base_dir = __DIR__ .'\includes' . DIRECTORY_SEPARATOR;
+    $file = $base_dir . str_replace('\\', DIRECTORY_SEPARATOR, $relative_class) . '.php';
+
+    if (file_exists($file) && is_readable($file)) {
+        require_once $file;
+    }
+});
 
 /**
  * Main plugin class (MSO_AI_Meta_Description).
@@ -122,18 +136,8 @@ final class MSO_AI_Meta_Description
      */
     private function setup(): void
     {
-        $this->load_dependencies();
         $this->instantiate_components();
         $this->register_hooks();
-    }
-
-    /**
-     * Load required dependencies if any (beyond the autoloader).
-     * Placeholder for loading function files, external libraries, etc.
-     */
-    private function load_dependencies(): void
-    {
-
     }
 
     /**
@@ -188,22 +192,6 @@ final class MSO_AI_Meta_Description
     public function load_plugin_text_domain(): void
     {
         load_plugin_textdomain(self::TEXT_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
-    }
-
-    /**
-     * Prevent deserialization of the singleton instance.
-     */
-    public function __wakeup()
-    {
-
-    }
-
-    /**
-     * Prevent cloning of the singleton instance.
-     */
-    private function __clone()
-    {
-
     }
 }
 
