@@ -55,7 +55,7 @@ jobs:
 
       # Étape 6 : Ajouter tous les fichiers du répertoire src dans la release
       - name: Zip Source Files (src/)
-        run: zip -r src-files.zip ./src
+        run: zip -r mso-ai-meta-description.zip ./src
 
       - name: Attach Source Files to Release
         uses: actions/upload-release-asset@v1
@@ -63,7 +63,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./src-files.zip
-          asset_name: src-files.zip
+          asset_path: ./mso-ai-meta-description.zip
+          asset_name: mso-ai-meta-description.zip
           asset_content_type: application/zip
   
