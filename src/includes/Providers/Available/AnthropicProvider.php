@@ -26,16 +26,6 @@ use WP_Error;
 class AnthropicProvider extends AbstractProvider implements ProviderInterface
 {
     /**
-     * Returns the unique identifier for this provider.
-     *
-     * @return string The provider name ('anthropic').
-     */
-    public function get_name(): string
-    {
-        return 'anthropic';
-    }
-
-    /**
      * Returns the title for this provider.
      *
      * @return string The provider title
@@ -43,16 +33,6 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
     public function get_title(): string
     {
         return 'Anthropic';
-    }
-
-    /**
-     * Returns the base URL for the Anthropic API.
-     *
-     * @return string The base URL for Anthropic API v1.
-     */
-    protected function get_api_base(): string
-    {
-        return 'https://api.anthropic.com/v1/';
     }
 
     /**
@@ -72,6 +52,16 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
     public function get_default_model(): string
     {
         return 'claude-3-sonnet-20240229';
+    }
+
+    /**
+     * Returns the base URL for the Anthropic API.
+     *
+     * @return string The base URL for Anthropic API v1.
+     */
+    protected function get_api_base(): string
+    {
+        return 'https://api.anthropic.com/v1/';
     }
 
     /**
@@ -129,6 +119,16 @@ class AnthropicProvider extends AbstractProvider implements ProviderInterface
                 'displayName' => $model['display_name'] ?? $model['id'],
             ];
         }, $data['data']);
+    }
+
+    /**
+     * Returns the unique identifier for this provider.
+     *
+     * @return string The provider name ('anthropic').
+     */
+    public function get_name(): string
+    {
+        return 'anthropic';
     }
 
     /**

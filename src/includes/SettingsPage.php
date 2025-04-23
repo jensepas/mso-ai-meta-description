@@ -65,17 +65,6 @@ class SettingsPage
     }
 
     /**
-     * Helper method to consistently generate the section ID for a provider.
-     *
-     * @param string $provider_name The name of the provider (e.g., 'mistral').
-     * @return string The generated section ID.
-     */
-    private static function get_section_id_for_provider(string $provider_name): string
-    {
-        return MSO_AI_Meta_Description::OPTION_PREFIX . $provider_name . '_section';
-    }
-
-    /**
      * Registers the admin menu hook.
      */
     public function register_hooks(): void
@@ -131,6 +120,31 @@ class SettingsPage
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Defines the available tabs for the settings page dynamically based on loaded providers.
+     *
+     * @return array<string, string> Associative array where keys are provider names (tab slugs) and values are display labels.
+     */
+    private function get_tabs(): array
+    {
+        $tabs[self::OPTIONS_TAB_SLUG] = esc_html__('Settings', 'mso-ai-meta-description');
+
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
+
+        foreach ($this->providers as $provider) {
+            $provider_name = $provider->get_name();
+            $provider_title = $provider->get_title();
+            $enable_option_name = $prefix . $provider_name . '_provider_enabled';
+
+            if (get_option($enable_option_name, false)) {
+                /* translators: %s: Provider name (e.g., Mistral) */
+                $tabs[$provider_name] = sprintf(esc_html__('%s Settings', 'mso-ai-meta-description'), $provider_title);
+            }
+        }
+
+        return $tabs;
     }
 
     /**
@@ -294,41 +308,14 @@ class SettingsPage
     }
 
     /**
-     * Defines the available tabs for the settings page dynamically based on loaded providers.
+     * Helper method to consistently generate the section ID for a provider.
      *
-     * @return array<string, string> Associative array where keys are provider names (tab slugs) and values are display labels.
+     * @param string $provider_name The name of the provider (e.g., 'mistral').
+     * @return string The generated section ID.
      */
-    private function get_tabs(): array
+    private static function get_section_id_for_provider(string $provider_name): string
     {
-        $tabs[self::OPTIONS_TAB_SLUG] = esc_html__('Settings', 'mso-ai-meta-description');
-
-        $prefix = MSO_AI_Meta_Description::get_option_prefix();
-
-        foreach ($this->providers as $provider) {
-            $provider_name = $provider->get_name();
-            $provider_title = $provider->get_title();
-            $enable_option_name = $prefix . $provider_name . '_provider_enabled';
-
-            if (get_option($enable_option_name, false)) {
-                /* translators: %s: Provider name (e.g., Mistral) */
-                $tabs[$provider_name] = sprintf(esc_html__('%s Settings', 'mso-ai-meta-description'), $provider_title);
-            }
-        }
-
-        return $tabs;
-    }
-
-    /**
-     * Helper function to get the default prompt text template.
-     * Avoids duplication with AbstractProvider.
-     *
-     * @return string The default prompt template.
-     */
-    private function get_default_summary_prompt_template(): string
-    {
-        return
-            /* translators: 1: min length, 2: max length, 3: content */
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
+        return MSO_AI_Meta_Description::OPTION_PREFIX . $provider_name . '_section';
     }
 
     /**
@@ -432,6 +419,19 @@ class SettingsPage
             '</p>';
 
         echo '</div>';
+    }
+
+    /**
+     * Helper function to get the default prompt text template.
+     * Avoids duplication with AbstractProvider.
+     *
+     * @return string The default prompt template.
+     */
+    private function get_default_summary_prompt_template(): string
+    {
+        return
+            /* translators: 1: min length, 2: max length, 3: content */
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
     }
 
     /**

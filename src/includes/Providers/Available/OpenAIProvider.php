@@ -26,16 +26,6 @@ use WP_Error;
 class OpenAIProvider extends AbstractProvider implements ProviderInterface
 {
     /**
-     * Returns the unique identifier for this provider.
-     *
-     * @return string The provider name ('openai').
-     */
-    public function get_name(): string
-    {
-        return 'openai';
-    }
-
-    /**
      * Returns the title for this provider.
      *
      * @return string The provider title
@@ -43,16 +33,6 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface
     public function get_title(): string
     {
         return 'OpenIA';
-    }
-
-    /**
-     * Returns the base URL for the OpenAI API.
-     *
-     * @return string The base URL for OpenAI API v1.
-     */
-    protected function get_api_base(): string
-    {
-        return 'https://api.openai.com/v1/';
     }
 
     /**
@@ -72,6 +52,16 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface
     public function get_default_model(): string
     {
         return 'gpt-3.5-turbo';
+    }
+
+    /**
+     * Returns the base URL for the OpenAI API.
+     *
+     * @return string The base URL for OpenAI API v1.
+     */
+    protected function get_api_base(): string
+    {
+        return 'https://api.openai.com/v1/';
     }
 
     /**
@@ -140,6 +130,16 @@ class OpenAIProvider extends AbstractProvider implements ProviderInterface
                 'displayName' => $model['id'] ?? '',
             ];
         }, array_values($models));
+    }
+
+    /**
+     * Returns the unique identifier for this provider.
+     *
+     * @return string The provider name ('openai').
+     */
+    public function get_name(): string
+    {
+        return 'openai';
     }
 
     /**

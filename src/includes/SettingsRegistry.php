@@ -164,6 +164,18 @@ class SettingsRegistry
     }
 
     /**
+     * Helper method to consistently generate the section ID for a provider.
+     * Made static as it doesn't depend on instance state.
+     *
+     * @param string $provider_name The name of the provider (e.g., 'mistral').
+     * @return string The generated section ID.
+     */
+    public static function get_section_id_for_provider(string $provider_name): string
+    {
+        return MSO_AI_Meta_Description::OPTION_PREFIX . $provider_name . '_section';
+    }
+
+    /**
      * Wrapper function to hook the front page setting registration.
      * Necessary because register_setting should be called on admin_init.
      */
@@ -188,17 +200,5 @@ class SettingsRegistry
             'default',
             ['label_for' => $option_name]
         );
-    }
-
-    /**
-     * Helper method to consistently generate the section ID for a provider.
-     * Made static as it doesn't depend on instance state.
-     *
-     * @param string $provider_name The name of the provider (e.g., 'mistral').
-     * @return string The generated section ID.
-     */
-    public static function get_section_id_for_provider(string $provider_name): string
-    {
-        return MSO_AI_Meta_Description::OPTION_PREFIX . $provider_name . '_section';
     }
 }

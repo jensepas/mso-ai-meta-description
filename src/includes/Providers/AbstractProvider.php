@@ -40,25 +40,25 @@ abstract class AbstractProvider implements ProviderInterface
     }
 
     /**
-     * Checks if the API key is set and valid.
-     * Returns a WP_Error if the key is missing.
+     * Get the default model ID for this provider.
+     * Example: 'mistral-small-latest'
      *
-     * @return true|WP_Error True if key is valid, WP_Error otherwise.
      */
-    protected function check_api_key(): bool|WP_Error
+    abstract public function get_default_model(): string;
+
+    /**
+     * Fetches models by calling the shared request method and parsing the result.
+     *
+     * @return array<int, array<string, string>>|WP_Error
+     */
+    public function fetch_models(): array|WP_Error
     {
-        if (empty($this->api_key)) {
-            return new WP_Error(
-                'api_key_missing',
-                sprintf(
-                    /* translators: %s: Provider name (e.g., Mistral) */
-                    __('API key for %s is not set.', 'mso-ai-meta-description'),
-                    ucfirst($this->get_name())
-                )
-            );
+        $result = $this->request('models');
+        if (is_wp_error($result)) {
+            return $result;
         }
 
-        return true;
+        return $this->parse_model_list($result);
     }
 
     /**
@@ -116,14 +116,25 @@ abstract class AbstractProvider implements ProviderInterface
     }
 
     /**
-     * Allows providers to modify headers if needed (e.g., Gemini uses API key in URL for GET).
+     * Checks if the API key is set and valid.
+     * Returns a WP_Error if the key is missing.
      *
-     * @param array<string, string> $headers Default headers from AbstractProvider.
-     * @return array<string, string> Modified headers for Anthropic API.I.
+     * @return true|WP_Error True if key is valid, WP_Error otherwise.
      */
-    protected function prepare_headers(array $headers): array
+    protected function check_api_key(): bool|WP_Error
     {
-        return $headers;
+        if (empty($this->api_key)) {
+            return new WP_Error(
+                'api_key_missing',
+                sprintf(
+                    /* translators: %s: Provider name (e.g., Mistral) */
+                    __('API key for %s is not set.', 'mso-ai-meta-description'),
+                    ucfirst($this->get_name())
+                )
+            );
+        }
+
+        return true;
     }
 
     /**
@@ -134,119 +145,14 @@ abstract class AbstractProvider implements ProviderInterface
     abstract protected function get_api_base(): string;
 
     /**
-     * Get the default model ID for this provider.
-     * Example: 'mistral-small-latest'
+     * Allows providers to modify headers if needed (e.g., Gemini uses API key in URL for GET).
      *
+     * @param array<string, string> $headers Default headers from AbstractProvider.
+     * @return array<string, string> Modified headers for Anthropic API.I.
      */
-    abstract public function get_default_model(): string;
-
-    /**
-     * Extracts the error message from the provider's specific error response structure.
-     *
-     * The structure of $data can vary depending on the API and the error.
-     * Concrete implementations should safely check the expected structure.
-     *
-     * @param array<string, mixed> $data The decoded JSON error response, or null if decoding failed.
-     * @return string The extracted error message or null if not found.
-     */
-    abstract protected function extract_error_message(array $data): string;
-
-    /**
-     * Parses the successful response from the 'fetch_models' API call.
-     *
-     * @param array<string, mixed> $data Decoded JSON response data.
-     * @return array<int, array<string, string>>|WP_Error Formatted array of models or WP_Error on parsing failure.
-     */
-    abstract protected function parse_model_list(array $data): array|WP_Error;
-
-    /**
-     * Parses the successful response from the 'generate_summary' API call.
-     *
-     * @param array<string, mixed> $data The decoded JSON response data from the chat completions endpoint.
-     * @return string|WP_Error The extracted summary text on success, or a WP_Error if parsing fails.
-     */
-    abstract protected function parse_summary(array $data): string|WP_Error;
-
-    /**
-     * Builds the request body specific to this provider for summary generation.
-     *
-     * @param string $prompt The user-provided text to generate a summary from.
-     * @return array<string, mixed> The request body as an associative array, ready for JSON encoding.
-     */
-    abstract protected function build_summary_request_body(string $prompt): array;
-
-    /**
-     * Fetches models by calling the shared request method and parsing the result.
-     *
-     * @return array<int, array<string, string>>|WP_Error
-     */
-    public function fetch_models(): array|WP_Error
+    protected function prepare_headers(array $headers): array
     {
-        $result = $this->request('models');
-        if (is_wp_error($result)) {
-            return $result;
-        }
-
-        return $this->parse_model_list($result);
-    }
-
-    /**
-     * Generates summary by building prompt/body, calling the shared request method, and parsing the result.
-     *
-     * @param string $content The plain text content to summarize.
-     * @return string|WP_Error The generated summary string on success, or a WP_Error object on failure.
-     *                          The WP_Error object should contain relevant error codes and messages.
-     */
-    public function generate_summary(string $content): string|WP_Error
-    {
-        $prompt = $this->build_summary_prompt($content);
-        $request_body = $this->build_summary_request_body($prompt);
-
-        $result = $this->request(
-            $this->get_summary_endpoint(),
-            [
-                'timeout' => 30,
-                'body' => $request_body,
-            ],
-            'POST'
-        );
-
-        if (is_wp_error($result)) {
-            return $result;
-        }
-
-        return $this->parse_summary($result);
-    }
-
-    /**
-     * Gets the specific endpoint path for summary generation.
-     * Example: 'chat/completions'
-     *
-     */
-    abstract protected function get_summary_endpoint(): string;
-
-    /**
-     * Builds the summary prompt, using a custom one from settings if available.
-     *
-     * @param string $content The content to summarize.
-     * @return string The formatted prompt.
-     */
-    protected function build_summary_prompt(string $content): string
-    {
-        $prefix = MSO_AI_Meta_Description::get_option_prefix();
-        $custom_prompt_option_name = $prefix . $this->get_name() . '_custom_summary_prompt';
-        $custom_prompt_template = (string)get_option($custom_prompt_option_name, '');
-        $prompt_template = ! empty($custom_prompt_template)
-            ? $custom_prompt_template
-            : /* translators: 1: Min length, 2: Max length, 3: Content */
-            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
-
-        return sprintf(
-            $prompt_template,
-            MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH,
-            MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
-            $content
-        );
+        return $headers;
     }
 
     /**
@@ -320,4 +226,98 @@ abstract class AbstractProvider implements ProviderInterface
 
         return $final_result;
     }
+
+    /**
+     * Extracts the error message from the provider's specific error response structure.
+     *
+     * The structure of $data can vary depending on the API and the error.
+     * Concrete implementations should safely check the expected structure.
+     *
+     * @param array<string, mixed> $data The decoded JSON error response, or null if decoding failed.
+     * @return string The extracted error message or null if not found.
+     */
+    abstract protected function extract_error_message(array $data): string;
+
+    /**
+     * Parses the successful response from the 'fetch_models' API call.
+     *
+     * @param array<string, mixed> $data Decoded JSON response data.
+     * @return array<int, array<string, string>>|WP_Error Formatted array of models or WP_Error on parsing failure.
+     */
+    abstract protected function parse_model_list(array $data): array|WP_Error;
+
+    /**
+     * Generates summary by building prompt/body, calling the shared request method, and parsing the result.
+     *
+     * @param string $content The plain text content to summarize.
+     * @return string|WP_Error The generated summary string on success, or a WP_Error object on failure.
+     *                          The WP_Error object should contain relevant error codes and messages.
+     */
+    public function generate_summary(string $content): string|WP_Error
+    {
+        $prompt = $this->build_summary_prompt($content);
+        $request_body = $this->build_summary_request_body($prompt);
+
+        $result = $this->request(
+            $this->get_summary_endpoint(),
+            [
+                'timeout' => 30,
+                'body' => $request_body,
+            ],
+            'POST'
+        );
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return $this->parse_summary($result);
+    }
+
+    /**
+     * Builds the summary prompt, using a custom one from settings if available.
+     *
+     * @param string $content The content to summarize.
+     * @return string The formatted prompt.
+     */
+    protected function build_summary_prompt(string $content): string
+    {
+        $prefix = MSO_AI_Meta_Description::get_option_prefix();
+        $custom_prompt_option_name = $prefix . $this->get_name() . '_custom_summary_prompt';
+        $custom_prompt_template = (string)get_option($custom_prompt_option_name, '');
+        $prompt_template = ! empty($custom_prompt_template)
+            ? $custom_prompt_template
+            : /* translators: 1: Min length, 2: Max length, 3: Content */
+            __('Summarize the following text into a concise meta description between %1$d and %2$d characters long. Focus on the main topic and keywords. Ensure the description flows naturally and avoid cutting words mid-sentence. Maintain the language of the original text. Output only the description text itself: %3$s', 'mso-ai-meta-description');
+
+        return sprintf(
+            $prompt_template,
+            MSO_AI_Meta_Description::MIN_DESCRIPTION_LENGTH,
+            MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
+            $content
+        );
+    }
+
+    /**
+     * Builds the request body specific to this provider for summary generation.
+     *
+     * @param string $prompt The user-provided text to generate a summary from.
+     * @return array<string, mixed> The request body as an associative array, ready for JSON encoding.
+     */
+    abstract protected function build_summary_request_body(string $prompt): array;
+
+    /**
+     * Gets the specific endpoint path for summary generation.
+     * Example: 'chat/completions'
+     *
+     */
+    abstract protected function get_summary_endpoint(): string;
+
+    /**
+     * Parses the successful response from the 'generate_summary' API call.
+     *
+     * @param array<string, mixed> $data The decoded JSON response data from the chat completions endpoint.
+     * @return string|WP_Error The extracted summary text on success, or a WP_Error if parsing fails.
+     */
+    abstract protected function parse_summary(array $data): string|WP_Error;
 }

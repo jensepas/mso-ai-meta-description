@@ -26,16 +26,6 @@ use WP_Error;
 class GeminiProvider extends AbstractProvider implements ProviderInterface
 {
     /**
-     * Returns the unique identifier for this provider.
-     *
-     * @return string The provider name ('gemini').
-     */
-    public function get_name(): string
-    {
-        return 'gemini';
-    }
-
-    /**
      * Returns the title for this provider.
      *
      * @return string The provider title
@@ -43,16 +33,6 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
     public function get_title(): string
     {
         return 'Gemini';
-    }
-
-    /**
-     * Returns the base URL for the Gemini API.
-     *
-     * @return string The base URL for Gemini API v1.
-     */
-    protected function get_api_base(): string
-    {
-        return 'https://generativelanguage.googleapis.com/v1beta/';
     }
 
     /**
@@ -72,6 +52,16 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
     public function get_default_model(): string
     {
         return 'gemini-1.5-flash-latest';
+    }
+
+    /**
+     * Returns the base URL for the Gemini API.
+     *
+     * @return string The base URL for Gemini API v1.
+     */
+    protected function get_api_base(): string
+    {
+        return 'https://generativelanguage.googleapis.com/v1beta/';
     }
 
     protected function get_summary_endpoint(): string
@@ -136,6 +126,16 @@ class GeminiProvider extends AbstractProvider implements ProviderInterface
                 'displayName' => $model['displayName'] ?? $model['id'],
             ];
         }, array_values($models));
+    }
+
+    /**
+     * Returns the unique identifier for this provider.
+     *
+     * @return string The provider name ('gemini').
+     */
+    public function get_name(): string
+    {
+        return 'gemini';
     }
 
     /**

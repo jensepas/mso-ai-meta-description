@@ -26,16 +26,6 @@ use WP_Error;
 class MistralProvider extends AbstractProvider implements ProviderInterface
 {
     /**
-     * Returns the unique identifier for this provider.
-     *
-     * @return string The provider name ('mistral').
-     */
-    public function get_name(): string
-    {
-        return 'mistral';
-    }
-
-    /**
      * Returns the title for this provider.
      *
      * @return string The provider title
@@ -43,16 +33,6 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     public function get_title(): string
     {
         return 'Mistral';
-    }
-
-    /**
-     * Returns the base URL for the Mistral API.
-     *
-     * @return string The base URL for Mistral API v1.
-     */
-    protected function get_api_base(): string
-    {
-        return 'https://api.mistral.ai/v1/';
     }
 
     /**
@@ -72,6 +52,16 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
     public function get_default_model(): string
     {
         return 'mistral-small-latest';
+    }
+
+    /**
+     * Returns the base URL for the Mistral API.
+     *
+     * @return string The base URL for Mistral API v1.
+     */
+    protected function get_api_base(): string
+    {
+        return 'https://api.mistral.ai/v1/';
     }
 
     /**
@@ -129,6 +119,16 @@ class MistralProvider extends AbstractProvider implements ProviderInterface
                 'displayName' => $model['id'] ?? '',
             ];
         }, array_values($data['data']));
+    }
+
+    /**
+     * Returns the unique identifier for this provider.
+     *
+     * @return string The provider name ('mistral').
+     */
+    public function get_name(): string
+    {
+        return 'mistral';
     }
 
     /**
