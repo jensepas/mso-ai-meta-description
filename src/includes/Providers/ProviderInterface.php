@@ -13,7 +13,7 @@
 
 namespace MSO_AI_Meta_Description\Providers;
 
-use WP_Error; 
+use WP_Error;
 
 /**
  * Interface for AI service providers.
@@ -70,4 +70,14 @@ interface ProviderInterface
      *                         The WP_Error object should contain relevant error codes and messages.
      */
     public function generate_summary(string $content): string|WP_Error;
+
+    /**
+     * Get the default model identifier for this provider.
+     *
+     * This model might be used when no specific model is selected or available.
+     * It should return a string representing the model ID (e.g., 'gpt-3.5-turbo').
+     *
+     * @return string The default model identifier.
+     */
+    public function get_default_model(): string;
 }

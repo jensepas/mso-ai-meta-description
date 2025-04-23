@@ -9,6 +9,10 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
+    permissions: # Ajoutez cette section pour définir les permissions nécessaires
+      contents: write # Permet de créer des releases et d'ajouter des assets
+      actions: read # Permet de lire les actions
+
     steps:
       # Étape 1 : Vérifiez le code source
       - name: Checkout code
@@ -30,13 +34,8 @@ jobs:
       # Étape 4 : Copier les fichiers générés par Gulp dans `src/assets`
       - name: Copy Gulp Build to src/assets
         run: |
-          # Crée les répertoires si nécessaire
           mkdir -p src/assets/css src/assets/js
-
-          # Copier les fichiers CSS dans src/assets/css
           cp src/assets/css/*.css src/assets/css/ || echo "No CSS files to copy"
-
-          # Copier les fichiers JS dans src/assets/js
           cp src/assets/js/*.js src/assets/js/ || echo "No JS files to copy"
 
       # Étape 5 : Créez une release
@@ -46,7 +45,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }} # Utilise le tag qui a déclenché le workflow
+          tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
           body: |
             Cette release contient les fichiers du dossier `src`, avec les fichiers générés par Gulp copiés dans `src/assets`.
@@ -66,4 +65,3 @@ jobs:
           asset_path: ./mso-ai-meta-description.zip
           asset_name: mso-ai-meta-description.zip
           asset_content_type: application/zip
-  
