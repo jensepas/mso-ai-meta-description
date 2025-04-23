@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MSO AI Meta Description\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 09:55+0200\n"
-"PO-Revision-Date: 2025-04-23 09:56+0200\n"
+"POT-Creation-Date: 2025-04-23 12:43+0200\n"
+"PO-Revision-Date: 2025-04-23 12:43+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,55 +18,55 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: .\n"
 
-#: ../includes/Admin.php:122 ../includes/SettingsPage.php:484
+#: ../includes/Admin.php:117 ../includes/SettingsPage.php:504
 msgid "(Too short)"
 msgstr "(Trop court)"
 
-#: ../includes/Admin.php:123 ../includes/SettingsPage.php:485
+#: ../includes/Admin.php:118 ../includes/SettingsPage.php:505
 msgid "(Too long)"
 msgstr "(Trop long)"
 
-#: ../includes/Admin.php:124 ../includes/SettingsPage.php:486
+#: ../includes/Admin.php:119 ../includes/SettingsPage.php:506
 msgid "(Good)"
 msgstr "(Bien)"
 
-#: ../includes/Admin.php:127
+#: ../includes/Admin.php:122
 msgid "-- Select a Model --"
 msgstr "-- Sélectionnez un modèle --"
 
-#: ../includes/Admin.php:128
+#: ../includes/Admin.php:123
 msgid "Error loading models."
 msgstr "Erreur lors du chargement des modèles."
 
-#: ../includes/Admin.php:131
+#: ../includes/Admin.php:126
 msgid "Saving..."
 msgstr "Enregistrement…"
 
-#: ../includes/Admin.php:132
+#: ../includes/Admin.php:127
 msgid "Settings Saved"
 msgstr "Paramètres enregistrés"
 
-#: ../includes/Admin.php:133
+#: ../includes/Admin.php:128
 msgid "Error Saving Settings"
 msgstr "Erreur lors de l'enregistrement des paramètres"
 
-#: ../includes/Admin.php:134 ../includes/SettingsPage.php:396
+#: ../includes/Admin.php:129 ../includes/SettingsPage.php:403
 msgid "Customize the prompt"
 msgstr "Personnaliser le prompt"
 
-#: ../includes/Admin.php:135 ../includes/SettingsPage.php:395
+#: ../includes/Admin.php:130 ../includes/SettingsPage.php:402
 msgid "Hide custom prompt"
 msgstr "Masquer le prompt personnalisé"
 
-#: ../includes/Admin.php:154 ../includes/SettingsPage.php:283
+#: ../includes/Admin.php:149 ../includes/SettingsPage.php:132
 msgid "Settings"
 msgstr "Réglages"
 
-#: ../includes/Admin.php:177
+#: ../includes/Admin.php:172
 msgid "Overview"
 msgstr "Aperçu"
 
-#: ../includes/Admin.php:178
+#: ../includes/Admin.php:173
 msgid ""
 "This page allows you to configure the API keys and select models for the "
 "different AI providers used by MSO AI Meta Description."
@@ -75,7 +75,7 @@ msgstr ""
 "modèles pour les différents fournisseurs d'IA utilisés par MSO AI Meta "
 "Description."
 
-#: ../includes/Admin.php:179
+#: ../includes/Admin.php:174
 msgid ""
 "Navigate through the tabs (Mistral, Gemini, etc.) to enter your credentials "
 "for each service you want to use."
@@ -83,7 +83,7 @@ msgstr ""
 "Naviguez dans les onglets (Mistral, Gemini, etc.) pour saisir vos "
 "identifiants pour chaque service que vous souhaitez utiliser."
 
-#: ../includes/Admin.php:180
+#: ../includes/Admin.php:175
 msgid ""
 "Once an API key is saved and valid, the available models for that provider "
 "will be loaded automatically in the dropdown."
@@ -91,11 +91,11 @@ msgstr ""
 "Une fois qu'une clé API est enregistrée et valide, les modèles disponibles "
 "pour ce fournisseur seront automatiquement chargés dans la liste déroulante."
 
-#: ../includes/Admin.php:185
+#: ../includes/Admin.php:180
 msgid "API Keys"
 msgstr "Clés API"
 
-#: ../includes/Admin.php:186
+#: ../includes/Admin.php:181
 msgid ""
 "You need to obtain an API key from each AI provider you wish to use (OpenAI, "
 "Mistral, Gemini, Anthropic, Cohere)."
@@ -103,7 +103,7 @@ msgstr ""
 "Vous devez obtenir une clé API auprès de chaque fournisseur d'IA que vous "
 "souhaitez utiliser (OpenAI, Mistral, Gemini, Anthropic, Cohere)."
 
-#: ../includes/Admin.php:187
+#: ../includes/Admin.php:182
 msgid ""
 "Enter the corresponding API key in the input field for each provider and "
 "click \"Save Changes\"."
@@ -111,7 +111,7 @@ msgstr ""
 "Saisissez la clé API correspondante dans le champ de saisie pour chaque "
 "fournisseur et cliquez sur \"Enregistrer les modifications\"."
 
-#: ../includes/Admin.php:188
+#: ../includes/Admin.php:183
 msgid ""
 "Make sure your keys have the necessary permissions to list models and "
 "generate text."
@@ -119,15 +119,15 @@ msgstr ""
 "Assurez-vous que vos clés disposent des autorisations nécessaires pour "
 "répertorier les modèles et générer du texte."
 
-#: ../includes/Admin.php:192
+#: ../includes/Admin.php:187
 msgid "For more information:"
 msgstr "Pour plus d'informations :"
 
-#: ../includes/Admin.php:193
+#: ../includes/Admin.php:188
 msgid "Plugin Website"
 msgstr "Site Web de plugins"
 
-#: ../includes/Admin.php:194
+#: ../includes/Admin.php:189
 msgid "Support Forum"
 msgstr "Forum d'assistance"
 
@@ -136,7 +136,7 @@ msgid "Invalid nonce."
 msgstr "Nonce non valide."
 
 #: ../includes/Ajax.php:82 ../includes/Ajax.php:131
-#: ../includes/SettingsAjaxHandler.php:59
+#: ../includes/SettingsAjaxHandler.php:60
 msgid "Permission denied."
 msgstr "Permission refusée."
 
@@ -161,7 +161,7 @@ msgstr "Le fournisseur d'IA \"%s\" n'est pas enregistré ni pris en charge."
 msgid "MSO AI Meta Description"
 msgstr "MSO AI Meta Description"
 
-#: ../includes/MetaBox.php:112 ../includes/SettingsPage.php:92
+#: ../includes/MetaBox.php:112 ../includes/SettingsPage.php:82
 msgid "Meta Description"
 msgstr "Méta description"
 
@@ -183,17 +183,34 @@ msgstr "Générer avec l'IA :"
 msgid "Generate with %s"
 msgstr "Générer avec %s"
 
-#: ../includes/Providers/AbstractProvider.php:55
-#, php-format
-msgid "API key for %s is not set."
-msgstr "API key for %s is not set."
-
 #: ../includes/Providers/AbstractProvider.php:104
 msgid "Failed to encode request body."
 msgstr "Échec de l'encodage du corps de la requête."
 
-#: ../includes/Providers/AbstractProvider.php:242
-#: ../includes/SettingsPage.php:311
+#: ../includes/Providers/AbstractProvider.php:131
+#, php-format
+msgid "API key for %s is not set."
+msgstr "API key for %s is not set."
+
+#: ../includes/Providers/AbstractProvider.php:182
+msgid "Unknown API error occurred."
+msgstr "Une erreur API inconnue s'est produite."
+
+#: ../includes/Providers/AbstractProvider.php:193
+#, php-format
+msgid "%1$s API Error (%2$d): %3$s"
+msgstr "Erreur API %1$s (%2$d) : %3$s"
+
+#: ../includes/Providers/AbstractProvider.php:207
+msgid "Failed to decode API response."
+msgstr "Échec du décodage de la réponse de l'API."
+
+#: ../includes/Providers/AbstractProvider.php:219
+msgid "API response was not in the expected array format."
+msgstr "La réponse de l'API n'était pas au format de tableau attendu."
+
+#: ../includes/Providers/AbstractProvider.php:291
+#: ../includes/SettingsPage.php:434
 #, php-format
 msgid ""
 "Summarize the following text into a concise meta description between %1$d "
@@ -208,28 +225,11 @@ msgstr ""
 "phrase. Conservez la langue d'origine. N'affichez que le texte de "
 "description lui-même : %3$s"
 
-#: ../includes/Providers/AbstractProvider.php:276
-msgid "Unknown API error occurred."
-msgstr "Une erreur API inconnue s'est produite."
-
-#: ../includes/Providers/AbstractProvider.php:287
-#, php-format
-msgid "%1$s API Error (%2$d): %3$s"
-msgstr "Erreur API %1$s (%2$d) : %3$s"
-
-#: ../includes/Providers/AbstractProvider.php:302
-msgid "Failed to decode API response."
-msgstr "Échec du décodage de la réponse de l'API."
-
-#: ../includes/Providers/AbstractProvider.php:316
-msgid "API response was not in the expected array format."
-msgstr "La réponse de l'API n'était pas au format de tableau attendu."
-
-#: ../includes/Providers/Available/AnthropicProvider.php:120
+#: ../includes/Providers/Available/AnthropicProvider.php:110
 #: ../includes/Providers/Available/CohereProvider.php:107
-#: ../includes/Providers/Available/GeminiProvider.php:118
-#: ../includes/Providers/Available/MistralProvider.php:120
-#: ../includes/Providers/Available/OpenAIProvider.php:123
+#: ../includes/Providers/Available/GeminiProvider.php:108
+#: ../includes/Providers/Available/MistralProvider.php:110
+#: ../includes/Providers/Available/OpenAIProvider.php:113
 #, php-format
 msgid "Unable to parse model list from %1$d: \"models\" array missing."
 msgstr ""
@@ -247,55 +247,54 @@ msgstr ""
 "%1$d réponse manquante dans les données récapitulatives attendues ou format "
 "non valide."
 
-#: ../includes/SettingsAjaxHandler.php:64
+#: ../includes/SettingsAjaxHandler.php:65
 msgid "Missing active tab identifier."
 msgstr "Identifiant d'onglet actif manquant."
 
-#: ../includes/SettingsAjaxHandler.php:74
+#: ../includes/SettingsAjaxHandler.php:75
 #, php-format
 msgid "Unknown settings tab: %s"
 msgstr "Onglet Paramètres inconnus : %s"
 
-#: ../includes/SettingsAjaxHandler.php:80
+#: ../includes/SettingsAjaxHandler.php:81
 msgid "Settings saved successfully."
 msgstr "Paramètres enregistrés avec succès."
 
-#: ../includes/SettingsPage.php:91
+#: ../includes/SettingsPage.php:81
 msgid "MSO AI Meta Description Settings"
 msgstr "MSO AI Meta Description Paramètres Personnalisés"
 
-#: ../includes/SettingsPage.php:145
-msgid "No AI providers found or enabled in Settings."
-msgstr "Aucun fournisseur d'IA trouvé ou activé dans les paramètres."
-
-#: ../includes/SettingsPage.php:243
-msgid "Save Changes"
-msgstr "Enregistrer les modifications"
-
-#: ../includes/SettingsPage.php:272
-msgid "Please select a valid settings tab."
-msgstr "Veuillez sélectionner un onglet de paramètres valide."
-
-#: ../includes/SettingsPage.php:294
+#: ../includes/SettingsPage.php:143
 #, php-format
 msgid "%s Settings"
 msgstr "Paramètres %s"
 
-#: ../includes/SettingsPage.php:327
-#, php-format
-msgid "Configure the settings for using the %s API."
-msgstr "Configurez les paramètres d’utilisation de l’API %s."
+#: ../includes/SettingsPage.php:160
+msgid "No AI providers found or enabled in Settings."
+msgstr "Aucun fournisseur d'IA trouvé ou activé dans les paramètres."
 
-#: ../includes/SettingsPage.php:351
+#: ../includes/SettingsPage.php:277
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+#: ../includes/SettingsPage.php:306
+msgid "Please select a valid settings tab."
+msgstr "Veuillez sélectionner un onglet de paramètres valide."
+
+#: ../includes/SettingsPage.php:334
+msgid "Activate the settings for using the API."
+msgstr "Activez les paramètres d'utilisation de l'API."
+
+#: ../includes/SettingsPage.php:358
 #, php-format
 msgid "Get your %s API key"
 msgstr "Obtenez votre clé API %s"
 
-#: ../includes/SettingsPage.php:367
+#: ../includes/SettingsPage.php:374
 msgid "Loading models..."
 msgstr "Chargement des modèles..."
 
-#: ../includes/SettingsPage.php:374
+#: ../includes/SettingsPage.php:381
 #, php-format
 msgid ""
 "Select the %s model to use. Models loaded dynamically if API key is valid."
@@ -303,7 +302,7 @@ msgstr ""
 "Sélectionnez le modèle %s à utiliser. Les modèles sont chargés dynamiquement "
 "si la clé API est valide."
 
-#: ../includes/SettingsPage.php:409
+#: ../includes/SettingsPage.php:416
 msgid ""
 "Customize the prompt sent to the AI for generating meta descriptions. Leave "
 "empty to use the default prompt."
@@ -311,37 +310,37 @@ msgstr ""
 "Personnalisez le prompt envoyée à l'IA pour générer des méta-descriptions. "
 "Laissez ce champ vide pour utiliser le prompt par défaut."
 
-#: ../includes/SettingsPage.php:410
+#: ../includes/SettingsPage.php:417
 msgid "Available placeholders:"
 msgstr "Espaces réservés disponibles :"
 
-#: ../includes/SettingsPage.php:410
+#: ../includes/SettingsPage.php:417
 msgid "min length 120 characters"
 msgstr "longueur minimale 120 caractères"
 
-#: ../includes/SettingsPage.php:410
+#: ../includes/SettingsPage.php:417
 msgid "max length 160 characters"
 msgstr "longueur maximale 160 caractères"
 
-#: ../includes/SettingsPage.php:410
+#: ../includes/SettingsPage.php:417
 msgid "content"
 msgstr "contenu"
 
-#: ../includes/SettingsPage.php:411
+#: ../includes/SettingsPage.php:418
 msgid "Default prompt:"
 msgstr "Prompt par défaut :"
 
-#: ../includes/SettingsPage.php:439
+#: ../includes/SettingsPage.php:459
 #, php-format
 msgid "Enable %s"
 msgstr "Activer %s"
 
-#: ../includes/SettingsPage.php:442
+#: ../includes/SettingsPage.php:462
 #, php-format
 msgid "Show the \"Generate with %1$s\" button in the WordPress Editor."
 msgstr "Afficher le bouton \"Générer avec %s\" dans l'éditeur WordPress."
 
-#: ../includes/SettingsPage.php:467
+#: ../includes/SettingsPage.php:487
 #, php-format
 msgid ""
 "Enter the meta description for the site's front page when it displays the "
@@ -350,7 +349,7 @@ msgstr ""
 "Saisissez la méta-description de la page d'accueil du site pour afficher les "
 "derniers articles. Longueur recommandée : %1$d-%2$d caractères."
 
-#: ../includes/SettingsPage.php:468
+#: ../includes/SettingsPage.php:488
 msgid "Character count:"
 msgstr "Nombre de caractères :"
 
@@ -368,7 +367,7 @@ msgstr "Modèle %s"
 msgid "Custom Prompt"
 msgstr "Prompt personnalisé"
 
-#: ../includes/SettingsRegistry.php:185
+#: ../includes/SettingsRegistry.php:197
 msgid "Front page meta description"
 msgstr "Balise méta description de la page"
 

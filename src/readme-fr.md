@@ -44,7 +44,7 @@
 
 ### Prérequis Minimums
 
-- WordPress 6.0+
+- WordPress 6.7+
 - PHP 8.1+
 
 ### Installation Automatique
@@ -122,30 +122,9 @@ Possible. Les deux plugins peuvent générer une méta description. **Évitez le
 
 ## 🧾 Journal des modifications
 
-### 1.4.0 – *2025-04-17*
+### 1.0.0 – *2025-04-17*
 
-- ✨ Ajout du support pour **Cohere**
-
-### 1.3.0
-
-- ✨ Ajout du support pour **Anthropic**
-
-### 1.2.0
-
-- ✨ Ajout du support pour **OpenAI (ChatGPT)**
-- ⚙️ Meilleure gestion des erreurs pour tous les fournisseurs
-- 🎨 Amélioration de l'interface utilisateur pour les réglages et l'éditeur
-- 🛠️ Correction de la logique de visibilité des boutons IA
-
-### 1.1.0
-
-- 🧱 Refonte majeure de la base de code (structure basée sur SoC)
-- 🎛️ Amélioration de l'expérience utilisateur de la page de réglages
-- 📡 Standardisation des réponses API
-
-### 1.0.0
-
-- 🚀 Version initiale avec support pour Gemini et Mistral
+- 🚀 Version initiale : édition manuelle des méta descriptions, génération d'IA via Gemini Mistral OpenAI Anthropic Cohere
 
 ---
 

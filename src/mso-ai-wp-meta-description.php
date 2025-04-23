@@ -5,7 +5,7 @@
  *
  * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
  * Author: ms-only
- * Version: 1.4.0
+ * Version: 1.0.0
  * Requires at least: 6.0
  * Requires PHP: 8.1
  * Author URI: https://www.ms-only.fr/
@@ -59,12 +59,12 @@ spl_autoload_register(function ($class) {
  * Implements the Singleton pattern to ensure only one instance exists.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 final class MSO_AI_Meta_Description
 {
     /** Plugin version number. Used for cache busting scripts/styles. */
-    public const string VERSION = '1.4.0';
+    public const string VERSION = '1.0.0';
 
     /** Text domain for localization (internationalization). Must match plugin header and .pot file. */
     public const string TEXT_DOMAIN = 'mso-ai-meta-description';

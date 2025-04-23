@@ -1,9 +1,9 @@
 === MSO AI Meta Description ===
-Contributors: jensepas
+Contributors: msonly
 Tags: meta description, seo, AI, Gemini Mistral OpenAI ChatGPT Anthropic
 Requires at least: 6.7
 Tested up to: 6.8
-Stable tag: 1.4.0
+Stable tag: 1.0.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -37,7 +37,7 @@ Improve your site's visibility and click-through rates by crafting perfect meta 
 
 **Minimum Requirements:**
 
-* WordPress 6.0 or greater
+* WordPress 6.7 or greater
 * PHP version 8.1 or greater
 
 **Automatic Installation (Easiest):**
@@ -74,7 +74,9 @@ Improve your site's visibility and click-through rates by crafting perfect meta 
 
 == Screenshots ==
 
-1. MSO AI Meta Description settings page
+1. Settings: activation of the different APIs
+
+2. Settings screen: adding and modifying the model API key and customizing the prompt
 
 == Frequently Asked Questions ==
 
@@ -103,32 +105,12 @@ This plugin adds its meta description tag directly to the `wp_head` action hook 
 
 == Changelog ==
 
-= 1.4.0 =
-* Date: 2025-04-17
-* Feature: Added support for Cohere
-
-= 1.3.0 =
-* Date: 2025-04-14
-* Feature: Added support for Anthropic.
-
-= 1.2.0 =
-* Date: 2025-04-12
-* Feature: Added support for OpenAI (ChatGPT) for AI-powered description generation.
-* Enhancement: Updated API client and JavaScript for better error handling and dynamic model loading for all providers.
-* Enhancement: Improved UI for settings page and meta box.
-* Fix: Corrected conditional logic for displaying AI buttons in meta box.
-
-= 1.1.0 =
-* Note: Version representing the major refactoring for better code structure (Separation of Concerns). (Adjust date/details if tracked differently)
-* Enhancement: Refactored plugin codebase into separate classes (Admin, Frontend, Ajax, ApiClient, etc.).
-* Enhancement: Improved settings page layout and handling.
-* Enhancement: Standardized API response handling.
-
 = 1.0.0 =
+* Date: 2025-04-17
 * Initial release.
-* Features: Manual meta description editing, AI generation via Gemini and Mistral.
+* Features: Manual meta description editing, AI generation via Gemini Mistral OpenAI Anthropic Cohere.
 
 == Upgrade Notice ==
 
-= 1.4.0 =
+= 1.0.0 =
 This version adds support for OpenAI (ChatGPT) Anthropic Gemini Cohere and Mistral for generating meta descriptions! Please review the updated settings page under Settings > General to add your OpenAI API key if desired.

@@ -9,7 +9,7 @@
  * Dynamically registers settings based on loaded providers.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 
 namespace MSO_AI_Meta_Description;
@@ -331,7 +331,7 @@ class SettingsPage
         $provider_name = substr($section_id, $prefix_length, -$suffix_length);
 
         if ($provider_name) {
-            echo '<h2>' . sprintf(/* translators: %s: Provider name (e.g., Mistral) */ esc_html__('Configure the settings for using the %s API.', 'mso-ai-meta-description'), esc_html(ucfirst($provider_name))) . '</h2>';
+            echo '<h2>' . esc_html__('Activate the settings for using the API.', 'mso-ai-meta-description') . '</h2>';
         }
     }
 

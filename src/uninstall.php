@@ -8,7 +8,7 @@
  * from the "Plugins" page. It does *not* run on deactivation.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 
 if (! defined('WP_UNINSTALL_PLUGIN')) {

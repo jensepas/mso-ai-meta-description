@@ -7,7 +7,7 @@
  * It handles requests for generating AI summaries and fetching available AI models.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 
 namespace MSO_AI_Meta_Description;

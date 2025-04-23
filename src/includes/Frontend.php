@@ -7,7 +7,7 @@
  * Determines the appropriate description based on the current page context (post, page, archive, front page, etc.).
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 
 namespace MSO_AI_Meta_Description;

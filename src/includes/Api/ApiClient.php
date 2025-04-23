@@ -8,7 +8,7 @@
  * and delegates API calls (like fetching models or generating summaries) to it.
  *
  * @package MSO_AI_Meta_Description
- * @since   1.4.0
+ * @since   1.0.0
  */
 
 namespace MSO_AI_Meta_Description\Api;

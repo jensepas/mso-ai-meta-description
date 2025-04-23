@@ -122,30 +122,9 @@ Possibly. Both plugins may output a meta description. **Avoid duplication** by d
 
 ## 🧾 Changelog
 
-### 1.4.0 – *2025-04-17*
+### 1.0.0 – *2025-04-17*
 
-- ✨ Added support for **Cohere**
-
-### 1.3.0
-
-- ✨ Added support for **Anthropic**
-
-### 1.2.0
-
-- ✨ Added support for **OpenAI (ChatGPT)**
-- ⚙️ Better error handling for all providers
-- 🎨 Improved UI for settings and editor
-- 🛠️ Fixed logic for AI button visibility
-
-### 1.1.0
-
-- 🧱 Major codebase refactoring (SoC-based structure)
-- 🎛️ Improved settings page UX
-- 📡 Standardized API responses
-
-### 1.0.0
-
-- 🚀 Initial release with support for Gemini and Mistral
+- 🚀 Initial release : manual meta description editing, AI generation via Gemini Mistral OpenAI Anthropic Cohere
 
 ---
 
