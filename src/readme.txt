@@ -1,4 +1,4 @@
-=== MSO AI Meta Description: Custom Meta Descriptions with AI ===
+=== MSO AI Meta Description ===
 Contributors: jensepas
 Tags: meta description, seo, AI, Gemini Mistral OpenAI ChatGPT Anthropic
 Requires at least: 6.7

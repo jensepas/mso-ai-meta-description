@@ -33,22 +33,19 @@ class ApiClient
      */
     public function fetch_models(string $provider_name): array|WP_Error
     {
-        
         $provider = ProviderManager::get_provider($provider_name);
 
-        
         if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
-                'provider_not_found', 
+                'provider_not_found',
                 sprintf(
                     /* translators: %s: Provider name (e.g., Mistral) */
                     __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
                     $provider_name
-                ) 
+                )
             );
         }
 
-        
         return $provider->fetch_models();
     }
 
@@ -64,34 +61,19 @@ class ApiClient
      */
     public function generate_summary(string $provider_name, string $content): string|WP_Error
     {
-        
         $provider = ProviderManager::get_provider($provider_name);
 
-        
         if (! $provider instanceof ProviderInterface) {
             return new WP_Error(
-                'provider_not_found', 
+                'provider_not_found',
                 sprintf(
                     /* translators: %s: Provider name (e.g., Mistral) */
                     __('AI provider "%s" is not registered or supported.', 'mso-ai-meta-description'),
                     $provider_name
-                ) 
+                )
             );
         }
 
-        
         return $provider->generate_summary($content);
-    }
-
-    /**
-     * Retrieves all registered provider instances.
-     * Delegates the call directly to the ProviderManager.
-     *
-     * @return ProviderInterface[] An array of all registered provider instances.
-     */
-    public function get_providers(): array
-    {
-        
-        return ProviderManager::get_providers();
     }
 }

@@ -289,7 +289,7 @@
                 let modelToSelect = defaultModel;
 
                 models.forEach(model => {
-                    if (model && model?.id) {
+                    if (model?.id) {
                         $select.append($('<option>', {
                             value: model.id,
                             text: model.displayName || model.id
@@ -369,31 +369,50 @@
          * @returns {string} Active tab slug or empty string.
          */
         getActiveTabSlug() {
+
+            let tabSlug = '';
+
             const $activeTabLink = this.elements.$navTabs.filter('.nav-tab-active');
             if ($activeTabLink.length) {
-                try {
-                    const url = new URL($activeTabLink.attr('href'), window.location.origin);
-                    return url.searchParams.get('tab') || '';
-                } catch {
-                    const href = $activeTabLink.attr('href');
-                    const tabMatch = href ? href.match(/tab=([^&]*)/) : null;
-                    return tabMatch ? tabMatch[1] : '';
-                }
+                tabSlug = this._getTabFromLink($activeTabLink);
             }
 
-            const currentUrlParams = new URLSearchParams(window.location.search);
-            let tab = currentUrlParams.get('tab');
-            if (!tab && this.elements.$navTabs.length) {
-                try {
-                    const url = new URL(this.elements.$navTabs.first().attr('href'), window.location.origin);
-                    return url.searchParams.get('tab') || '';
-                } catch {
-                    const href = this.elements.$navTabs.first().attr('href');
-                    const tabMatch = href ? href.match(/tab=([^&]*)/) : null;
-                    return tabMatch ? tabMatch[1] : '';
-                }
+            if (!tabSlug) {
+                const currentUrlParams = new URLSearchParams(window.location.search);
+                tabSlug = currentUrlParams.get('tab') || '';
             }
-            return tab || '';
+
+            if (!tabSlug && this.elements.$navTabs.length) {
+                const $firstTabLink = this.elements.$navTabs.first();
+                tabSlug = this._getTabFromLink($firstTabLink);
+            }
+
+            return tabSlug;
+        },
+
+        /**
+         * Extracts the 'tab' query parameter from a jQuery link element's href attribute.
+         * Handles both valid URLs and simple href strings with regex fallback.
+         * @param {jQuery} $link - The jQuery object representing the link element.
+         * @returns {string} The value of the 'tab' parameter or an empty string if not found or invalid.
+         * @private // Indicate it's intended for internal use within the class
+         */
+        _getTabFromLink($link) {
+            if (!$link?.length) {
+                return '';
+            }
+            const href = $link.attr('href');
+            if (!href) {
+                return '';
+            }
+
+            try {
+                const url = new URL(href, window.location.origin);
+                return url.searchParams.get('tab') || '';
+            } catch (e) {
+                const tabMatch = href.match(/tab=([^&]*)/);
+                return tabMatch ? tabMatch[1] : '';
+            }
         },
 
         /**
@@ -437,40 +456,39 @@
                 ...data
             };
 
-            const queryString = new URLSearchParams(baseData).toString();
-            const ajaxParams = new URLSearchParams(requestData).toString();
-            const finalBody = `${queryString}${queryString ? '&' : ''}${ajaxParams}`;
+            const baseParams = new URLSearchParams(baseData);
+            const ajaxParams = new URLSearchParams(requestData);
 
-            try {
-                const response = await fetch(this.config.ajaxUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    },
-                    body: finalBody,
-                });
+            ajaxParams.forEach((value, key) => {
+                baseParams.set(key, value);
+            });
 
-                if (!response.ok) {
-                    let errorData = null;
-                    try {
-                        errorData = await response.json();
-                    } catch { }
-                    const displayError = this.parseApiError(errorData?.data?.message || this.config.error_text, this.config.error_text);
+            const finalBody = baseParams.toString();
 
-                    throw new Error(displayError || `HTTP error ${response.status}`);
-                }
+            const response = await fetch(this.config.ajaxUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                },
+                body: finalBody,
+            });
 
-                const result = await response.json();
-
-                if (!result.success) {
-                    throw new Error(result.data?.message || 'Unknown AJAX error.');
-                }
-
-                return result.data;
-
-            } catch (error) {
-                throw error;
+            if (!response.ok) {
+                let errorData = null;
+                try {
+                    errorData = await response.json();
+                } catch {}
+                const displayError = this.parseApiError(errorData?.data?.message || `HTTP error ${response.status}`, this.config.error_text);
+                throw new Error(displayError);
             }
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.data?.message || 'Unknown AJAX error.');
+            }
+
+            return result.data;
         },
 
         /**
@@ -487,7 +505,7 @@
             try {
                 const jsonStringMatch = message.match(/{.*}/);
 
-                if (jsonStringMatch && jsonStringMatch[0] && jsonStringMatch[0].startsWith('{') && jsonStringMatch[0].endsWith('}')) {
+                if (jsonStringMatch?.length && jsonStringMatch[0].startsWith('{') && jsonStringMatch[0].endsWith('}')) {
                     const potentialJson = jsonStringMatch[0];
                     const innerError = JSON.parse(potentialJson);
 

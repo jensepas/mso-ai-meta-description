@@ -26,11 +26,6 @@ if (! defined('ABSPATH')) {
 class Admin
 {
     /**
-     * Instance of the Settings class.
-     */
-    private Settings $settings;
-
-    /**
      * Instance of the MetaBox class.
      */
     private MetaBox $meta_box;
@@ -46,13 +41,11 @@ class Admin
      *
      * Injects dependencies for Settings and MetaBox classes.
      *
-     * @param Settings $settings The Settings class instance.
      * @param MetaBox  $meta_box The MetaBox class instance.
      * @param array<ProviderInterface> $providers.
      */
-    public function __construct(Settings $settings, MetaBox $meta_box, array $providers)
+    public function __construct(MetaBox $meta_box, array $providers)
     {
-        $this->settings = $settings;
         $this->meta_box = $meta_box;
         $this->providers = $providers;
     }
@@ -66,12 +59,10 @@ class Admin
      */
     public function register_hooks(): void
     {
-        add_action('admin_menu', [$this->settings, 'add_options_page']);
-        add_action('admin_init', [$this->settings, 'register_settings']);
         add_action('add_meta_boxes', [$this->meta_box, 'add_meta_box']);
         add_action('save_post', [$this->meta_box, 'save_meta_data']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
-        add_action('admin_head', [$this, 'add_contextual_help']);
+        //add_action('admin_head', [$this, 'add_contextual_help']);
     }
 
     /**
@@ -87,26 +78,28 @@ class Admin
     {
         $screen = get_current_screen();
         $is_post_edit_page = $screen && $screen->base === 'post';
-        $settings_page_hook = 'toplevel_page_' . Settings::PAGE_SLUG;
+        $settings_page_hook = 'toplevel_page_' . SettingsPage::PAGE_SLUG;
         $is_settings_page = $hook_suffix === $settings_page_hook;
 
         if (! $is_post_edit_page && ! $is_settings_page) {
             return;
         }
 
+        $plugin_version = MSO_AI_Meta_Description::VERSION;
+
         wp_enqueue_script(
             'mso-ai-admin-script',
             plugin_dir_url(dirname(__FILE__)) . 'assets/js/mso-ai-main.js',
             ['jquery'],
-            MSO_AI_Meta_Description::VERSION,
+            $plugin_version,
             true
         );
 
         wp_enqueue_style(
             'mso-ai-admin-style',
-            plugin_dir_url(dirname(__FILE__)) . 'assets/css/mso-ai-admin.css',
+            plugin_dir_url(dirname(__FILE__)) . 'assets/css/mso-ai-main.css',
             [],
-            MSO_AI_Meta_Description::VERSION
+            $plugin_version
         );
 
         $selected_models = [];
@@ -129,10 +122,6 @@ class Admin
             'selectModel' => __('-- Select a Model --', 'mso-ai-meta-description'),
             'errorLoadingModels' => __('Error loading models.', 'mso-ai-meta-description'),
             'nonce' => wp_create_nonce(MSO_AI_Meta_Description::AJAX_NONCE_ACTION),
-            'selectedGeminiModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'gemini_model'),
-            'selectedMistralModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'mistral_model'),
-            'selectedOpenaiModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'openai_model'),
-            'selectedAnthropicModel' => get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'anthropic_model'),
             'action' => MSO_AI_Meta_Description::AJAX_NONCE_ACTION,
             'saving_text' => __('Saving...', 'mso-ai-meta-description'),
             'saved_text' => __('Settings Saved', 'mso-ai-meta-description'),
@@ -156,7 +145,7 @@ class Admin
     {
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
-            esc_url(admin_url('admin.php?page=' . Settings::PAGE_SLUG)),
+            esc_url(admin_url('admin.php?page=' . SettingsPage::PAGE_SLUG)),
             __('Settings', 'mso-ai-meta-description')
         );
         array_unshift($links, $settings_link);
@@ -173,7 +162,7 @@ class Admin
     {
         $screen = get_current_screen();
 
-        $settings_page_hook = 'toplevel_page_' . Settings::PAGE_SLUG;
+        $settings_page_hook = 'toplevel_page_' . SettingsPage::PAGE_SLUG;
         if (! $screen || $screen->id !== $settings_page_hook) {
             return;
         }

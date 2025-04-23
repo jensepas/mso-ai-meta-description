@@ -94,42 +94,68 @@ class Frontend
         if (is_singular()) {
             $post_id = get_queried_object_id();
             if ($post_id) {
-                $description = get_post_meta($post_id, $this->meta_key, true);
+                $description = (string) get_post_meta($post_id, $this->meta_key, true);
             }
         } elseif (is_tag() || is_category() || is_tax()) {
             $description = term_description();
         } elseif (is_front_page()) {
-            if ('page' === $this->show_on_front) {
-                $post_id = (int) get_option('page_on_front');
+            $description = $this->get_front_page_description();
+        } elseif (is_home()) {
+            $description = $this->get_blog_home_description();
+        }
 
-                if ($post_id) {
-                    $description = get_post_meta($post_id, $this->meta_key, true);
-                }
+        return (string) apply_filters('mso_ai_meta_description_output', $description);
+    }
 
-                if (empty($description) && $post_id) {
-                    $description = get_bloginfo('description', 'display');
-                }
-            } else {
-                $description = get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page');
+    /**
+     * Gets the meta description specifically for the front page.
+     * Handles both 'page' and 'posts' settings for 'show_on_front'.
+     *
+     * @return string The front page description.
+     * @private
+     */
+    private function get_front_page_description(): string
+    {
+        $description = '';
+
+        if ('page' === $this->show_on_front) {
+            $page_id = (int) get_option('page_on_front');
+            if ($page_id) {
+                $description = (string) get_post_meta($page_id, $this->meta_key, true);
+            }
+        } else {
+            $description = (string) get_option(MSO_AI_Meta_Description::OPTION_PREFIX . 'front_page');
+        }
+
+        if (empty($description)) {
+            $description = get_bloginfo('description', 'display');
+        }
+
+        return $description;
+    }
+
+    /**
+     * Gets the meta description specifically for the blog posts index page (when is_home() is true).
+     * This is relevant only when 'show_on_front' is set to 'page'.
+     *
+     * @return string The blog home page description.
+     * @private
+     */
+    private function get_blog_home_description(): string
+    {
+        $description = '';
+
+        if ('page' === $this->show_on_front) {
+            $page_id = (int) get_option('page_for_posts');
+            if ($page_id) {
+                $description = (string) get_post_meta($page_id, $this->meta_key, true);
 
                 if (empty($description)) {
                     $description = get_bloginfo('description', 'display');
                 }
             }
-        } elseif (is_home()) {
-            if ('page' === $this->show_on_front) {
-                $post_id = (int) get_option('page_for_posts');
-
-                if ($post_id) {
-                    $description = get_post_meta($post_id, $this->meta_key, true);
-                }
-
-                if (empty($description) && $post_id) {
-                    $description = get_bloginfo('description', 'display');
-                }
-            }
         }
 
-        return apply_filters('mso_ai_meta_description_output', $description);
+        return $description;
     }
 }

@@ -105,69 +105,14 @@ abstract class AbstractProvider implements ProviderInterface
             }
         }
 
-        if (strtoupper($method) === 'POST') {
-            $response = wp_remote_post($url, $request_args);
-        } else {
-            $response = wp_remote_get($url, $request_args);
-        }
+        $response = (strtoupper($method) === 'POST')
+            ? wp_remote_post($url, $request_args)
+            : wp_remote_get($url, $request_args);
 
-        if (is_wp_error($response)) {
-            Logger::error('WP HTTP API Error', ['url' => $url, 'error_code' => $response->get_error_code(), 'error_message' => $response->get_error_message()]);
 
-            return $response;
-        }
+        return $this->handle_response($response, $url, $endpoint);
 
-        $http_code = wp_remote_retrieve_response_code($response);
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
 
-        if ($http_code < 200 || $http_code >= 300) {
-            $error_message = $this->extract_error_message($response) !== ''
-                ? $this->extract_error_message($response)
-                : __('Unknown API error occurred.', 'mso-ai-meta-description');
-
-            Logger::error(
-                sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint),
-                [
-                    'url' => $url,
-                    'status' => $http_code,
-                    'message' => $error_message,
-                    'response_body' => $body,
-                ]
-            );
-
-            return new WP_Error(
-                'api_error',
-                sprintf(
-                    /* translators: 1: Provider name, 2: HTTP status code, 3: Error message */
-                    __('%1$s API Error (%2$d): %3$s', 'mso-ai-meta-description'),
-                    ucfirst($this->get_name()),
-                    $http_code,
-                    $error_message
-                ),
-                ['status' => $http_code, 'response_body' => $body]
-            );
-        }
-
-        if ($data === '' && json_last_error() !== JSON_ERROR_NONE) {
-            Logger::error(
-                sprintf('%s API JSON Decode Error (%s)', ucfirst($this->get_name()), $endpoint),
-                ['url' => $url, 'status' => $http_code, 'response_body' => $body, 'json_error' => json_last_error_msg()]
-            );
-
-            return new WP_Error('json_decode_error', __('Failed to decode API response.', 'mso-ai-meta-description'), ['status' => $http_code, 'response_body' => $body]);
-        }
-
-        if (! is_array($data)) {
-            Logger::error(
-                sprintf('%s API Response Not An Array (%s)', ucfirst($this->get_name()), $endpoint),
-                ['url' => $url, 'status' => $http_code, 'response_body' => $body]
-            );
-
-            return [];
-        }
-
-        return $data;
     }
 
     /**
@@ -302,5 +247,77 @@ abstract class AbstractProvider implements ProviderInterface
             MSO_AI_Meta_Description::MAX_DESCRIPTION_LENGTH,
             $content
         );
+    }
+
+    /**
+     * Handles the response from wp_remote_get/post.
+     * Checks for WP_Error, HTTP status codes, decodes JSON, and handles errors.
+     *
+     * @param array<string, mixed>|WP_Error $response The response from wp_remote_get/post.
+     * @param string                        $url      The request URL (for logging).
+     * @param string                        $endpoint The request endpoint (for logging).
+     * @return array<string, mixed>|WP_Error Decoded JSON data on success, WP_Error on failure.
+     * @private
+     */
+    private function handle_response(WP_Error|array $response, string $url, string $endpoint): array|WP_Error
+    {
+        if (is_wp_error($response)) {
+            Logger::error('WP HTTP API Error', ['url' => $url, 'error_code' => $response->get_error_code(), 'error_message' => $response->get_error_message()]);
+            $final_result = $response;
+        } else {
+            $http_code = wp_remote_retrieve_response_code($response);
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+            $json_last_error = json_last_error();
+
+            if ($http_code < 200 || $http_code >= 300) {
+                $error_message = $this->extract_error_message($response);
+                if (empty($error_message)) {
+                    $error_message = __('Unknown API error occurred.', 'mso-ai-meta-description');
+                }
+
+                Logger::error(
+                    sprintf('%s API Error (%s)', ucfirst($this->get_name()), $endpoint),
+                    ['url' => $url, 'status' => $http_code, 'message' => $error_message, 'response_body' => $body]
+                );
+                $final_result = new WP_Error(
+                    'api_error',
+                    sprintf(
+                        /* translators: 1: Provider name, 2: HTTP status code, 3: Error message */
+                        __('%1$s API Error (%2$d): %3$s', 'mso-ai-meta-description'),
+                        ucfirst($this->get_name()),
+                        $http_code,
+                        $error_message
+                    ),
+                    ['status' => $http_code, 'response_body' => $body]
+                );
+            } elseif ($data === null && $body !== '' && $json_last_error !== JSON_ERROR_NONE) {
+                Logger::error(
+                    sprintf('%s API JSON Decode Error (%s)', ucfirst($this->get_name()), $endpoint),
+                    ['url' => $url, 'status' => $http_code, 'response_body' => $body, 'json_error' => json_last_error_msg()]
+                );
+                $final_result = new WP_Error(
+                    'json_decode_error',
+                    __('Failed to decode API response.', 'mso-ai-meta-description'),
+                    ['status' => $http_code, 'response_body' => $body]
+                );
+            } elseif ($data === null && $body === '') {
+                $final_result = [];
+            } elseif (! is_array($data)) {
+                Logger::error(
+                    sprintf('%s API Response Not An Array (%s)', ucfirst($this->get_name()), $endpoint),
+                    ['url' => $url, 'status' => $http_code, 'response_body' => $body, 'decoded_type' => gettype($data)]
+                );
+                $final_result = new WP_Error(
+                    'invalid_response_format',
+                    __('API response was not in the expected array format.', 'mso-ai-meta-description'),
+                    ['status' => $http_code, 'response_body' => $body]
+                );
+            } else {
+                $final_result = $data;
+            }
+        }
+
+        return $final_result;
     }
 }

@@ -95,47 +95,64 @@ class ProviderManager
             return;
         }
 
-        $iterator = new GlobIterator($providers_dir . '*Provider.php', FilesystemIterator::KEY_AS_PATHNAME);
-        foreach ($iterator as $path => $fileInfo) {
-            if (! $fileInfo instanceof SplFileInfo) {
-                continue;
+        try {
+            $iterator = new GlobIterator($providers_dir . '*Provider.php', FilesystemIterator::KEY_AS_PATHNAME);
+
+            foreach ($iterator as $path => $fileInfo) {
+                self::process_provider_file($path, $fileInfo);
             }
-
-            if ($fileInfo->isFile() && $fileInfo->isReadable()) {
-                require_once $path;
-                $className = $fileInfo->getBasename('.php');
-                $fullQualifiedName = __NAMESPACE__ . '\\Available\\' . $className;
-
-                try {
-                    if (class_exists($fullQualifiedName)) {
-                        $reflection = new ReflectionClass($fullQualifiedName);
-
-                        if ($reflection->implementsInterface(ProviderInterface::class) && $reflection->isInstantiable()) {
-                            /** @var ProviderInterface $providerInstance */
-                            $providerInstance = $reflection->newInstance();
-                            self::register_provider($providerInstance);
-                        } else {
-                            Logger::error(
-                                'Class found but does not implement ProviderInterface or is not instantiable',
-                                ['class' => $fullQualifiedName]
-                            );
-                        }
-                    } else {
-                        Logger::error(
-                            'File included, but class not found',
-                            ['path' => $path, 'expected_class' => $fullQualifiedName]
-                        );
-                    }
-                } catch (Exception $e) {
-                    Logger::error(
-                        'Error loading provider',
-                        ['path' => $path, 'exception_message' => $e->getMessage()]
-                    );
-                }
-            }
+        } catch (Exception $e) {
+            // Catch potential errors during iterator creation/usage
+            Logger::error('Error iterating through provider directory', ['path' => $providers_dir, 'exception_message' => $e->getMessage()]);
         }
 
         self::$providers_registered = true;
+    }
+
+    /**
+     * Processes a single potential provider file.
+     * Includes the file, validates the class, instantiates, and registers it.
+     *
+     * @param string       $path     The full path to the file.
+     * @param SplFileInfo $fileInfo File information object.
+     * @private
+     */
+    private static function process_provider_file(string $path, SplFileInfo $fileInfo): void
+    {
+        if (! $fileInfo->isFile() || ! $fileInfo->isReadable()) {
+            Logger::debug('Skipping non-file or unreadable item in provider directory.', ['path' => $path]);
+
+            return;
+        }
+
+        require_once $path;
+
+        $className = $fileInfo->getBasename('.php');
+        $fullQualifiedName = __NAMESPACE__ . '\\Available\\' . $className;
+
+        try {
+            if (! class_exists($fullQualifiedName)) {
+                Logger::error('File included, but class not found', ['path' => $path, 'expected_class' => $fullQualifiedName]);
+            } else {
+                $reflection = new ReflectionClass($fullQualifiedName);
+
+                if (! $reflection->implementsInterface(ProviderInterface::class)) {
+                    Logger::error('Class found but does not implement ProviderInterface', ['class' => $fullQualifiedName]);
+                } elseif (! $reflection->isInstantiable()) {
+                    Logger::error('Class found but is not instantiable (e.g., abstract)', ['class' => $fullQualifiedName]);
+                } else {
+                    /** @var ProviderInterface $providerInstance */
+                    $providerInstance = $reflection->newInstance();
+                    self::register_provider($providerInstance);
+                    Logger::debug('Successfully registered provider.', ['class' => $fullQualifiedName]);
+                }
+            }
+        } catch (Exception $e) {
+            Logger::error(
+                'Error processing provider file',
+                ['path' => $path, 'class' => $fullQualifiedName, 'exception_message' => $e->getMessage()]
+            );
+        }
     }
 
     /**

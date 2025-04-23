@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Plugin Name: MSO AI Meta Description: Custom Meta Descriptions with AI
+ * Plugin Name: MSO AI Meta Description
+ *
  * Description: WordPress plugin to add custom meta description tags in the HTML header, with the option to generate by AI.
  * Author: ms-only
  * Version: 1.4.0
@@ -103,6 +104,18 @@ final class MSO_AI_Meta_Description
     /** Instance of the Ajax class, handling AJAX requests. */
     private Ajax $ajax;
 
+    /** Instance of the MetaBox class, handling the meta description. */
+    private MetaBox $meta_box;
+
+    /** Instance of the SettingsPage class, handling the plugin's settings page. */
+    private SettingsPage $settings_page;
+
+    /** Instance of the SettingsRegistry class, handling the registration plugin settings, sections, and fields. */
+    private SettingsRegistry $settings_registry;
+
+    /** Instance of the SettingsAjaxHandler class, handling AJAX Settings requests. */
+    private SettingsAjaxHandler $settings_ajax_handler;
+
     /**
      * Private constructor to prevent direct instantiation (Singleton pattern).
      * Use `get_instance()` to get the object.
@@ -148,13 +161,16 @@ final class MSO_AI_Meta_Description
     {
         ProviderManager::register_providers_from_directory();
         $providers = ProviderManager::get_providers();
-        $registered_providers = ProviderManager::get_provider_names();
+        $registered_provider_names = ProviderManager::get_provider_names();
+
         $api_client = new ApiClient();
-        $settings = new Settings($providers);
-        $meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME, $providers);
-        $this->admin = new Admin($settings, $meta_box, $providers);
+        $this->meta_box = new MetaBox(self::META_KEY, self::META_BOX_NONCE_ACTION, self::META_BOX_NONCE_NAME, $providers);
         $this->frontend = new Frontend(self::META_KEY);
-        $this->ajax = new Ajax($api_client, self::AJAX_NONCE_ACTION, $registered_providers);
+        $this->ajax = new Ajax($api_client, self::AJAX_NONCE_ACTION, $registered_provider_names);
+        $this->settings_page = new SettingsPage($providers);
+        $this->settings_registry = new SettingsRegistry($providers, $this->settings_page);
+        $this->settings_ajax_handler = new SettingsAjaxHandler($providers);
+        $this->admin = new Admin($this->meta_box, $providers);
     }
 
     /**
@@ -167,6 +183,9 @@ final class MSO_AI_Meta_Description
 
         $this->frontend->register_hooks();
         $this->ajax->register_hooks();
+        $this->settings_page->register_hooks();
+        $this->settings_registry->register_hooks();
+        $this->settings_ajax_handler->register_hooks();
 
         if (is_admin() || (defined('WP_CLI') && WP_CLI)) {
             $this->admin->register_hooks();

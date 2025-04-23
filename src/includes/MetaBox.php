@@ -183,31 +183,25 @@ class MetaBox
      */
     public function save_meta_data(int $post_id): void
     {
-        if (! isset($_POST[$this->nonce_name]) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action)) {
-            return;
-        }
-
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-
-        $post_type = get_post_type($post_id);
-        if (! $post_type) {
-            return;
-        }
-
-        $post_type_object = get_post_type_object($post_type);
-        if (! $post_type_object || ! current_user_can($post_type_object->cap->edit_post, $post_id)) {
-            return;
-        }
-
         $field_name = 'mso_ai_add_description';
-        if (! isset($_POST[$field_name])) {
 
+        if (! isset($_POST[$this->nonce_name]) ||
+            ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST[$this->nonce_name])), $this->nonce_action) ||
+
+            (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) ||
+
+            ! ($post_type = get_post_type($post_id)) ||
+            ! ($post_type_object = get_post_type_object($post_type)) ||
+
+            ! current_user_can($post_type_object->cap->edit_post, $post_id) ||
+
+            ! isset($_POST[$field_name])
+        ) {
             return;
         }
 
         $new_value = sanitize_text_field(wp_unslash($_POST[$field_name]));
+
         if (empty($new_value)) {
             delete_post_meta($post_id, $this->meta_key);
         } else {
